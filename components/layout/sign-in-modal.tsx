@@ -32,11 +32,10 @@ const SignInModal = ({
               height={20}
             />
           </a>
-          <h3 className="font-display text-2xl font-bold">Sign In</h3>
-          <p className="text-sm text-gray-500">
-            This is strictly for demo purposes - only your email and profile
-            picture will be stored.
-          </p>
+          <h1 className="font-display text-2xl font-bold">Log in to continue.</h1>
+          <h2 className="text-md font-display font-bold">
+            Don&apos;t have an account?
+          </h2>
         </div>
 
         <div className="flex flex-col space-y-4 bg-gray-50 px-4 py-8 md:px-16">
