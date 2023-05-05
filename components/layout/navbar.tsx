@@ -4,16 +4,19 @@ import Image from "next/image";
 import Link from "next/link";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useSignInModal } from "./sign-in-modal";
+import { useCreatorsApplyModal } from "./creators-apply-modal";
 import UserDropdown from "./user-dropdown";
 import { Session } from "next-auth";
 
 export default function NavBar({ session }: { session: Session | null }) {
   const { SignInModal, setShowSignInModal } = useSignInModal();
+  const { CreatorsApplyModal, setShowCreatorsApplyModal } = useCreatorsApplyModal();
   const scrolled = useScroll(50);
 
   return (
     <>
       <SignInModal />
+      <CreatorsApplyModal/>
       <div
         className={`fixed top-0 w-full ${
           scrolled
@@ -45,7 +48,9 @@ export default function NavBar({ session }: { session: Session | null }) {
                   Sign In
                 </button>
                 <button 
-                  className="mx-2 rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black">
+                  className="mx-2 rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
+                  onClick={() => setShowCreatorsApplyModal(true)}
+                >
                   Apply
                 </button>
               </div>
