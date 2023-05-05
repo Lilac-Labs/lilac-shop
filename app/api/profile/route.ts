@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function getUserInfo() {
+export async function GET() {
   return NextResponse.json({
     name: "Dance Party",
     bio: "In moonlit shadows, bodies sway, A rhythmic beat calls them to play. With every pulse and heart's desire, They join the dance, a burning fire.",
@@ -8,3 +8,4 @@ export async function getUserInfo() {
     tk: "https://www.tiktok.com/@judyxkam?ug_source=op.auth&ug_term=&utm_source=awnuf8qyocl7mnug&utm_campaign=tt4d_profile_link&_r=1",
   });
 }
+

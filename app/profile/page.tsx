@@ -3,12 +3,12 @@ import Image from "next/image";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
-import { getUserInfo } from "@/app/api/profile/route";
+import { GET } from "@/app/api/profile/route";
 
 export default async function Home() {
 
   async function getData() {
-    const res = await getUserInfo();
+    const res = await GET();
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
    
