@@ -4,26 +4,13 @@ import Image from "next/image";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 import { GET } from "@/app/api/profile/route";
+import { getData } from "@/lib/utils";
 
 export default async function Home() {
 
-  async function getData() {
-    const res = await GET();
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
-   
-    // Recommendation: handle errors
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error('Failed to fetch data');
-    }
-   
-    return res.json();
-  }
-
   const session = await getServerSession(authOptions);
   const { email, image } = session?.user || {};
-  const res = await getData();
+  const res = await getData(GET);
 
   return (
     <>
