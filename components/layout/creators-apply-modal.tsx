@@ -1,4 +1,5 @@
 import Modal from "@/components/shared/modal";
+import axios from 'axios';
 import { signIn } from "next-auth/react";
 import {
   useState,
@@ -18,7 +19,61 @@ const CreatorsApplyModal = ({
     showCreatorsApplyModal: boolean;
     setCreatorsApplyModal: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [applyClicked, setApplyClicked] = useState(false);
+
+  const [status, setStatus] = useState({
+    submitted: false,
+    submitting: false,
+    info: { error: false, msg: "" },
+  });
+
+  // Success message
+  const handleServerResponse = (ok:boolean, msg: string) => {
+    if (ok) {
+      setStatus({
+        submitted: true,
+        submitting: false,
+        info: { error: false, msg: msg },
+      });
+    } else {
+      setStatus({
+        ...status,
+        info: { error: true, msg: msg },
+      });
+    }
+    console.log(msg)
+  };
+
+  // Form submission handler
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submission
+    // Get data from form
+    const inputs = {
+      name: (e.currentTarget.elements[0] as HTMLInputElement).value,
+      email: (e.currentTarget.elements[1] as HTMLInputElement).value,
+      bio: (e.currentTarget.elements[2] as HTMLInputElement).value,
+      links: (e.currentTarget.elements[3] as HTMLInputElement).value
+    };
+    
+    // Submit data to formspree API
+    axios({
+      method: 'POST',
+      url: 'https://formspree.io/f/mknaylzb',
+      data: inputs,
+    })
+    // Handle success
+      .then((response) => {
+        handleServerResponse(
+          true,
+          'Thank you, your message has been submitted.',
+        );
+      })
+    // Handle error
+      .catch((error) => {
+        handleServerResponse(false, error.response.data.error);
+      });
+    // Reset form
+    setCreatorsApplyModal(false);
+  };
 
   return (
     <Modal showModal={showCreatorsApplyModal} setShowModal={setCreatorsApplyModal}>
@@ -28,10 +83,7 @@ const CreatorsApplyModal = ({
           <p className="text-sm">
             Fill out the form below. Someone from our team will be in touch shortly.
           </p>
-          {
-              // Form with fields for name, email, two input boxes
-          }
-          <Form.Root className="FromRoot">
+          <Form.Root className="FromRoot" onSubmit={handleFormSubmit}>
               <Form.Field className="FormField" name="name">
                   <div className="flex rounded">
                       <Form.Message className="FormMessage" match="valueMissing">
