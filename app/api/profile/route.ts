@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: Request) {
   return NextResponse.json({
     name: "Dance Party",
     bio: "In moonlit shadows, bodies sway, A rhythmic beat calls them to play. With every pulse and heart's desire, They join the dance, a burning fire.",
