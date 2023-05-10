@@ -3,14 +3,19 @@ import Image from "next/image";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
-import { GET } from "@/app/api/profile/route";
-import { getData } from "@/lib/utils";
+
+import { fetcher } from "@/lib/utils";
+
+
 
 export default async function Home() {
 
   const session = await getServerSession(authOptions);
   const { email, image } = session?.user || {};
-  const res = await getData(GET);
+
+  const res = await fetcher(`${process.env.BASE_URL}/api/profile`);
+
+
 
   return (
     <>
