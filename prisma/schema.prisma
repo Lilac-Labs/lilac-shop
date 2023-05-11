@@ -45,12 +45,29 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
+  firstName     String
+  lastName      String
+  email         String   @unique
   emailVerified DateTime?
   image         String?
+  bio           String?
+  
+  socialMedias   SocialMedia[]
+
   accounts      Account[]
   sessions      Session[]
+}
+
+model SocialMedia {
+  link      String   @unique
+  type      SocialMediaType
+  userId    String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum SocialMediaType {
+  TIKTOK
+  INSTAGRAM
 }
 
 model VerificationToken {
