@@ -8,6 +8,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
         id: params.id,
       },
   })
+  // const user = await prisma.user.findMany({})
   console.log("user", user); 
   return NextResponse.json(user)
 }
