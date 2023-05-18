@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
 
-    const res = await fetcher(`${process.env.BASE_URL}/api/${params.id}`, { next: { revalidate: 10 } });
+    const res = await fetcher(`${process.env.BASE_URL}/api/user/byId/${params.id}`, { next: { revalidate: 10 } });
     console.log('res', res)
     if (res === null) {
         // redirect to 404
