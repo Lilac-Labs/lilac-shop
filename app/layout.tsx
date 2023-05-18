@@ -5,6 +5,13 @@ import { sfPro, inter } from "./fonts";
 import Nav from "@/components/layout/nav";
 import Footer from "@/components/layout/footer";
 import { Suspense } from "react";
+import { Providers } from "@/lib/context/providers";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth/next";
+import { fetcher } from "@/lib/utils";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
+
 
 export const metadata = {
   title: "Precedent - Building blocks for your Next.js project",
@@ -26,6 +33,22 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // const session = await getServerSession(authOptions);
+  // const router = useRouter();
+  // if (session) {
+  //   const { email } = session?.user || {};
+
+  //   const res = await fetcher(`${process.env.BASE_URL}/api/user/byEmail/${email}`, { next: { revalidate: 10 } });
+
+  //   console.log(router.pathname)
+  //   // if (res.bio === null) {
+  //   //   // redirect to profile
+  //   //   redirect('/profile');
+  //   // }
+    
+  // }
+
+
   return (
     <html lang="en">
       <body className={cx(sfPro.variable, inter.variable)} suppressHydrationWarning={true} >
@@ -35,7 +58,7 @@ export default async function RootLayout({
           <Nav />
         </Suspense>
         <main className="flex min-h-screen w-full flex-col items-center justify-center py-32">
-          {children}
+          <Providers>{children}</Providers>
         </main>
         <Footer />
         <Analytics />
