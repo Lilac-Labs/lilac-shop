@@ -1,5 +1,6 @@
 'use client';
  
+import { usePathname } from 'next/navigation';
 import { createContext } from 'react';
  
 export const DummyContext = createContext({});
@@ -7,5 +8,7 @@ export const DummyContext = createContext({});
 export default function DummyProvider({ children }: {
     children: React.ReactNode;
   }) {
-  return <DummyContext.Provider value="dark">{children}</DummyContext.Provider>;
+
+    const dummyData: string = "asdfasdfasdf";
+  return <DummyContext.Provider value={{dummyData}}>{children}</DummyContext.Provider>;
 }
