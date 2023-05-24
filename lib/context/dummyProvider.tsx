@@ -1,6 +1,5 @@
 'use client';
  
-import { usePathname } from 'next/navigation';
 import { createContext } from 'react';
  
 export const DummyContext = createContext({});
