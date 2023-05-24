@@ -1,13 +1,16 @@
 'use client';
 
 import DummyProvider  from './dummyProvider';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
  
-export function Providers({ children }: {
+export function Providers({ children, session }: {
     children: React.ReactNode;
+    session: Session | null;
   }) {
   return (
-    <DummyProvider>
-    {children}
-    </DummyProvider>
+    <SessionProvider session={session}>
+        {children}
+    </SessionProvider>
   );
 }
