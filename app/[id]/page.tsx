@@ -40,7 +40,6 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <>
-            {/* @ts-expect-error Server Component */}
             <UserProfile userInfo={userInfo}/>
         </>
     );
