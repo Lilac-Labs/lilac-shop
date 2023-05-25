@@ -7,8 +7,6 @@ import Footer from "@/components/layout/footer";
 import { Suspense } from "react";
 import { Providers } from "@/lib/context/providers";
 import SignUpRedirect from "@/components/layout/sign-up-redirect";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth/next";
 
 
 export const metadata = {
@@ -32,7 +30,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
 
-  const session = await getServerSession(authOptions);
 
   return (
     <html lang="en">
@@ -43,10 +40,8 @@ export default async function RootLayout({
           <Nav />
         </Suspense>
         <main className="flex min-h-screen w-full flex-col items-center justify-center py-32">
-          <Providers session={session}>
+          <Providers>
             {children}
-            {/* @ts-expect-error Server Component */}
-            <SignUpRedirect />
           </Providers>
         </main>
         <Footer />
