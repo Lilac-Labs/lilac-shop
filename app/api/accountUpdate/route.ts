@@ -10,6 +10,7 @@ export async function PUT(request: Request) {
         email: params.email,
       },
       data: {
+        id: params.id,
         bio: params.bio,
         firstName : params.firstName,
         lastName: params.lastName,
