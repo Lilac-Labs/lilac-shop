@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function PUT(request: Request) {
     const params = await request.json();
-    console.log ("Params:", params);
   
   const result = await prisma.user.update({
       where: {
