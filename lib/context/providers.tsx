@@ -3,8 +3,6 @@
 import DummyProvider  from './dummyProvider';
 import { SessionProvider, getSession } from 'next-auth/react';
 import { Session } from 'next-auth';
-import { useEffect, useState } from 'react';
-import { fetcher } from '../utils';
  
 export function Providers({ children }: {
     children: React.ReactNode;
