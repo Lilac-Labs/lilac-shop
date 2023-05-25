@@ -3,11 +3,7 @@
 import DummyProvider  from './dummyProvider';
 import { SessionProvider, getSession } from 'next-auth/react';
 import { Session } from 'next-auth';
-<<<<<<< HEAD
 import { useEffect } from 'react';
-=======
-import { useEffect, useState } from 'react';
->>>>>>> refs/remotes/origin/22-dynamic-profile
 import { fetcher } from '../utils';
  
 export function Providers({ children }: {
