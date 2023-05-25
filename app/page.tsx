@@ -6,6 +6,7 @@ import WebVitals from "@/components/home/web-vitals";
 import ComponentGrid from "@/components/home/component-grid";
 import Image from "next/image";
 import { nFormatter } from "@/lib/utils";
+import { User } from "@/components/client-component";
 export default async function Home() {
   const { stargazers_count: stars } = await fetch(
     "https://api.github.com/repos/steven-tey/precedent",
@@ -26,6 +27,7 @@ export default async function Home() {
   return (
     <>
       <div className="z-10 w-full max-w-xl px-5 xl:px-0">
+      <User />
         <a
           href="https://twitter.com/steventey/status/1613928948915920896"
           target="_blank"
@@ -108,6 +110,7 @@ export default async function Home() {
           />
         ))}
       </div>
+      
     </>
   );
 }

@@ -6,7 +6,6 @@ import Nav from "@/components/layout/nav";
 import Footer from "@/components/layout/footer";
 import { Suspense } from "react";
 import { Providers } from "@/lib/context/providers";
-import SignUpRedirect from "@/components/layout/sign-up-redirect";
 
 
 export const metadata = {
