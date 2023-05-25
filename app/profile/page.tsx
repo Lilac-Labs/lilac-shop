@@ -13,10 +13,15 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   const { email, image } = session?.user || {};
 
-  const res = await fetcher(`${process.env.BASE_URL}/api/profile`);
+  const inputs = {
+    email:email
+  };
 
-
-
+  console.log("inputs:", inputs);
+  
+  // Make call to accountUpdate API
+  const APIurl = `http://localhost:3000/api/user/byEmail/${email}`;
+  const res = await fetcher(APIurl);
   return (
     <>
       <div className="z-10 rounded-full mb-5"> 
@@ -26,7 +31,10 @@ export default async function Home() {
               width={150} 
               height={150} />
       </div>
-      <h1 className="z-30 text-2xl font-bold text-center">{res.name}</h1>
+      <div className="flex">
+      <h1 className="z-30 text-2xl font-bold text-center mx-2">{res.firstName}</h1>
+      <h1 className="z-30 text-2xl font-bold text-center">{res.lastName}</h1>
+      </div>
       <p className="z-30 text-md text-center">{res.bio}</p>
       <div className="flex z-30">
         <a
