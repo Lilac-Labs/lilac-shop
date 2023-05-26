@@ -1,6 +1,6 @@
 'use client';
 
-import DummyProvider  from './dummyProvider';
+import UserInfoProvider  from './UserInfoProvider';
 import { SessionProvider, getSession } from 'next-auth/react';
 import { Session } from 'next-auth';
 import { useEffect } from 'react';
@@ -32,9 +32,9 @@ export function Providers({ children }: {
 
   return (
     <SessionProvider refetchOnWindowFocus={false}>
-      <DummyProvider>
+      <UserInfoProvider>
         {children}
-      </DummyProvider>
+      </UserInfoProvider>
     </SessionProvider>
   );
 }

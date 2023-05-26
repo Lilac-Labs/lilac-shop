@@ -6,29 +6,31 @@ import * as Form from '@radix-ui/react-form';
 import { fetcher } from "@/lib/utils";
 import { Session } from "next-auth";
 import Link from "next/link";
+import { useUserInfoContext } from "@/lib/context/UserInfoProvider";
 
 export default function AccountUpdate({session}: {session: Session | null }) {
     
+    const { userInfo } = useUserInfoContext();
     // Get user email from their session
-    let email = session?.user?.email;
-    // The API URL.
-    const APIurl = `http://localhost:3000/api/user/byEmail/${email}`;
-    const [userInfo, setUserInfo] = useState<any>(null)
+    // let email = session?.user?.email;
+    // // The API URL.
+    // const APIurl = `http://localhost:3000/api/user/byEmail/${email}`;
+    // const [userInfo, setUserInfo] = useState<any>(null)
 
-    // The way to ensure useEffect is run only once is to use an empty dependency array.
-    useEffect(() => {
-        getUserInfo();},
-        []);
+    // // The way to ensure useEffect is run only once is to use an empty dependency array.
+    // useEffect(() => {
+    //     getUserInfo();},
+    //     []);
     
-    // Seperate function to fetch user info
-    const getUserInfo = async () => {
-        const fetchedUserInfo = await fetcher(APIurl, { next: { revalidate: 10 } });
-        setUserInfo(fetchedUserInfo);
-        console.log("Fetched User Info:", fetchedUserInfo);
-    };
+    // // Seperate function to fetch user info
+    // const getUserInfo = async () => {
+    //     const fetchedUserInfo = await fetcher(APIurl, { next: { revalidate: 10 } });
+    //     setUserInfo(fetchedUserInfo);
+    //     console.log("Fetched User Info:", fetchedUserInfo);
+    // };
 
-    // Print out userInfo
-    console.log("User Info:", userInfo);
+    // // Print out userInfo
+    // console.log("User Info:", userInfo);
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent default form submission
@@ -38,7 +40,7 @@ export default function AccountUpdate({session}: {session: Session | null }) {
           firstName: (e.currentTarget.elements[1] as HTMLInputElement).value,
           lastName: (e.currentTarget.elements[2] as HTMLInputElement).value,
           bio: (e.currentTarget.elements[3] as HTMLInputElement).value,
-          email:email
+          email: userInfo.email,
         };
         
         
