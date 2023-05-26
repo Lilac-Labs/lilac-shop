@@ -61,3 +61,7 @@ export const truncate = (str: string, length: number) => {
   if (!str || str.length <= length) return str;
   return `${str.slice(0, length)}...`;
 };
+
+export function isEmpty(obj: Record<string, any>): boolean {
+  return Object.keys(obj).length === 0;
+}

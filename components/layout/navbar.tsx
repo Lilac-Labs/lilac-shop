@@ -7,11 +7,15 @@ import { useSignInModal } from "./sign-in-modal";
 import { useCreatorsApplyModal } from "./creators-apply-modal";
 import UserDropdown from "./user-dropdown";
 import { Session } from "next-auth";
+import { useUserInfoContext } from "@/lib/context/UserInfoProvider";
+import { isEmpty } from "@/lib/utils";
 
 export default function NavBar({ session }: { session: Session | null }) {
   const { SignInModal, setShowSignInModal } = useSignInModal();
   const { CreatorsApplyModal, setShowCreatorsApplyModal } = useCreatorsApplyModal();
   const scrolled = useScroll(50);
+  const { userInfo } = useUserInfoContext();
+  const isUserInfo = isEmpty(userInfo);
 
   return (
     <>
@@ -36,25 +40,25 @@ export default function NavBar({ session }: { session: Session | null }) {
             <p>myStore</p>
           </Link>
 
-          {session && (
-            <Link href="/profile" className="flex items-center font-display text-xl mx-4">
+          {session && !isUserInfo && (
+            <Link href={`/${userInfo.id}`} className="flex items-center font-display text-xl mx-4">
               <p>Profile</p>
             </Link>
           )}
 
-          {session && (
+          {session && !isUserInfo && (
             <Link href="/myshop" className="flex items-center font-display text-xl mx-4">
               <p>MyShop</p>
             </Link>
           )}
 
-          {session && (
+          {session && !isUserInfo && (
             <Link href="/links" className="flex items-center font-display text-xl mx-4">
               <p>Links</p>
             </Link>
           )}
 
-          {session && (
+          {session && !isUserInfo && (
             <Link href="/earnings" className="flex items-center font-display text-xl mx-4">
               <p>Earnings</p>
             </Link>
