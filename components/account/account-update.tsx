@@ -7,10 +7,11 @@ import { fetcher } from "@/lib/utils";
 import { Session } from "next-auth";
 import Link from "next/link";
 import { useUserInfoContext } from "@/lib/context/UserInfoProvider";
+import { redirect } from "next/navigation";
 
-export default function AccountUpdate({session}: {session: Session | null }) {
+export default function AccountUpdate() {
     
-    const { userInfo } = useUserInfoContext();
+    const { userInfo, setUserInfoUpdated } = useUserInfoContext();
     // Get user email from their session
     // let email = session?.user?.email;
     // // The API URL.
@@ -54,6 +55,7 @@ export default function AccountUpdate({session}: {session: Session | null }) {
         })
         .then((res) => {
             console.log("Response:", res);
+            setUserInfoUpdated(true);  
         }
         )
         .catch((err) => {
@@ -62,7 +64,7 @@ export default function AccountUpdate({session}: {session: Session | null }) {
         );
 
         // Redirect to profile page
-        window.location.href = "/profile";
+        redirect(`/${userInfo.id}`)
         };
 
   return (

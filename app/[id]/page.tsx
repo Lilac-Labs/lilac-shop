@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
 
-    const res = await fetcher(`http://localhost:3000/api/user/byId/${params.id}`, { next: { revalidate: 10 } });
+    const res = await fetcher(`http://localhost:3000/api/user/byId/${params.id}`, { next: { revalidate: 1 } });
     const userInfo: UserInfo = {
         id: res.id,
         firstName: res.firstName,

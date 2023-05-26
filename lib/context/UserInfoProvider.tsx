@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { UserInfo } from "../types";
 import { fetcher } from "../utils";
 
-const UserInfoContext = createContext( {} as { userInfo: UserInfo });
+const UserInfoContext = createContext( {} as { userInfo: UserInfo, userInfoUpdated: boolean, setUserInfoUpdated: React.Dispatch<React.SetStateAction<boolean>> });
 
 export default function UserInfoProvider({
   children,
@@ -16,10 +16,12 @@ export default function UserInfoProvider({
 
   const [ userInfo, setUserInfo ] = useState<UserInfo>({} as UserInfo);
 
-  const email = session?.user?.email;
-  
-  
+  const [ userInfoUpdated, setUserInfoUpdated ] = useState<boolean>(false);
 
+  const email = session?.user?.email;
+
+  
+  
   useEffect(() => {
     const getUserInfo = async () => {
       const res = await fetcher(`http://localhost:3000/api/user/byEmail/${email}`, { next: { revalidate: 10 } });
@@ -36,17 +38,18 @@ export default function UserInfoProvider({
       setUserInfo(userInfo_);
     }
 
+    // email is ture when session is true
     if (email) {
-
       getUserInfo();
+      setUserInfoUpdated(false);
     }
-  }, [email]);
+  }, [email, userInfoUpdated]);
 
   
 
 
   return (
-    <UserInfoContext.Provider value={{ userInfo }}>
+    <UserInfoContext.Provider value={{ userInfo, userInfoUpdated, setUserInfoUpdated }}>
       {children}
     </UserInfoContext.Provider>
   );
