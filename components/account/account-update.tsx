@@ -12,26 +12,6 @@ import { redirect } from "next/navigation";
 export default function AccountUpdate() {
     
     const { userInfo, setUserInfoUpdated } = useUserInfoContext();
-    // Get user email from their session
-    // let email = session?.user?.email;
-    // // The API URL.
-    // const APIurl = `http://localhost:3000/api/user/byEmail/${email}`;
-    // const [userInfo, setUserInfo] = useState<any>(null)
-
-    // // The way to ensure useEffect is run only once is to use an empty dependency array.
-    // useEffect(() => {
-    //     getUserInfo();},
-    //     []);
-    
-    // // Seperate function to fetch user info
-    // const getUserInfo = async () => {
-    //     const fetchedUserInfo = await fetcher(APIurl, { next: { revalidate: 10 } });
-    //     setUserInfo(fetchedUserInfo);
-    //     console.log("Fetched User Info:", fetchedUserInfo);
-    // };
-
-    // // Print out userInfo
-    // console.log("User Info:", userInfo);
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent default form submission
@@ -71,13 +51,14 @@ export default function AccountUpdate() {
     <>
       <div className="w-full overflow-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border md:border-black-200" style={{zIndex:1}}>
         <div className="flex flex-col items-left justify-center space-y-3 border-b border-back-200 bg-white px-4 py-6 pt-8 text-center md:px-16">
-          <h1 className="font-display text-3xl font-bold">Complete your profile!</h1>
+          <h1 className="font-display text-3xl font-bold">Update your profile.</h1>
           <p className="text-sm">
-            Fill out the form below. Someone from our team will be in touch shortly.
+            Fields with * are required.
           </p>
-          <Form.Root className="FromRoot" onSubmit={handleFormSubmit}>
+          <Form.Root className="FromRoot" onSubmit={handleFormSubmit}>        
                 <Form.Field className="FormField" name="unique-username">
-                  <div className="flex rounded">
+                  <div className="flex">
+                    <Form.Label className="FormLabel">Username *</Form.Label>
                       <Form.Message className="FormMessage" match="valueMissing">
                           Please enter your name.
                       </Form.Message>
@@ -86,11 +67,13 @@ export default function AccountUpdate() {
                       </Form.Message>
                   </div>
                   <Form.Control asChild>
-                        <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="text" style={{ marginBottom: 5 }} required placeholder="Unique Username" defaultValue={userInfo?.id} />
+                        <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="text" style={{ marginBottom: 10 }} required placeholder="Unique Username" defaultValue={userInfo?.id} />
                   </Form.Control>
               </Form.Field>
+              <div className="grid grid-flow-col gap-x-4 justify-stretch" >
               <Form.Field className="FormField" name="first-name">
                   <div className="flex rounded">
+                  <Form.Label className="FormLabel">First Name *</Form.Label>
                       <Form.Message className="FormMessage" match="valueMissing">
                           Please enter your name.
                       </Form.Message>
@@ -99,24 +82,27 @@ export default function AccountUpdate() {
                       </Form.Message>
                   </div>
                   <Form.Control asChild>
-                        <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="text" style={{ marginBottom: 5 }} required placeholder="First Name" defaultValue={userInfo?.firstName} />
+                        <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="text" style={{ marginBottom: 10 }} required placeholder="First Name" defaultValue={userInfo?.firstName} />
                   </Form.Control>
               </Form.Field>
               <Form.Field className="FormField" name="last-name">
                   <div className="flex rounded">
-                      <Form.Message className="FormMessage" match="valueMissing">
-                          Please enter your name.
-                      </Form.Message>
-                      <Form.Message className="FormMessage" match="typeMismatch">
-                          Please provide a valid name.
-                      </Form.Message>
+                        <Form.Label className="FormLabel">Last Name *</Form.Label>
+                        <Form.Message className="FormMessage" match="valueMissing">
+                            Please enter your name.
+                        </Form.Message>
+                        <Form.Message className="FormMessage" match="typeMismatch">
+                            Please provide a valid name.
+                        </Form.Message>
                   </div>
                   <Form.Control asChild>
-                      <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="text" style={{ marginBottom: 5 }} required placeholder="Last Name" defaultValue={userInfo?.lastName}/>
+                      <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="text" style={{ marginBottom: 10 }} required placeholder="Last Name" defaultValue={userInfo?.lastName}/>
                   </Form.Control>
               </Form.Field>
+              </div>
               <Form.Field className="FormField" name="bio">
                   <div className="flex">
+                    <Form.Label className="FormLabel">Bio *</Form.Label>
                       <Form.Message className="FormMessage" match="valueMissing">
                           Please briefly describe who you are and the types of content you promote regularly on your social channels.
                       </Form.Message>
@@ -127,22 +113,35 @@ export default function AccountUpdate() {
               </Form.Field>
               <Form.Field className="FormField" name="Instagram">
                   <div className="flex">
+                    <Form.Label className="FormLabel">Instagram @</Form.Label>
                       <Form.Message className="FormMessage" match="valueMissing">
                           Please provide links to your social media channels.
                       </Form.Message>
                   </div>
                   <Form.Control asChild>
-                      <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="text" style={{ marginBottom: 5 }} required placeholder="Instagram @" defaultValue="placeholder"/>
+                      <input className="Input valid:border-gray-500 w-full rounded" type="text" style={{ marginBottom: 10 }} required placeholder="Instagram @" defaultValue=""/>
                   </Form.Control>
               </Form.Field>
               <Form.Field className="FormField" name="TikTok">
                   <div className="flex">
+                    <Form.Label className="FormLabel">TikTok @</Form.Label>
                       <Form.Message className="FormMessage" match="valueMissing">
                           Please provide links to your social media channels.
                       </Form.Message>
                   </div>
                   <Form.Control asChild>
-                      <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="text" style={{ marginBottom: 5 }} required placeholder="TikTok @" defaultValue="placeholder"/>
+                      <input className="Input valid:border-gray-500  w-full rounded" type="text" style={{ marginBottom: 10 }} required placeholder="TikTok @" defaultValue=""/>
+                  </Form.Control>
+              </Form.Field>
+              <Form.Field className="FormField" name="profile-pic">
+                  <div className="flex">
+                    <Form.Label className="FormLabel">Profile Picture</Form.Label>
+                      <Form.Message className="FormMessage" match="valueMissing">
+                          Please provide links to your social media channels.
+                      </Form.Message>
+                  </div>
+                  <Form.Control asChild>
+                      <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="file" style={{ marginBottom: 10 }}/>
                   </Form.Control>
               </Form.Field>
               <Form.Submit asChild>
