@@ -11,6 +11,7 @@ export const User = () => {
     <>
       <h1>Client Session</h1>
       <pre>{JSON.stringify(session)}</pre>
+      <p>{Object.keys(userInfo).length}</p>
     </>
   );
 };
