@@ -20,6 +20,7 @@ const newProduct = (): Product => {
     link: faker.internet.url(),
     commission: faker.number.float(0.3),
     image: faker.image.urlLoremFlickr({ category: 'fashion' }),
+    brand: faker.company.name(),
   }
 }
 

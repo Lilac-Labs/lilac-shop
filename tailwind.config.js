@@ -18,6 +18,7 @@ module.exports = {
 
     extend: {
       colors: {
+        grey: '#64748b',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -107,7 +108,7 @@ module.exports = {
             from: { height: "var(--radix-accordion-content-height)" },
             to: { height: 0 },
           },
-  
+
         },
         // Tooltip
         "slide-up-fade": {

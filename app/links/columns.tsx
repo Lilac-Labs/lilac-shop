@@ -50,7 +50,27 @@ export const columns: ColumnDef<AffiliateLink>[] = [
   {
     header: () => <div className="text-center">Product</div>,
     accessorKey: 'product',
-    accessorFn: (row) => row.product,
+    cell: ({ row }) => {
+      const product = row.getValue('product') as Product
+      return (
+        <div className="text-center">
+          <div>
+            <img
+              src={product.image}
+              className="mx-auto h-24 w-24 object-contain"
+            />
+          </div>
+          <h1 className="">{product.tittle}</h1>
+          <p className="text-grey">{product.brand}</p>
+          <Link className="text-grey" href={product.link} target="_blank">
+            {product.link}
+          </Link>
+          <p className="text-grey">{`${(product.commission * 100).toFixed(
+            0,
+          )}% commission`}</p>
+        </div>
+      )
+    },
   },
   {
     header: () => <div className="text-center">Content</div>,
