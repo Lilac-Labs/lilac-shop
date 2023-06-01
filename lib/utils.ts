@@ -1,4 +1,10 @@
 import ms from "ms";
+import { ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+ 
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 
 export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
   if (!timestamp) return "never";
@@ -64,4 +70,23 @@ export const truncate = (str: string, length: number) => {
 
 export function isEmpty(obj: Record<string, any>): boolean {
   return Object.keys(obj).length === 0;
+}
+
+export function getOrdinal(n: number): string {
+  let ord = 'th';
+
+  if (n % 10 == 1 && n % 100 != 11)
+  {
+    ord = 'st';
+  }
+  else if (n % 10 == 2 && n % 100 != 12)
+  {
+    ord = 'nd';
+  }
+  else if (n % 10 == 3 && n % 100 != 13)
+  {
+    ord = 'rd';
+  }
+
+  return ord;
 }
