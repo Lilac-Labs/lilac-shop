@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, RefObject} from 'react';
 import ReactMarkdown from "react-markdown";
 import Balancer from "react-wrap-balancer";
 import * as Form from '@radix-ui/react-form';
@@ -13,18 +13,60 @@ export default function AccountUpdate() {
     
     const { userInfo, setUserInfoUpdated } = useUserInfoContext();
 
+    const [name, setName] = useState("");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [storageLink, setStorageLink] = useState<string>("");
+    
+    // handfilechange is called when a file is selected, and sets the selected file to the file that was selected
+    // and sets the name to the name of the file. It's async because it calls uploadFile, which is async.
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        
+        // Get file from event
+        const file = e.target.files?.[0]!;
+        const filename = encodeURIComponent(file.name)
+        const fileType = encodeURIComponent(file.type)
+
+        // Get presigned post from backend
+        const GET_URL = `/api/upload-url?file=${filename}&fileType=${fileType}`
+        const res = await fetch(GET_URL);
+        const { url, fields } = await res.json()
+
+        // Upload file to S3
+        const formData = new FormData()
+        Object.entries({ ...fields, file }).forEach(([key, value]) => {
+            formData.append(key, value as string)
+          })
+        
+          const upload = await fetch(url, {
+            method: 'POST',
+            body: formData,
+          })
+        
+          if (upload.ok) {
+            console.log('Uploaded successfully!')
+            setStorageLink(`https://dev-shop-links.s3.us-west-2.amazonaws.com/${filename}`)
+          } else {
+            console.error('Upload failed.')
+        }
+        // From upload, get the url of the file in aws.
+        // Set state to store url of the file.
+    };
+
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent default form submission
         // Get data from form
         const inputs = {
-          id: (e.currentTarget.elements[0] as HTMLInputElement).value,
-          firstName: (e.currentTarget.elements[1] as HTMLInputElement).value,
-          lastName: (e.currentTarget.elements[2] as HTMLInputElement).value,
-          bio: (e.currentTarget.elements[3] as HTMLInputElement).value,
-          email: userInfo.email,
+            email: userInfo.email, // User cannot change for now.
+            id: (e.currentTarget.elements[0] as HTMLInputElement).value,
+            firstName: (e.currentTarget.elements[1] as HTMLInputElement).value,
+            lastName: (e.currentTarget.elements[2] as HTMLInputElement).value,
+            bio: (e.currentTarget.elements[3] as HTMLInputElement).value,
+            //ig: (e.currentTarget.elements[4] as HTMLInputElement).value,
+            //tiktok: (e.currentTarget.elements[5] as HTMLInputElement).value,
+            // image is selectedFile if it exists, otherwise it is the current image
+            image: storageLink ? storageLink : userInfo.image,
         };
-        
-        
         // Make call to accountUpdate API
         fetcher("http://localhost:3000/api/accountUpdate", {
             method: "PUT",
@@ -141,7 +183,7 @@ export default function AccountUpdate() {
                       </Form.Message>
                   </div>
                   <Form.Control asChild>
-                      <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded" type="file" style={{ marginBottom: 10 }}/>
+                      <input className="Input valid:border-gray-500 invalid:border-red-500 w-full rounded"  accept="image/png, image/jpeg" type="file" style={{ marginBottom: 10 }} onChange={handleFileChange} required placeholder="Profile Picture" defaultValue="" />
                   </Form.Control>
               </Form.Field>
               <Form.Submit asChild>
