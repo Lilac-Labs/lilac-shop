@@ -14,13 +14,13 @@ const range = (len: number) => {
 }
 
 const newProduct = (): Product => {
-    return {
-        tittle: faker.commerce.productName(),
-        description: faker.commerce.productDescription(),
-        link: faker.internet.url(),
-        commission: faker.number.float(.3),
-        image: faker.image.urlLoremFlickr({ category: 'fashion' }),
-    }
+  return {
+    tittle: faker.commerce.productName(),
+    description: faker.commerce.productDescription(),
+    link: faker.internet.url(),
+    commission: faker.number.float(0.3),
+    image: faker.image.urlLoremFlickr({ category: 'fashion' }),
+  }
 }
 
 const newAffiliateLink = (): AffiliateLink => {

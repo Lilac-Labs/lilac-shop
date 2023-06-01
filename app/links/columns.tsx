@@ -1,87 +1,141 @@
-"use client";
-import { getOrdinal } from "@/lib/utils";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table"
+'use client'
+import { getOrdinal } from '@/lib/utils'
+import { ColumnDef } from '@tanstack/react-table'
 import { AffiliateLink, Product } from 'lib/types'
-import Link from "next/link";
-
-const columnHelper = createColumnHelper<AffiliateLink>()
-
-// const dateFormat = (date: Date) => {
-//     const monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-//     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-//     const day = date.getDate()
-//     const month = date.getMonth()
-
-//     const ord = getOrdinal(day)
-//     return 
-//   }
+import Link from 'next/link'
+import { ArrowUpDown } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export const columns: ColumnDef<AffiliateLink>[] = [
-    {
-        header: () => <div className="text-center">Created</div>,
-        accessorKey: 'createdAt',
-        cell: ({ row }) => {
-          const date = new Date(row.getValue("createdAt"))
-          const monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-          const day = date.getDate()
-          const month = date.getMonth()
+  {
+    header: ({ column }) => {
+      return (
+        <div className="text-center">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Created
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      )
+    },
+    accessorKey: 'createdAt',
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('createdAt'))
+      const monthShortNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ]
+      const day = date.getDate()
+      const month = date.getMonth()
 
-          const ord = getOrdinal(day)
-          return <div className="text-center">{`${monthShortNames[month]} ${day}${ord}`}</div>
-        }
+      const ord = getOrdinal(day)
+      return (
+        <div className="text-center">{`${monthShortNames[month]} ${day}${ord}`}</div>
+      )
     },
-    {
-        header: () => <div className="text-center">Product</div>,
-        accessorKey: 'product',
-        accessorFn: (row) => row.product,
+  },
+  {
+    header: () => <div className="text-center">Product</div>,
+    accessorKey: 'product',
+    accessorFn: (row) => row.product,
+  },
+  {
+    header: () => <div className="text-center">Content</div>,
+    accessorKey: 'content',
+    cell: ({ row }) => {
+      const content = String(row.getValue('content'))
+      if (content === undefined) {
+        return (
+          <Link href={content}>
+            {' '}
+            <p>Link to Content</p>{' '}
+          </Link>
+        )
+      }
+      return <div className="text-center">-</div>
     },
-    {
-        header: () => <div className="text-center">Content</div>,
-        accessorKey: 'content',
-        cell: ({ row }) => {
-          const content = String(row.getValue("content"))
-          if (content === undefined) {
-            return <Link href={content}> <p>Link to Content</p> </Link>
-          }
-          return <div className="text-center">-</div>
-        }
-    },
-    {
-      header: () => <div className="text-center">Clicks</div>,
-      accessorKey: 'clicks',
-      cell: ({ row }) => {
-        const clicks = parseInt(row.getValue("clicks"))
+  },
+  {
+    header: ({ column }) => (
+      <div className="text-center">
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Clicks
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      </div>
+    ),
+    accessorKey: 'clicks',
+    cell: ({ row }) => {
+      const clicks = parseInt(row.getValue('clicks'))
 
-        return <div className="text-center">{clicks}</div>
-      }
+      return <div className="text-center">{clicks}</div>
     },
-    {
-      header: () => <div className="text-center">Orders</div>,
-      accessorKey: 'orders',
-      cell: ({ row }) => {
-        const orders = parseInt(row.getValue("orders"))
+  },
+  {
+    header: ({ column }) => (
+      <div className="text-center">
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Orders
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      </div>
+    ),
+    accessorKey: 'orders',
+    cell: ({ row }) => {
+      const orders = parseInt(row.getValue('orders'))
 
-        return <div className="text-center">{orders}</div>
-      }
+      return <div className="text-center">{orders}</div>
     },
-    {
-      header: () => <div className="text-center">Earned</div>,
-      accessorKey: 'earned',
-      cell: ({ row }) => {
-        const earned = parseFloat(row.getValue("earned"))
-        const formatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(earned)
+  },
+  {
+    header: ({ column }) => (
+      <div className="text-center">
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Earned
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      </div>
+    ),
+    accessorKey: 'earned',
+    cell: ({ row }) => {
+      const earned = parseFloat(row.getValue('earned'))
+      const formatted = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      }).format(earned)
 
-        return <div className="text-center">{formatted}</div>
-      }
+      return <div className="text-center">{formatted}</div>
     },
-    {
-      header: () => <div className="text-center">Affiliate Link</div>,
-      accessorKey: 'url',
-      cell: ({ row }) => {
-        const link = String(row.getValue("url"))
-        
-        return <div className="text-center">{link}</div>
-      }
-    }
+  },
+  {
+    header: () => <div className="text-center">Affiliate Link</div>,
+    accessorKey: 'url',
+    cell: ({ row }) => {
+      const link = String(row.getValue('url'))
+
+      return <div className="text-center">{link}</div>
+    },
+  },
 ]
