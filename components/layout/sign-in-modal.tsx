@@ -1,23 +1,17 @@
-import Modal from "@/components/shared/modal";
-import { signIn } from "next-auth/react";
-import {
-  useState,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-} from "react";
-import { LoadingDots, Google } from "@/components/shared/icons";
-import Image from "next/image";
+import Modal from '@/components/shared/modal'
+import { signIn } from 'next-auth/react'
+import { useState, Dispatch, SetStateAction, useCallback, useMemo } from 'react'
+import { LoadingDots, Google } from '@/components/shared/icons'
+import Image from 'next/image'
 
 const SignInModal = ({
   showSignInModal,
   setShowSignInModal,
 }: {
-  showSignInModal: boolean;
-  setShowSignInModal: Dispatch<SetStateAction<boolean>>;
+  showSignInModal: boolean
+  setShowSignInModal: Dispatch<SetStateAction<boolean>>
 }) => {
-  const [signInClicked, setSignInClicked] = useState(false);
+  const [signInClicked, setSignInClicked] = useState(false)
 
   return (
     <Modal showModal={showSignInModal} setShowModal={setShowSignInModal}>
@@ -32,7 +26,9 @@ const SignInModal = ({
               height={20}
             />
           </a> */}
-          <h1 className="font-display text-3xl font-bold">Log in to continue.</h1>
+          <h1 className="font-display text-3xl font-bold">
+            Log in to continue.
+          </h1>
           <h2 className="text-md font-display font-bold">
             Don&apos;t have an account?
           </h2>
@@ -43,12 +39,12 @@ const SignInModal = ({
             disabled={signInClicked}
             className={`${
               signInClicked
-                ? "cursor-not-allowed border-gray-200 bg-gray-100"
-                : "border border-gray-200 bg-white text-black hover:bg-gray-50"
+                ? 'cursor-not-allowed border-gray-200 bg-gray-100'
+                : 'border border-gray-200 bg-white text-black hover:bg-gray-50'
             } flex h-10 w-full items-center justify-center space-x-3 rounded-md border text-sm shadow-sm transition-all duration-75 focus:outline-none`}
             onClick={() => {
-              setSignInClicked(true);
-              signIn("google");
+              setSignInClicked(true)
+              signIn('google')
             }}
           >
             {signInClicked ? (
@@ -65,15 +61,18 @@ const SignInModal = ({
           <h2 className="text-md font-display font-bold">
             Don&apos;t have an account?
           </h2>
-          <p className="text-sm">If you have an invitation code, click here to create your account, otherwise click here to apply for an account.</p>
+          <p className="text-sm">
+            If you have an invitation code, click here to create your account,
+            otherwise click here to apply for an account.
+          </p>
         </div>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
 export function useSignInModal() {
-  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false)
 
   const SignInModalCallback = useCallback(() => {
     return (
@@ -81,11 +80,11 @@ export function useSignInModal() {
         showSignInModal={showSignInModal}
         setShowSignInModal={setShowSignInModal}
       />
-    );
-  }, [showSignInModal, setShowSignInModal]);
+    )
+  }, [showSignInModal, setShowSignInModal])
 
   return useMemo(
     () => ({ setShowSignInModal, SignInModal: SignInModalCallback }),
     [setShowSignInModal, SignInModalCallback],
-  );
+  )
 }

@@ -1,20 +1,20 @@
-import Card from "@/components/home/card";
-import Balancer from "react-wrap-balancer";
-import { DEPLOY_URL } from "@/lib/constants";
-import { Github, Twitter } from "@/components/shared/icons";
-import WebVitals from "@/components/home/web-vitals";
-import ComponentGrid from "@/components/home/component-grid";
-import Image from "next/image";
-import { nFormatter } from "@/lib/utils";
-import { User } from "@/components/client-component";
+import Card from '@/components/home/card'
+import Balancer from 'react-wrap-balancer'
+import { DEPLOY_URL } from '@/lib/constants'
+import { Github, Twitter } from '@/components/shared/icons'
+import WebVitals from '@/components/home/web-vitals'
+import ComponentGrid from '@/components/home/component-grid'
+import Image from 'next/image'
+import { nFormatter } from '@/lib/utils'
+import { User } from '@/components/client-component'
 export default async function Home() {
   const { stargazers_count: stars } = await fetch(
-    "https://api.github.com/repos/steven-tey/precedent",
+    'https://api.github.com/repos/steven-tey/precedent',
     {
       ...(process.env.GITHUB_OAUTH_TOKEN && {
         headers: {
           Authorization: `Bearer ${process.env.GITHUB_OAUTH_TOKEN}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }),
       // data will revalidate every 60 seconds
@@ -22,12 +22,12 @@ export default async function Home() {
     },
   )
     .then((res) => res.json())
-    .catch((e) => console.log(e));
+    .catch((e) => console.log(e))
 
   return (
     <>
       <div className="z-10 w-full max-w-xl px-5 xl:px-0">
-      <User />
+        <User />
         <a
           href="https://twitter.com/steventey/status/1613928948915920896"
           target="_blank"
@@ -35,27 +35,27 @@ export default async function Home() {
           className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"
         >
           <Twitter className="h-5 w-5 text-[#1d9bf0]" />
-          <p className="text-sm font-semibold text-[#1d9bf0]">
-            ShopyMy
-          </p>
+          <p className="text-sm font-semibold text-[#1d9bf0]">ShopyMy</p>
         </a>
         <h1
           className="animate-fade-up bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center font-display text-4xl font-bold tracking-[-0.02em] text-transparent opacity-0 drop-shadow-sm md:text-7xl md:leading-[5rem]"
-          style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}
+          style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}
         >
           <Balancer>Where elite creators and brands collaborate</Balancer>
         </h1>
         <p
           className="mt-6 animate-fade-up text-center text-gray-500 opacity-0 md:text-xl"
-          style={{ animationDelay: "0.25s", animationFillMode: "forwards" }}
+          style={{ animationDelay: '0.25s', animationFillMode: 'forwards' }}
         >
           <Balancer>
-          Join the world’s leading brands and content creators to access powerful tools and your dream collaborations on the #1 platform for product promotion on social.
+            Join the world’s leading brands and content creators to access
+            powerful tools and your dream collaborations on the #1 platform for
+            product promotion on social.
           </Balancer>
         </p>
         <div
           className="mx-auto mt-6 flex animate-fade-up items-center justify-center space-x-5 opacity-0"
-          style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
+          style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}
         >
           <a
             className="group flex max-w-fit items-center justify-center space-x-2 rounded-full border border-black bg-black px-5 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black"
@@ -87,7 +87,7 @@ export default async function Home() {
           >
             <Github />
             <p>
-              <span className="hidden sm:inline-block">Star on</span> GitHub{" "}
+              <span className="hidden sm:inline-block">Star on</span> GitHub{' '}
               <span className="font-semibold">{nFormatter(stars)}</span>
             </p>
           </a>
@@ -100,7 +100,7 @@ export default async function Home() {
             title={title}
             description={description}
             demo={
-              title === "Beautiful, reusable components" ? (
+              title === 'Beautiful, reusable components' ? (
                 <ComponentGrid />
               ) : (
                 demo
@@ -110,28 +110,27 @@ export default async function Home() {
           />
         ))}
       </div>
-      
     </>
-  );
+  )
 }
 
 const features = [
   {
-    title: "Beautiful, reusable components",
+    title: 'Beautiful, reusable components',
     description:
-      "Pre-built beautiful, a11y-first components, powered by [Tailwind CSS](https://tailwindcss.com/), [Radix UI](https://www.radix-ui.com/), and [Framer Motion](https://framer.com/motion)",
+      'Pre-built beautiful, a11y-first components, powered by [Tailwind CSS](https://tailwindcss.com/), [Radix UI](https://www.radix-ui.com/), and [Framer Motion](https://framer.com/motion)',
     large: true,
   },
   {
-    title: "Performance first",
+    title: 'Performance first',
     description:
-      "Built on [Next.js](https://nextjs.org/) primitives like `@next/font` and `next/image` for stellar performance.",
+      'Built on [Next.js](https://nextjs.org/) primitives like `@next/font` and `next/image` for stellar performance.',
     demo: <WebVitals />,
   },
   {
-    title: "One-click Deploy",
+    title: 'One-click Deploy',
     description:
-      "Jumpstart your next project by deploying Precedent to [Vercel](https://vercel.com/) in one click.",
+      'Jumpstart your next project by deploying Precedent to [Vercel](https://vercel.com/) in one click.',
     demo: (
       <a href={DEPLOY_URL}>
         <Image
@@ -145,9 +144,9 @@ const features = [
     ),
   },
   {
-    title: "Built-in Auth + Database",
+    title: 'Built-in Auth + Database',
     description:
-      "Precedent comes with authentication and database via [Auth.js](https://authjs.dev/) + [Prisma](https://prisma.io/)",
+      'Precedent comes with authentication and database via [Auth.js](https://authjs.dev/) + [Prisma](https://prisma.io/)',
     demo: (
       <div className="flex items-center justify-center space-x-20">
         <Image alt="Auth.js logo" src="/authjs.webp" width={50} height={50} />
@@ -156,9 +155,9 @@ const features = [
     ),
   },
   {
-    title: "Hooks, utilities, and more",
+    title: 'Hooks, utilities, and more',
     description:
-      "Precedent offers a collection of hooks, utilities, and `@vercel/og`",
+      'Precedent offers a collection of hooks, utilities, and `@vercel/og`',
     demo: (
       <div className="grid grid-flow-col grid-rows-3 gap-10 p-10">
         <span className="font-mono font-semibold">useIntersectionObserver</span>
@@ -170,4 +169,4 @@ const features = [
       </div>
     ),
   },
-];
+]
