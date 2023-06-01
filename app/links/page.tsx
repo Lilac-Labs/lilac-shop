@@ -116,6 +116,7 @@ export default function Home() {
   const data = makeData(10)
 
   return (
+<<<<<<< HEAD
     // <>
     //   {/* <h1 className="z-30 text-2xl font-bold text-center">Links Page in development...</h1> */}
     //   <div className='p-2 z-30' >
@@ -177,4 +178,12 @@ export default function Home() {
       <DataTable columns={columns} data={data} />
     </div>
   );
+=======
+    <>
+      <h1 className="z-30 text-center text-2xl font-bold">
+        Links Page in development...
+      </h1>
+    </>
+  )
+>>>>>>> af28544 (code formatting)
 }
