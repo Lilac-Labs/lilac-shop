@@ -1,5 +1,5 @@
-"use client";
-import { getOrdinal } from '@/lib/utils';
+'use client'
+import { getOrdinal } from '@/lib/utils'
 import {
   ColumnDef,
   createColumnHelper,
@@ -9,16 +9,15 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { create } from 'domain';
+import { create } from 'domain'
 import { AffiliateLink, Product } from 'lib/types'
-import Link from 'next/link';
-import { use, useMemo, useReducer, useRef, useState } from 'react';
-import { makeData } from './makeData';
-import { columns } from './columns';
-import { DataTable } from './data-table';
+import Link from 'next/link'
+import { use, useMemo, useReducer, useRef, useState } from 'react'
+import { makeData } from './makeData'
+import { columns } from './columns'
+import { DataTable } from './data-table'
 
 export default function Home() {
-
   // const rerender = useReducer(() => ({}), {})[1]
 
   // const [ sorting, setSorting] = useState<SortingState>([])
@@ -112,7 +111,7 @@ export default function Home() {
 
   // const { rows } = table.getRowModel()
   // const rowVirtualizer = useVirtual
-  
+
   const data = makeData(10)
 
   return (
@@ -128,7 +127,7 @@ export default function Home() {
     //                 <th key={header.id} colSpan={header.colSpan}>
     //                   {
     //                     header.isPlaceholder ? null : (
-    //                       <div {...{className: header.column.getCanSort() ? 'cursor-pointer select-none' : '', 
+    //                       <div {...{className: header.column.getCanSort() ? 'cursor-pointer select-none' : '',
     //                       onClick: header.column.getToggleSortingHandler()}}
     //                       >
     //                         {flexRender(
@@ -173,8 +172,8 @@ export default function Home() {
     //     </table>
     //   </div>
     // </>
-    <div className="container mx-auto py-10 z-30">
+    <div className="container z-30 mx-auto py-10">
       <DataTable columns={columns} data={data} />
     </div>
-  );
+  )
 }

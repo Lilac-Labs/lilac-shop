@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import { useSession } from "next-auth/react";
-import { useUserInfoContext } from "@/lib/context/UserInfoProvider";
+import { useSession } from 'next-auth/react'
+import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 
 export const User = () => {
-  const { data: session } = useSession();
-  const { userInfo }  = useUserInfoContext();
+  const { data: session } = useSession()
+  const { userInfo } = useUserInfoContext()
 
   return (
     <>
@@ -14,5 +14,5 @@ export const User = () => {
       <p>Userinfo {JSON.stringify(userInfo)}</p>
       <p>{Object.keys(userInfo).length}</p>
     </>
-  );
-};
+  )
+}

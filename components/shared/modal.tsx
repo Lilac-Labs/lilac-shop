@@ -1,43 +1,37 @@
-"use client";
+'use client'
 
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
-import FocusTrap from "focus-trap-react";
-import { AnimatePresence, motion } from "framer-motion";
-import Leaflet from "./leaflet";
-import useWindowSize from "@/lib/hooks/use-window-size";
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef } from 'react'
+import FocusTrap from 'focus-trap-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import Leaflet from './leaflet'
+import useWindowSize from '@/lib/hooks/use-window-size'
 
 export default function Modal({
   children,
   showModal,
   setShowModal,
 }: {
-  children: React.ReactNode;
-  showModal: boolean;
-  setShowModal: Dispatch<SetStateAction<boolean>>;
+  children: React.ReactNode
+  showModal: boolean
+  setShowModal: Dispatch<SetStateAction<boolean>>
 }) {
-  const desktopModalRef = useRef(null);
+  const desktopModalRef = useRef(null)
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setShowModal(false);
+      if (e.key === 'Escape') {
+        setShowModal(false)
       }
     },
     [setShowModal],
-  );
+  )
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onKeyDown]);
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [onKeyDown])
 
-  const { isMobile, isDesktop } = useWindowSize();
+  const { isMobile, isDesktop } = useWindowSize()
 
   return (
     <AnimatePresence>
@@ -50,13 +44,13 @@ export default function Modal({
                 <motion.div
                   ref={desktopModalRef}
                   key="desktop-modal"
-                  className="fixed inset-0 z-40 hidden min-w-full min-h-screen items-center justify-center md:flex"
+                  className="fixed inset-0 z-40 hidden min-h-screen min-w-full items-center justify-center md:flex"
                   initial={{ scale: 0.95 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0.95 }}
                   onMouseDown={(e) => {
                     if (desktopModalRef.current === e.target) {
-                      setShowModal(false);
+                      setShowModal(false)
                     }
                   }}
                 >
@@ -76,5 +70,5 @@ export default function Modal({
         </>
       )}
     </AnimatePresence>
-  );
+  )
 }

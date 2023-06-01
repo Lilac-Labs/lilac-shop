@@ -1,8 +1,8 @@
-'use client';
-import { useSession } from "next-auth/react"
-import { fetcher } from "@/lib/utils";
-import { redirect } from "next/navigation";
-import { useRouter } from "next/router";
+'use client'
+import { useSession } from 'next-auth/react'
+import { fetcher } from '@/lib/utils'
+import { redirect } from 'next/navigation'
+import { useRouter } from 'next/router'
 
 /**
  * A component that redirects to the signup page if the user is logged in but not signed up.
@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 export default async function SignUpRedirect() {
   const { status } = useSession()
   // const { asPath } = useRouter();
-  console.log("status", status)
+  console.log('status', status)
   // if (status) {
   //   const { email } = session?.user || {};
 
@@ -22,7 +22,7 @@ export default async function SignUpRedirect() {
   //   if (asPath!== "/profile" && res.bio === null) {
   //     redirect('/profile');
   //   }
-    
+
   // }
   return <div>{null}</div>
 }
