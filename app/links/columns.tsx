@@ -50,6 +50,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
   {
     header: () => <div className="text-center">Product</div>,
     accessorKey: 'product',
+    filterFn: 'productSearch',
     cell: ({ row }) => {
       const product = row.getValue('product') as Product
       return (
