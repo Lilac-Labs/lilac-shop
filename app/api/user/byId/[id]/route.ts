@@ -11,5 +11,6 @@ export async function GET(
       id: params.id,
     },
   })
+  console.log('user', user)
   return NextResponse.json(user)
 }

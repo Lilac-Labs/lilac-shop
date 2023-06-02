@@ -52,15 +52,6 @@ export default function NavBar({ session }: { session: Session | null }) {
 
           {session && !isUserInfo && (
             <Link
-              href="/myshop"
-              className="mx-4 flex items-center font-display text-xl"
-            >
-              <p>MyShop</p>
-            </Link>
-          )}
-
-          {session && !isUserInfo && (
-            <Link
               href="/links"
               className="mx-4 flex items-center font-display text-xl"
             >
@@ -79,7 +70,10 @@ export default function NavBar({ session }: { session: Session | null }) {
 
           <div>
             {session ? (
-              <UserDropdown session={session} />
+              !isUserInfo ? (
+                <UserDropdown session={session} />
+              ) : (
+                null)
             ) : (
               // add log in button here
               <div>
