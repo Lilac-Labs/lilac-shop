@@ -11,7 +11,14 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  FilterFn,
 } from '@tanstack/react-table'
+
+declare module '@tanstack/table-core' {
+  interface FilterFns {
+    productSearch: FilterFn<unknown>
+  }
+}
 
 import {
   Table,
@@ -23,6 +30,7 @@ import {
 } from '@/components/ui/table'
 
 import { Input } from '@/components/ui/input'
+import { Product } from '@/lib/types'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData>[]
@@ -38,6 +46,14 @@ export function DataTable<TData, TValue>({
   ])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
+  const productSearchFilter: FilterFn<any> = (row, id, value, addMeta) => {
+    const product = row.getValue(id) as Product
+
+    return (
+      product.tittle.toLowerCase() + product.brand.toLowerCase()
+    ).includes(value.toLowerCase())
+  }
+
   const table = useReactTable({
     data,
     columns,
@@ -50,7 +66,12 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
+    filterFns: {
+      productSearch: productSearchFilter,
+    },
   })
+
+  console.log(table.getColumn('product'))
 
   return (
     <div>
