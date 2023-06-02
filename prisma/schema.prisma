@@ -51,6 +51,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   socialMedias  SocialMedia[]
+  affiliateLink AffiliateLink[]
 }
 
 model SocialMedia {
@@ -66,6 +67,38 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model AffiliateLink {
+  id                String  @id @default(cuid())
+  userId            String
+  link              String
+  createdAt         DateTime @default(now())
+  clicks            Int     @default(0)
+  orders            Int     @default(0)
+  earned            Float   @default(0)
+  productId         String
+  product           Product @relation(fields: [productId], references: [id])
+  content           String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  tittle      String
+  description String
+  link        String
+  brandName   String
+  brand       Brand  @relation(fields: [brandName], references: [name], onDelete: Cascade)
+  affiliateLinks AffiliateLink[]
+}
+
+model Brand {
+  name        String  @unique
+  commission  Float
+  products    Product[]
 }
 
 enum SocialMediaType {
