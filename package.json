@@ -8,8 +8,7 @@
     "format:write": "prettier --write \"**/*.{css,js,json,jsx,ts,tsx}\"",
     "format": "prettier \"**/*.{css,js,json,jsx,ts,tsx}\"",
     "start": "next start",
-    "lint": "next lint",
-    "postlint": "echo ✅ lint valid"
+    "lint": "next lint"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.342.0",
@@ -18,7 +17,6 @@
     "@prisma/client": "^4.13.0",
     "@radix-ui/react-form": "0.0.2",
     "@radix-ui/react-popover": "^1.0.2",
-    "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.2",
     "@tanstack/react-table": "^8.9.1",
     "@types/node": "18.11.18",
@@ -58,19 +56,10 @@
     "@types/ms": "^0.7.31",
     "autoprefixer": "^10.4.13",
     "concurrently": "^7.6.0",
-    "eslint": "^8.41.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.3",
     "postcss": "^8.4.21",
-    "prettier": "^2.8.8",
+    "prettier": "^2.8.2",
     "prettier-plugin-tailwindcss": "^0.2.1",
     "prisma": "^4.14.1",
     "tailwindcss": "^3.2.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
   }
 }
