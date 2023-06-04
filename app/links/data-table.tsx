@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   ColumnDef,
@@ -13,6 +13,7 @@ import {
   useReactTable,
   FilterFn,
 } from '@tanstack/react-table'
+import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -31,26 +32,38 @@ import {
 
 import { Input } from '@/components/ui/input'
 import { Product } from '@/lib/types'
+import { fetcher } from '@/lib/utils'
+import { LoadingCircle, LoadingDots } from '@/components/shared/icons'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData>[]
-  data: TData[]
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
 }: DataTableProps<TData, TValue>) {
+  const { userInfo } = useUserInfoContext()
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'createdAt', desc: true },
   ])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [data, setData] = useState<TData[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    fetcher(`http://localhost:3000/api/affiliateLinks/${userInfo.id}`)
+      .then((data) => {
+        console.log(data)
+        setData(data)
+      })
+      .finally(() => setLoading(false))
+  }, [userInfo.id])
 
   const productSearchFilter: FilterFn<any> = (row, id, value, addMeta) => {
     const product = row.getValue(id) as Product
 
     return (
-      product.tittle.toLowerCase() + product.brand.toLowerCase()
+      product.tittle.toLowerCase() + product.brand.name.toLowerCase()
     ).includes(value.toLowerCase())
   }
 
@@ -122,6 +135,15 @@ export function DataTable<TData, TValue>({
                   ))}
                 </TableRow>
               ))
+            ) : loading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  <LoadingDots color="#808080" />
+                </TableCell>
+              </TableRow>
             ) : (
               <TableRow>
                 <TableCell

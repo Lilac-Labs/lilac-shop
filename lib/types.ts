@@ -11,7 +11,7 @@ export type UserInfo = {
 
 export interface AffiliateLink {
   id: string
-  url: string
+  link: string
   createdAt: Date
   product: Product
   clicks: number
@@ -21,10 +21,14 @@ export interface AffiliateLink {
 }
 
 export interface Product {
+  link: string
   tittle: string
   description: string
-  link: string
-  commission: number
   image: string
-  brand: string
+  brand: Brand
+}
+
+export interface Brand {
+  name: string
+  commission: number
 }

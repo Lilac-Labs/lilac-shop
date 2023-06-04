@@ -51,7 +51,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   socialMedias  SocialMedia[]
-  affiliateLink AffiliateLink[]
+  affiliateLinks AffiliateLink[]
 }
 
 model SocialMedia {
@@ -70,15 +70,15 @@ model VerificationToken {
 }
 
 model AffiliateLink {
-  id                String  @id @default(cuid())
+  id                Int  @id @default(autoincrement())
   userId            String
   link              String
   createdAt         DateTime @default(now())
   clicks            Int     @default(0)
   orders            Int     @default(0)
   earned            Float   @default(0)
-  productId         String
-  product           Product @relation(fields: [productId], references: [id])
+  productLink       String
+  product           Product @relation(fields: [productLink], references: [link])
   content           String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -86,10 +86,10 @@ model AffiliateLink {
 }
 
 model Product {
-  id          String  @id @default(cuid())
+  link        String @unique @id
   tittle      String
-  description String
-  link        String
+  description String?
+  image       String
   brandName   String
   brand       Brand  @relation(fields: [brandName], references: [name], onDelete: Cascade)
   affiliateLinks AffiliateLink[]
