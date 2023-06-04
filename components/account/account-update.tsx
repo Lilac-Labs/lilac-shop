@@ -1,5 +1,5 @@
 'use client'
-import { ReactNode, useEffect, useState, RefObject, useRef } from 'react'
+import { ReactNode, useEffect, useState, RefObject, useRef, use } from 'react'
 import ReactMarkdown from 'react-markdown'
 import Balancer from 'react-wrap-balancer'
 import * as Form from '@radix-ui/react-form'
@@ -12,14 +12,97 @@ import { useRouter } from 'next/navigation'
 
 export default function AccountUpdate() {
   
-  type MatchProp = Form.ValidityMatcher | AsyncCustomMatcher;
-  type AsyncCustomMatcher = (value: string, formData: FormData) => Promise<boolean>;
+  const [formLoaded, setFormLoaded] = useState(false)
+
+  // For Validaiton state to disable submit buttom
+  const [formValid, setFormValid] = useState(false)
+
+  // Form values as state
+  const [enteredUUid, setEnteredUUid] = useState<string>('')
+  const [enteredFirstName, setEnteredFirstName] = useState<string>('')
+  const [enteredLastName, setEnteredLastName] = useState<string>('')
+  const [enteredBio, setEnteredBio] = useState<string>('')
+
+  // Form values as state
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+    console.log('handleFormChange - target id:', e.target.id)
+    switch (e.target.id) {
+      case 'uuid':
+        setEnteredUUid(e.target.value.toLowerCase())
+        break
+      case 'firstName':
+        setEnteredFirstName(e.target.value)
+        break
+      case 'lastName':
+        setEnteredLastName(e.target.value)
+        break
+      case 'bio':
+        setEnteredBio(e.target.value)
+        break
+      default:
+        break
+    }
+  }
+
+  // Did the user touch this form field? If so, we should validate it.
+  const [enteredUUidTouched, setEnteredUUidTouched] = useState<boolean>(false)
+  const [enteredFirstNameTouched, setEnteredFirstNameTouched] = useState<boolean>(false)
+  const [enteredLastNameTouched, setEnteredLastNameTouched] = useState<boolean>(false)
+  const [enteredBioTouched, setEnteredBioTouched] = useState<boolean>(false)
+
+  // Are the form fields valid?
+  const [enteredUUidValid, setEnteredUUidValid] = useState<boolean>(false)
+  const [enteredFirstNameValid, setEnteredFirstNameValid] = useState<boolean>(false)
+  const [enteredLastNameValid, setEnteredLastNameValid] = useState<boolean>(false)
+  const [enteredBioValid, setEnteredBioValid] = useState<boolean>(false)
+
+  // Form field error message
+  const [enteredUUidErrorMsg, setEnteredUUidErrorMsg] = useState<string>('')
+  const [enteredFirstNameErrorMsg, setEnteredFirstNameErrorMsg] = useState<string>('')
+  const [enteredLastNameErrorMsg, setEnteredLastNameErrorMsg] = useState<string>('')
+  const [enteredBioErrorMsg, setEnteredBioErrorMsg] = useState<string>('')
+
+
+  const enteredNameTouchInvalid = !enteredUUidValid && enteredUUidTouched
+  const enteredFirstNameTouchInvalid = !enteredFirstNameValid && enteredFirstNameTouched
+  const enteredLastNameTouchInvalid = !enteredLastNameValid && enteredLastNameTouched
+  const enteredBioTouchInvalid = !enteredBioValid && enteredBioTouched
+  
+
+
+
+  // Validation of fields
+  const handleFormBlur = async (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+    switch (e.target.id) {
+      case 'uuid':
+        setEnteredUUidTouched(true)
+        setEnteredUUidValid(await isValidUUid(e.target.value))
+        break
+      case 'firstName':
+        setEnteredFirstNameTouched(true)
+        setEnteredFirstNameValid(isValidFirstName(e.target.value))
+        break
+      case 'lastName':
+        setEnteredLastNameTouched(true)
+        setEnteredLastNameValid(isValidLastName(e.target.value))
+        break
+      case 'bio':
+        setEnteredBioTouched(true)
+        setEnteredBioValid(isValidBio(e.target.value))
+        break
+      default:
+        break
+    }
+  }
+
+  useEffect(() => {
+    setFormValid(enteredUUidValid && enteredFirstNameValid && enteredLastNameValid && enteredBioValid)
+    console.log('useEffect - Form is valid?', enteredUUidValid && enteredFirstNameValid && enteredLastNameValid && enteredBioValid)
+  }, [enteredUUidValid, enteredFirstNameValid, enteredLastNameValid, enteredBioValid])
+
 
   const router = useRouter()
-  const uuidRef = useRef<HTMLInputElement>(null);
 
-  // State values that don't depend on userInfo don't need to be rehydrated
-  const [name, setName] = useState('')
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [storageLink, setStorageLink] = useState<string>('')
 
@@ -27,86 +110,119 @@ export default function AccountUpdate() {
   const { userInfo, setUserInfoUpdated } = useUserInfoContext()
 
   // State values that depend on userInfo need to be rehydrated.
-  const [uniqueid, setUniqueId] = useState('')
-
 
   // State values that depend on userInfo need to be rehydrated.
   const [isIdUnique, setIsIdUnique] = useState(true)
 
-  // function to check if id is unique
-  const getUUIDNotUnique = () => {
-    return !isIdUnique
-  }
-
-  // useEffect(() => {
-  //   const form =  document.querySelector("form") as HTMLFormElement;
-  //   const uuid = document.querySelector("#uuid") as HTMLInputElement;
-  //   const uuidError = document.querySelector("#uuid + span.error") as HTMLSpanElement;
-  //   console.log("FORM:",form)
-  //   console.log("UUID:", uuid)
-  // }, [])
-
-  
   // State values that depend on userInfo need to be rehydrated
   useEffect(() => {
-    setUniqueId(userInfo.id ? userInfo.id : '')
+    setEnteredUUid(userInfo.id ? userInfo.id : '')
+    setEnteredFirstName(userInfo.firstName ? userInfo.firstName : '')
+    setEnteredLastName(userInfo.lastName ? userInfo.lastName : '')
+    setEnteredBio(userInfo.bio ? userInfo.bio : '')
+    setFormLoaded(true)
+
+    const validateForm = async () => {
+      setEnteredUUidValid(await isValidUUid(userInfo.id))
+      setEnteredFirstNameValid(isValidFirstName(userInfo.firstName))
+      setEnteredLastNameValid(isValidLastName(userInfo.lastName))
+      setEnteredBioValid(isValidBio(userInfo.bio))
+    }
+    validateForm()
   }, [userInfo])
 
-  // unique id change handler used to dynamically enforce lowercase
-  const handleUniqueIdChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    setUniqueId(e.target.value.toLowerCase())
-  }
+  // return boolean and string
+  const isValidUUid = async (newUniqueId: string): Promise<boolean> => {
+    console.log('new uuid:', newUniqueId)
+    // Check if its undefined
+    if (newUniqueId === undefined) {
+      // hacky way of getting rid of errors from first render before userInfo is hydrated
+      return false
+    }
 
-  // unique id change handler used to dynamically enforce lowercase
-  const handleUniqueIdBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    const uniqueid = e.target.value;
-    const form =  document.querySelector("form") as HTMLFormElement;
-    const formdata = new FormData(form);
-    const isValid = await validateUniqueId(uniqueid, formdata);
-    console.log('isValid:', isValid)
-    setIsIdUnique(isValid);
-  }
-
-  const validateUniqueId = async (value: string, formData: FormData): Promise<boolean> => {
-    const uuid = uuidRef.current as HTMLInputElement;
-    console.log('uuid:', uuid)
-    const newUniqueId = value
-    console.log('newUniqueId:', newUniqueId)
     // Check if it's empty
     if (newUniqueId === "") {
-      console.log('empty')
-      uuid.setCustomValidity('Invalid object!');
+      setEnteredUUidErrorMsg('Please enter a unique ID 🚫')
+      return false
+    }
+
+    if (newUniqueId.length < 3) {
+      setEnteredUUidErrorMsg('Usename must be at least 3 characters 🚫')
       return false
     }
     // Check if it's the same as the old uniqueId
     if (newUniqueId === userInfo.id) {
-      console.log('same')
-      uuid.setCustomValidity('');
+      setEnteredUUidErrorMsg('✅')
       return true
     }
     // Check if uniqueId is available
-    await fetcher(
+    const res = await fetcher(
       `http://localhost:3000/api/user/byId/${newUniqueId}`,
       { cache: 'no-store' },
-    ). then((res) => {
-      if (res === null) {
-        console.log('available')
-        uuid.setCustomValidity('');
-        return true
-      } else {
-        console.log('not available')
-        uuid.setCustomValidity('Invalid object!');
-        return false
-      }
-    })
-    return false
+    )
+    if (res === null) {
+      setEnteredUUidErrorMsg('✅')
+      return true
+    } else {
+      setEnteredUUidErrorMsg('Username is already taken 🚫')
+      return false
+    }
+  }
+
+  // return boolean and string
+  const isValidFirstName = (firstName: string): boolean => {
+    console.log('new first name:', firstName)
+    // Check if its undefined
+    if (firstName === undefined) {
+      // hacky way of getting rid of errors from first render before userInfo is hydrated
+      return false
+    }
+    // Check if it's empty
+    if (firstName === "") {
+      setEnteredFirstNameErrorMsg('Please enter a first name 🚫')
+      return false
+    }
+    setEnteredFirstNameErrorMsg('✅')
+    return true
+  }
+
+  // return boolean and string
+  const isValidLastName = (lastName: string): boolean => {
+    console.log('new last name:', lastName)
+    // Check if its undefined
+    if (lastName === undefined) {
+      // hacky way of getting rid of errors from first render before userInfo is hydrated
+      return false
+    }
+    // Check if it's empty
+    if (lastName === "") {
+      setEnteredLastNameErrorMsg('Please enter a last name 🚫')
+      return false
+    }
+    setEnteredLastNameErrorMsg('✅')
+    return true
+  }
+
+  // return boolean and string
+  const isValidBio = (bio: string): boolean => {
+    console.log('new bio:', bio)
+    // Check if its undefined
+    if (bio === undefined) {
+      // hacky way of getting rid of errors from first render before userInfo is hydrated
+      return false
+    }
+    // Check if it's empty
+    if (bio === "") {
+      setEnteredBioErrorMsg('Please enter a bio 🚫')
+      return false
+    }
+    setEnteredBioErrorMsg('✅')
+    return true
   }
 
   // handfilechange is called when a file is selected
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
-
     // Get file from event
     const file = e.target.files?.[0]!
     const filename = encodeURIComponent(file.name)
@@ -142,15 +258,14 @@ export default function AccountUpdate() {
 
   // make async function to handle form submission
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const uuid = document.querySelector("#uuid") as HTMLInputElement;
-    if (!uuid.checkValidity()) {
-      console.log('invalid')
-      e.preventDefault(); // Prevent form submission if it's invalid
-      // Optionally, you can display an error message or perform other actions
+
+    e.preventDefault()
+    // Check if form is valid
+    if (!formValid) {
+      console.log('Form is not valid')
       return
     }
-    console.log('valid')
-    e.preventDefault() // Prevent default form submission
+
     // Get data from form
     const inputs = {
       email: userInfo.email, // User cannot change for now.
@@ -179,13 +294,14 @@ export default function AccountUpdate() {
 
     // Redirect to profile
     // https://github.com/vercel/next.js/issues/42556
-    console.log('Redirecting to:', uniqueid)
+    console.log('Redirecting to:', enteredUUid)
     // router.replace(`/${uniqueid}`)
-    //window.location.href = `/${uniqueid}`
+    window.location.href = `/${enteredUUid}`
     // TODO: instead of server side redirect, use client side redirect to avoid unnecessary rerender of entire app.
   }
 
   return (
+    
     <>
       <div
         className="md:border-black-200 w-full overflow-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border"
@@ -196,42 +312,51 @@ export default function AccountUpdate() {
             Update your profile.
           </h1>
           <p className="text-sm">Fields with * are required.</p>
-          <Form.Root className="FromRoot" onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-                // `onSubmit` only triggered if it passes client-side 
-                handleFormSubmit(e);
-                const data = Object.fromEntries(new FormData(e.currentTarget));
-                console.log(data);
-                e.preventDefault();
-              }}>
-            <Form.Field className="FormField" name="unique-username" id="uuid">
-              <div className="flex">
-                <Form.Label className="FormLabel">Username *</Form.Label>
-                <Form.ValidityState>
-                {(validity) => (
-                  <Form.Control asChild>
-                  </Form.Control>
-                )}
-              </Form.ValidityState>
-                <Form.Message className="FormMessage" match="valueMissing">
-                  Username cannot be empty.
-                </Form.Message>
-                <Form.Message className="FormMessage" match="typeMismatch">
-                  Please provide a valid name.
-                </Form.Message>
-                <Form.Message match={async (value) => {
-                  const res = await fetcher('http://localhost:3000/api/uniqueid')
-                  return res === null ? true : false
-                  }} className="FormMessage">
-                  Please Enter a Unique Username.
-                </Form.Message>
-                <Form.Message match="valid">✅ Valid!</Form.Message>
-                {/* TODO: block submit if username is not unique.*/}
-                {/* <Form.Message className="FormMessage" match={getUUIDNotUnique}>
-                  Username is not unique. Try a new one.
-                </Form.Message> */}
-                <Form.Message className="FormMessage" match="tooShort">
-                  Username is too short.
-                </Form.Message>
+
+          {formLoaded ? (
+          <Form.Root className="FromRoot" onSubmit={handleFormSubmit}>
+            <Form.Field className="FormField" name="unique-username">
+              <div className="flex justify-between" >
+              <Form.Label className="FormLabel">Username *</Form.Label>
+              {enteredUUidTouched && (<Form.Message>{enteredUUidErrorMsg}</Form.Message>)}
+              </div>
+              <Form.Control asChild>
+                <input
+                  className="Input w-full rounded valid:border-gray-500 invalid:border-red-500"
+                  type="text"
+                  id="uuid"
+                  style={{ marginBottom: 10 }}
+                  required
+                  placeholder="Unique Username"
+                  onChange={handleFormChange}
+                  onBlur={handleFormBlur}
+                  value={enteredUUid}
+                />
+              </Form.Control>    
+            </Form.Field>
+            <Form.Field className="FormField" name="first-name">
+              <div className="flex justify-between">
+                <Form.Label className="FormLabel">First Name *</Form.Label>
+                {enteredFirstNameTouched && (<Form.Message>{enteredFirstNameErrorMsg}</Form.Message>)}
+              </div>
+              <Form.Control asChild>
+                <input
+                  className="Input w-full rounded valid:border-gray-500 invalid:border-red-500"
+                  type="text"
+                  style={{ marginBottom: 10 }}
+                  id="firstName"
+                  onChange={handleFormChange}
+                  onBlur={handleFormBlur}
+                  value={enteredFirstName}
+                  required
+                  placeholder="First Name"
+                />
+              </Form.Control>
+            </Form.Field>
+            <Form.Field className="FormField" name="last-name">
+              <div className="flex justify-between">
+                <Form.Label className="FormLabel">Last Name *</Form.Label>
+                {enteredLastNameTouched && (<Form.Message>{enteredLastNameErrorMsg}</Form.Message>)}
               </div>
               <Form.Control asChild>
                 <input
@@ -239,112 +364,28 @@ export default function AccountUpdate() {
                   type="text"
                   style={{ marginBottom: 10 }}
                   required
-                  ref={uuidRef}
-                  placeholder="Unique Username"
-                  value={uniqueid}
-                  onChange={handleUniqueIdChange}
-                  onBlur={handleUniqueIdBlur}
-                  minLength={4}
+                  placeholder="Last Name"
+                  id="lastName"
+                  onChange={handleFormChange}
+                  onBlur={handleFormBlur}
+                  value={enteredLastName}
                 />
               </Form.Control>
-            </Form.Field>
-            <div className="grid grid-flow-col justify-stretch gap-x-4">
-              <Form.Field className="FormField" name="first-name">
-                <div className="flex rounded">
-                  <Form.Label className="FormLabel">First Name *</Form.Label>
-                  <Form.Message className="FormMessage" match="valueMissing">
-                    Please enter your name.
-                  </Form.Message>
-                  <Form.Message className="FormMessage" match="typeMismatch">
-                    Please provide a valid name.
-                  </Form.Message>
-                  <Form.Message match="valid">✅ Valid!</Form.Message>
-                </div>
-                <Form.Control asChild>
-                  <input
-                    className="Input w-full rounded valid:border-gray-500 invalid:border-red-500"
-                    type="text"
-                    style={{ marginBottom: 10 }}
-                    required
-                    placeholder="First Name"
-                    defaultValue={userInfo?.firstName}
-                  />
-                </Form.Control>
-              </Form.Field>
-              <Form.Field className="FormField" name="last-name">
-                <div className="flex rounded">
-                  <Form.Label className="FormLabel">Last Name *</Form.Label>
-                  <Form.Message className="FormMessage" match="valueMissing">
-                    Please enter your name.
-                  </Form.Message>
-                  <Form.Message className="FormMessage" match="typeMismatch">
-                    Please provide a valid name.
-                  </Form.Message>
-                  <Form.Message match="valid">✅ Valid!</Form.Message>
-                </div>
-                <Form.Control asChild>
-                  <input
-                    className="Input w-full rounded valid:border-gray-500 invalid:border-red-500"
-                    type="text"
-                    style={{ marginBottom: 10 }}
-                    required
-                    placeholder="Last Name"
-                    defaultValue={userInfo?.lastName}
-                  />
-                </Form.Control>
-              </Form.Field>
-            </div>
+            </Form.Field>          
             <Form.Field className="FormField" name="bio">
-              <div className="flex">
+              <div className="flex justify-between">
                 <Form.Label className="FormLabel">Bio *</Form.Label>
-                <Form.Message className="FormMessage" match="valueMissing">
-                  Please briefly describe who you are and the types of content
-                  you promote regularly on your social channels.
-                </Form.Message>
-                <Form.Message match="valid">✅ Valid!</Form.Message>
+                {enteredBioTouched && (<Form.Message>{enteredBioErrorMsg}</Form.Message>)}
               </div>
               <Form.Control asChild>
                 <textarea
                   className="w-full rounded valid:border-gray-500 invalid:border-red-500"
                   required
                   placeholder="Briefly describe who you are and the types of content you promote regularly on your social channels."
-                  defaultValue={userInfo?.bio}
-                />
-              </Form.Control>
-            </Form.Field>
-            <Form.Field className="FormField" name="Instagram">
-              <div className="flex">
-                <Form.Label className="FormLabel">Instagram @</Form.Label>
-                <Form.Message className="FormMessage" match="valueMissing">
-                  Please provide links to your social media channels.
-                </Form.Message>
-              </div>
-              <Form.Control asChild>
-                <input
-                  className="Input w-full rounded valid:border-gray-500"
-                  type="text"
-                  style={{ marginBottom: 10 }}
-                  required
-                  placeholder="Instagram @"
-                  defaultValue=""
-                />
-              </Form.Control>
-            </Form.Field>
-            <Form.Field className="FormField" name="TikTok">
-              <div className="flex">
-                <Form.Label className="FormLabel">TikTok @</Form.Label>
-                <Form.Message className="FormMessage" match="valueMissing">
-                  Please provide links to your social media channels.
-                </Form.Message>
-              </div>
-              <Form.Control asChild>
-                <input
-                  className="Input w-full  rounded valid:border-gray-500"
-                  type="text"
-                  style={{ marginBottom: 10 }}
-                  required
-                  placeholder="TikTok @"
-                  defaultValue=""
+                  id="bio"
+                  onChange={handleFormChange}
+                  onBlur={handleFormBlur}
+                  value={enteredBio}
                 />
               </Form.Control>
             </Form.Field>
@@ -360,20 +401,27 @@ export default function AccountUpdate() {
                   style={{ marginBottom: 10 }}
                   onChange={handleFileChange}
                   placeholder="Profile Picture"
-                  defaultValue=""
                 />
               </Form.Control>
             </Form.Field>
             <Form.Submit asChild>
-              {/* Redirect after submit */}
-              <button className="mx-2 rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black">
-                Save
-              </button>
+
+              {formValid ? (
+                <button 
+                  className="mx-2 rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black">
+                  Save
+                </button>) :
+                (<button
+                  className="mx-2 rounded-full border border-black bg-grey p-1.5 px-4 text-sm text-white transition-all "
+                  disabled>
+                  Save
+                  </button>)}
             </Form.Submit>
-            <button type="reset">reset</button>
           </Form.Root>
+          ) : (<h1> LOADING.... </h1>)}
         </div>
       </div>
     </>
+    
   )
 }
