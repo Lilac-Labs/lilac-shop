@@ -232,7 +232,7 @@ export default function AccountUpdate() {
                   type="file"
                   style={{ marginBottom: 10 }}
                   onChange={handleFileChange}
-                  required
+                  // required
                   placeholder="Profile Picture"
                   defaultValue=""
                 />

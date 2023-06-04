@@ -1,13 +1,12 @@
 import { makeData } from './makeData'
 import { columns } from './columns'
 import { DataTable } from './data-table'
+import { fetcher } from '@/lib/utils'
 
-export default function Home() {
-  const data = makeData(10)
-
+export default async function Home() {
   return (
     <div className="container z-30 mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} />
     </div>
   )
 }
