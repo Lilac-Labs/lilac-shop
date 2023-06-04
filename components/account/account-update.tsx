@@ -142,7 +142,7 @@ export default function AccountUpdate() {
 
     // Check if it's empty
     if (newUniqueId === "") {
-      setEnteredUUidErrorMsg('Please enter a unique ID 🚫')
+      setEnteredUUidErrorMsg('Unique id can not be empty 🚫')
       return false
     }
 
