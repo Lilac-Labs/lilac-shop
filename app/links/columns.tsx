@@ -62,11 +62,11 @@ export const columns: ColumnDef<AffiliateLink>[] = [
             />
           </div>
           <h1 className="">{product.tittle}</h1>
-          <p className="text-grey">{product.brand}</p>
+          <p className="text-grey">{product.brand.name}</p>
           <Link className="text-grey" href={product.link} target="_blank">
             {product.link}
           </Link>
-          <p className="text-grey">{`${(product.commission * 100).toFixed(
+          <p className="text-grey">{`${product.brand.commission.toFixed(
             0,
           )}% commission`}</p>
         </div>
@@ -152,9 +152,9 @@ export const columns: ColumnDef<AffiliateLink>[] = [
   },
   {
     header: () => <div className="text-center">Affiliate Link</div>,
-    accessorKey: 'url',
+    accessorKey: 'link',
     cell: ({ row }) => {
-      const link = String(row.getValue('url'))
+      const link = String(row.getValue('link'))
 
       return <div className="text-center">{link}</div>
     },

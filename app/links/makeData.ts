@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { AffiliateLink, Product } from '@/lib/types'
+import { AffiliateLink, Brand, Product } from '@/lib/types'
 
 /**
  * This file is used to generate fake data for the table for the purpose of development.
@@ -18,16 +18,22 @@ const newProduct = (): Product => {
     tittle: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
     link: faker.internet.url(),
-    commission: faker.number.float(0.3),
     image: faker.image.urlLoremFlickr({ category: 'fashion' }),
-    brand: faker.company.name(),
+    brand: newBrand(),
+  }
+}
+
+const newBrand = (): Brand => {
+  return {
+    name: faker.company.name(),
+    commission: faker.number.int(30),
   }
 }
 
 const newAffiliateLink = (): AffiliateLink => {
   return {
     id: faker.string.uuid(),
-    url: faker.internet.url(),
+    link: faker.internet.url(),
     createdAt: faker.date.past(),
     product: newProduct(),
     clicks: faker.number.int(2000),
