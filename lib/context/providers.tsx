@@ -2,9 +2,9 @@
 
 import UserInfoProvider from './UserInfoProvider'
 import { SessionProvider, getSession } from 'next-auth/react'
-import { Session } from 'next-auth'
 import { useEffect } from 'react'
 import { fetcher } from '../utils'
+import AffiliateLinksProvider from './AffiliateLinksProvider'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -31,7 +31,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <SessionProvider refetchOnWindowFocus={false}>
-      <UserInfoProvider>{children}</UserInfoProvider>
+      <UserInfoProvider>
+        <AffiliateLinksProvider>{children}</AffiliateLinksProvider>
+      </UserInfoProvider>
     </SessionProvider>
   )
 }

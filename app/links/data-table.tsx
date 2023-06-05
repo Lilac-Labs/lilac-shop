@@ -36,6 +36,7 @@ import { LoadingCircle, LoadingDots } from '@/components/shared/icons'
 import { Button } from '@/components/ui/button'
 import { useCreateNewLinkModal } from '@/components/linksPage/create-new-link-modal'
 import { AffiliateLink, Brand } from '@/lib/types'
+import { useAffiliateLinksContext } from '@/lib/context/AffiliateLinksProvider'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData>[]
@@ -49,22 +50,14 @@ export function DataTable<TData, TValue>({
     { id: 'createdAt', desc: true },
   ])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [data, setData] = useState<TData[]>([])
+  // const [data, setData] = useState<TData[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-  const [newLinkAdded, setNewLinkAdded] = useState<boolean>(false)
+  const { affiliateLinks, setAffiliateLinksUpdated } =
+    useAffiliateLinksContext()
   const { CreateNewLinkModal, setShowCreateNewLinkModal } =
-    useCreateNewLinkModal(setNewLinkAdded)
-
-  useEffect(() => {
-    fetcher(`http://localhost:3000/api/affiliateLinks/${userInfo.id}`)
-      .then((data) => {
-        setData(data)
-      })
-      .finally(() => {
-        setNewLinkAdded(false)
-        setLoading(false)
-      })
-  }, [userInfo.id, newLinkAdded])
+    useCreateNewLinkModal(setAffiliateLinksUpdated)
+  const data = affiliateLinks as TData[]
+  console.log('data', affiliateLinks)
 
   const productSearchFilter: FilterFn<any> = (row, id, value, addMeta) => {
     const title = row.original.title as string
