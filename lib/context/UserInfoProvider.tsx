@@ -30,7 +30,7 @@ export default function UserInfoProvider({
     const getUserInfo = async () => {
       const res = await fetcher(
         `http://localhost:3000/api/user/byEmail/${email}`,
-        { next: { revalidate: 10 } },
+        { cache: 'no-store' },
       )
       const userInfo_: UserInfo = {
         id: res.id,
