@@ -72,7 +72,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
           <h1 className="">{title}</h1>
           <p className="text-grey">{brand.name}</p>
           <Link className="text-grey" href={productLink} target="_blank">
-            {productLink}
+            {productLink.slice(0, 30) + '...'}
           </Link>
           <p className="text-grey">{`${brand.commission.toFixed(
             0,
