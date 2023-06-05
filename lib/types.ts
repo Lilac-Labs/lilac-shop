@@ -13,19 +13,23 @@ export interface AffiliateLink {
   id: string
   link: string
   createdAt: Date
-  product: Product
   clicks: number
   orders: number
   earned: number
   content?: string
-}
-
-export interface Product {
-  link: string
-  tittle: string
-  description: string
+  productLink: string
+  title: string
+  description?: string
   image: string
   brand: Brand
+}
+// for creating a new affiliate link
+export interface Product {
+  image: string
+  productLink: string
+  title: string
+  description: string
+  brandName: string
 }
 
 export interface Brand {

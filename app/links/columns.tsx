@@ -1,7 +1,7 @@
 'use client'
 import { getOrdinal } from '@/lib/utils'
 import { ColumnDef } from '@tanstack/react-table'
-import { AffiliateLink, Product } from 'lib/types'
+import { AffiliateLink, Brand } from 'lib/types'
 import Link from 'next/link'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -52,21 +52,21 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     accessorKey: 'product',
     filterFn: 'productSearch',
     cell: ({ row }) => {
-      const product = row.getValue('product') as Product
+      const image = row.original.image as string
+      const title = row.original.title as string
+      const brand = row.original.brand as Brand
+      const productLink = row.original.productLink as string
       return (
         <div className="text-center">
           <div>
-            <img
-              src={product.image}
-              className="mx-auto h-24 w-24 object-contain"
-            />
+            <img src={image} className="mx-auto h-24 w-24 object-contain" />
           </div>
-          <h1 className="">{product.tittle}</h1>
-          <p className="text-grey">{product.brand.name}</p>
-          <Link className="text-grey" href={product.link} target="_blank">
-            {product.link}
+          <h1 className="">{title}</h1>
+          <p className="text-grey">{brand.name}</p>
+          <Link className="text-grey" href={productLink} target="_blank">
+            {productLink}
           </Link>
-          <p className="text-grey">{`${product.brand.commission.toFixed(
+          <p className="text-grey">{`${brand.commission.toFixed(
             0,
           )}% commission`}</p>
         </div>

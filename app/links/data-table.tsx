@@ -31,9 +31,11 @@ import {
 } from '@/components/ui/table'
 
 import { Input } from '@/components/ui/input'
-import { Product } from '@/lib/types'
 import { fetcher } from '@/lib/utils'
 import { LoadingCircle, LoadingDots } from '@/components/shared/icons'
+import { Button } from '@/components/ui/button'
+import { useCreateNewLinkModal } from '@/components/linksPage/create-new-link-modal'
+import { AffiliateLink } from '@/lib/types'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData>[]
@@ -49,21 +51,26 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [data, setData] = useState<TData[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+  const [newLinkAdded, setNewLinkAdded] = useState<boolean>(false)
+  const { CreateNewLinkModal, setShowCreateNewLinkModal } =
+    useCreateNewLinkModal(setNewLinkAdded)
 
   useEffect(() => {
     fetcher(`http://localhost:3000/api/affiliateLinks/${userInfo.id}`)
       .then((data) => {
-        console.log(data)
         setData(data)
       })
-      .finally(() => setLoading(false))
-  }, [userInfo.id])
+      .finally(() => {
+        setNewLinkAdded(false)
+        setLoading(false)
+      })
+  }, [userInfo.id, newLinkAdded])
 
   const productSearchFilter: FilterFn<any> = (row, id, value, addMeta) => {
-    const product = row.getValue(id) as Product
+    const product = row.getValue(id) as AffiliateLink
 
     return (
-      product.tittle.toLowerCase() + product.brand.name.toLowerCase()
+      product.title.toLowerCase() + product.brand.name.toLowerCase()
     ).includes(value.toLowerCase())
   }
 
@@ -84,19 +91,24 @@ export function DataTable<TData, TValue>({
     },
   })
 
-  console.log(table.getColumn('product'))
-
   return (
     <div>
-      <div className="flex items-center py-4">
+      <CreateNewLinkModal />
+      <div className="flex flex-row items-center py-4">
         <Input
           placeholder="SEARCH EXISITING LINKS"
           value={(table.getColumn('product')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('product')?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm basis-1/2"
         />
+        <Button
+          className="item-right ml-auto"
+          onClick={() => setShowCreateNewLinkModal(true)}
+        >
+          CREATE NEW LINK
+        </Button>
       </div>
       <div className="rounded-md border">
         <Table>
