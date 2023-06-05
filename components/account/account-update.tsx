@@ -55,21 +55,13 @@ export default function AccountUpdate() {
   const [enteredFirstNameValid, setEnteredFirstNameValid] = useState<boolean>(false)
   const [enteredLastNameValid, setEnteredLastNameValid] = useState<boolean>(false)
   const [enteredBioValid, setEnteredBioValid] = useState<boolean>(false)
+  
 
   // Form field error message
   const [enteredUUidErrorMsg, setEnteredUUidErrorMsg] = useState<string>('')
   const [enteredFirstNameErrorMsg, setEnteredFirstNameErrorMsg] = useState<string>('')
   const [enteredLastNameErrorMsg, setEnteredLastNameErrorMsg] = useState<string>('')
   const [enteredBioErrorMsg, setEnteredBioErrorMsg] = useState<string>('')
-
-
-  const enteredNameTouchInvalid = !enteredUUidValid && enteredUUidTouched
-  const enteredFirstNameTouchInvalid = !enteredFirstNameValid && enteredFirstNameTouched
-  const enteredLastNameTouchInvalid = !enteredLastNameValid && enteredLastNameTouched
-  const enteredBioTouchInvalid = !enteredBioValid && enteredBioTouched
-  
-
-
 
   // Validation of fields
   const handleFormBlur = async (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -95,24 +87,20 @@ export default function AccountUpdate() {
     }
   }
 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [imageUploading, setImageUploading] = useState<boolean>(false)
+  const [enteredImageErrorMsg, setEnteredImageErrorMsg] = useState<string>('')
+  const [storageLink, setStorageLink] = useState<string>('')
+
   useEffect(() => {
-    setFormValid(enteredUUidValid && enteredFirstNameValid && enteredLastNameValid && enteredBioValid)
-    console.log('useEffect - Form is valid?', enteredUUidValid && enteredFirstNameValid && enteredLastNameValid && enteredBioValid)
-  }, [enteredUUidValid, enteredFirstNameValid, enteredLastNameValid, enteredBioValid])
+    setFormValid(enteredUUidValid && enteredFirstNameValid && enteredLastNameValid && enteredBioValid && !imageUploading)
+    console.log('useEffect - Form is valid?', enteredUUidValid && enteredFirstNameValid && enteredLastNameValid && enteredBioValid && !imageUploading)
+  }, [enteredUUidValid, enteredFirstNameValid, enteredLastNameValid, enteredBioValid, imageUploading])
 
 
   const router = useRouter()
-
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [storageLink, setStorageLink] = useState<string>('')
-
   // userInfo is the user's info and userInfoUpdated is a boolean that is used to trigger a re-render
   const { userInfo, setUserInfoUpdated } = useUserInfoContext()
-
-  // State values that depend on userInfo need to be rehydrated.
-
-  // State values that depend on userInfo need to be rehydrated.
-  const [isIdUnique, setIsIdUnique] = useState(true)
 
   // State values that depend on userInfo need to be rehydrated
   useEffect(() => {
@@ -223,8 +211,16 @@ export default function AccountUpdate() {
   // handfilechange is called when a file is selected
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
-    // Get file from event
+    
+
     const file = e.target.files?.[0]!
+
+    if (file === undefined) {
+      return
+    }
+
+    setImageUploading(true) // we are uploading
+
     const filename = encodeURIComponent(file.name)
     const fileType = encodeURIComponent(file.type)
 
@@ -233,11 +229,14 @@ export default function AccountUpdate() {
     const res = await fetch(GET_URL)
     const { url, fields } = await res.json()
 
+    setEnteredImageErrorMsg('Image Uploading ⌛')
+
     // Upload file to S3
     const formData = new FormData()
     Object.entries({ ...fields, file }).forEach(([key, value]) => {
       formData.append(key, value as string)
     })
+    
 
     const upload = await fetch(url, {
       method: 'POST',
@@ -245,15 +244,19 @@ export default function AccountUpdate() {
     })
 
     if (upload.ok) {
-      console.log('Uploaded successfully!')
       setStorageLink(
         `https://dev-shop-links.s3.us-west-2.amazonaws.com/${filename}`,
       )
+      setEnteredImageErrorMsg('✅')
+      console.log('Uploaded successfully!')
+      
     } else {
+      setEnteredImageErrorMsg('Upload failed. Please retry.🚫')
       console.error('Upload failed.')
     }
-    // From upload, get the url of the file in aws.
-    // Set state to store url of the file.
+
+    setImageUploading(false) // we are no longer uploading
+
   }
 
   // make async function to handle form submission
@@ -390,14 +393,16 @@ export default function AccountUpdate() {
               </Form.Control>
             </Form.Field>
             <Form.Field className="FormField" name="profile-pic">
-              <div className="flex">
+              <div className="flex justify-between">
                 <Form.Label className="FormLabel">Profile Picture</Form.Label>
+                {enteredImageErrorMsg && (<Form.Message>{enteredImageErrorMsg}</Form.Message>)}
               </div>
               <Form.Control asChild>
                 <input
                   className="Input w-full rounded valid:border-gray-500 invalid:border-red-500"
                   accept="image/png, image/jpeg"
                   type="file"
+                  id="image"
                   style={{ marginBottom: 10 }}
                   onChange={handleFileChange}
                   placeholder="Profile Picture"
