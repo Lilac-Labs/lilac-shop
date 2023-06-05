@@ -34,7 +34,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { fetcher, formatBrandSelect } from '@/lib/utils'
-import { Product, Brand } from '@/lib/types'
+import { Product, Brand, AffiliateLink } from '@/lib/types'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 
 const formSchema = z.object({
@@ -45,65 +45,51 @@ const formSchema = z.object({
   brandName: z.string().min(1, { message: 'Please select a brand' }),
 })
 
-const CreateNewLinkModal = ({
-  showCreateNewLinkModal,
-  setCreateNewLinkModal,
-  setNewLinkAdded,
+const EditLinkModal = ({
+  showEditLinkModal,
+  setEditLinkModal,
+  setLinkEdited,
+  affiliateLink,
 }: {
-  showCreateNewLinkModal: boolean
-  setCreateNewLinkModal: Dispatch<SetStateAction<boolean>>
-  setNewLinkAdded: Dispatch<SetStateAction<boolean>>
+  showEditLinkModal: boolean
+  setEditLinkModal: Dispatch<SetStateAction<boolean>>
+  setLinkEdited: Dispatch<SetStateAction<boolean>>
+  affiliateLink: AffiliateLink
 }) => {
   const { userInfo } = useUserInfoContext()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      image: '',
-      productLink: '',
-      title: '',
-      description: '',
-      brandName: '',
+      image: affiliateLink.image,
+      productLink: affiliateLink.productLink,
+      title: affiliateLink.title,
+      description: affiliateLink.description,
+      brandName: formatBrandSelect(affiliateLink.brand),
     },
   })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values as Product)
-    console.log(`http://localhost:3000/api/affiliateLink/${userInfo.id}`)
-    fetcher(`http://localhost:3000/api/affiliateLink/${userInfo.id}`, {
-      method: 'PUT',
+    console.log(`http://localhost:3000/api/affiliateLink/${affiliateLink.id}`)
+    fetcher(`http://localhost:3000/api/affiliateLink/${affiliateLink.id}`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify(values as Product),
     })
       .then((res) => {
         console.log('Response:', res)
       })
       .finally(() => {
         console.log('Finally')
-        setNewLinkAdded(true)
-        setCreateNewLinkModal(false)
+        setLinkEdited(true)
+        setEditLinkModal(false)
       })
   }
 
-  const [brands, setBrands] = useState<Brand[]>([] as Brand[])
-  const [loading, setLoading] = useState<boolean>(true)
-
-  useEffect(() => {
-    fetcher(`http://localhost:3000/api/brands`)
-      .then((data) => {
-        setBrands(data as Brand[])
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [])
-
   return (
-    <Modal
-      showModal={showCreateNewLinkModal}
-      setShowModal={setCreateNewLinkModal}
-    >
+    <Modal showModal={showEditLinkModal} setShowModal={setEditLinkModal}>
       <div className="w-full overflow-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border md:border-gray-200">
         <Form {...form}>
           <form
@@ -117,7 +103,7 @@ const CreateNewLinkModal = ({
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormDescription>Product title.</FormDescription>
                   <FormMessage />
@@ -155,7 +141,6 @@ const CreateNewLinkModal = ({
                 </FormItem>
               )}
             />
-            TODO: add image upload
             <FormField
               control={form.control}
               name="image"
@@ -163,14 +148,22 @@ const CreateNewLinkModal = ({
                 <FormItem>
                   <FormLabel>Image</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <div>
+                      <Image
+                        alt={`${affiliateLink.title} image`}
+                        src={affiliateLink.image}
+                        width={150}
+                        height={150}
+                      />
+                      <Input {...field} />
+                    </div>
                   </FormControl>
                   <FormDescription>Image url of the product.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="brandName"
               render={({ field }) => (
@@ -182,49 +175,44 @@ const CreateNewLinkModal = ({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a verified email to display" />
+                        <SelectValue
+                          className="text-black"
+                          placeholder={affiliateLink.brand.name}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {brands.map((brand) => (
-                        <SelectItem key={brand.name} value={brand.name}>
-                          {formatBrandSelect(brand)}
-                        </SelectItem>
-                      ))}
+                      {brands.length === 0 ? (
+                        <SelectItem value="loading">Loading...</SelectItem>
+                      ) : (
+                        brands.map((brand) => (
+                          <SelectItem key={brand.name} value={brand.name}>
+                            {formatBrandSelect(brand)}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
-                  {/* {loading ? (
-                    <LoadingDots color="#808080" />
-                  ) : (
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a verified email to display" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="m@example.com">
-                          m@example.com
-                        </SelectItem>
-                        <SelectItem value="m@google.com">
-                          m@google.com
-                        </SelectItem>
-                        <SelectItem value="m@support.com">
-                          m@support.com
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )} */}
-
-                  <FormDescription>Image url of the product.</FormDescription>
+                  <FormDescription>Select a brand</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            /> */}
+            <FormField
+              control={form.control}
+              name="brandName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Brand</FormLabel>
+                  <FormControl>
+                    <Input {...field} disabled={true} />
+                  </FormControl>
+                  <FormDescription></FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">SAVE</Button>
           </form>
         </Form>
       </div>
@@ -232,26 +220,28 @@ const CreateNewLinkModal = ({
   )
 }
 
-export function useCreateNewLinkModal(
-  setNewLinkAdded: Dispatch<SetStateAction<boolean>>,
+export function useEditLinkModal(
+  setLinkEdited: Dispatch<SetStateAction<boolean>>,
+  affiliateLink: AffiliateLink,
 ) {
-  const [showCreateNewLinkModal, setShowCreateNewLinkModal] = useState(false)
+  const [showEditLinkModal, setShowEditLinkModal] = useState(false)
 
-  const CreateNewLinkModalCallback = useCallback(() => {
+  const EditLinkModalCallback = useCallback(() => {
     return (
-      <CreateNewLinkModal
-        showCreateNewLinkModal={showCreateNewLinkModal}
-        setCreateNewLinkModal={setShowCreateNewLinkModal}
-        setNewLinkAdded={setNewLinkAdded}
+      <EditLinkModal
+        showEditLinkModal={showEditLinkModal}
+        setEditLinkModal={setShowEditLinkModal}
+        setLinkEdited={setLinkEdited}
+        affiliateLink={affiliateLink}
       />
     )
-  }, [showCreateNewLinkModal, setShowCreateNewLinkModal])
+  }, [showEditLinkModal, setShowEditLinkModal])
 
   return useMemo(
     () => ({
-      setShowCreateNewLinkModal,
-      CreateNewLinkModal: CreateNewLinkModalCallback,
+      setShowEditLinkModal,
+      EditLinkModal: EditLinkModalCallback,
     }),
-    [setShowCreateNewLinkModal, CreateNewLinkModalCallback],
+    [setShowEditLinkModal, EditLinkModalCallback],
   )
 }

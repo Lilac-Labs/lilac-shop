@@ -38,6 +38,25 @@ export async function PUT(
   return NextResponse.json(affiliateLink)
 }
 
+export async function POST(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
+  const product: Product = await request.json()
+  const updatedAffiliateLink = await prisma.affiliateLink.update({
+    where: {
+      id: Number(params.id),
+    },
+    data: {
+      title: product.title,
+      description: product.description,
+      image: product.image,
+      productLink: product.productLink,
+    },
+  })
+  return NextResponse.json(updatedAffiliateLink)
+}
+
 /**
  * delete an affiliate link
  * @param request
