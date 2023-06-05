@@ -40,17 +40,17 @@ model Session {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  name          String?
-  firstName     String?
-  lastName      String?
-  email         String        @unique
-  emailVerified DateTime?
-  image         String?
-  bio           String?
-  accounts      Account[]
-  sessions      Session[]
-  socialMedias  SocialMedia[]
+  id             String          @id @default(cuid())
+  name           String?
+  firstName      String?
+  lastName       String?
+  email          String          @unique
+  emailVerified  DateTime?
+  image          String?
+  bio            String?
+  accounts       Account[]
+  sessions       Session[]
+  socialMedias   SocialMedia[]
   affiliateLinks AffiliateLink[]
 }
 
@@ -70,35 +70,29 @@ model VerificationToken {
 }
 
 model AffiliateLink {
-  id                Int  @id @default(autoincrement())
-  userId            String
-  link              String
-  createdAt         DateTime @default(now())
-  clicks            Int     @default(0)
-  orders            Int     @default(0)
-  earned            Float   @default(0)
-  productLink       String
-  product           Product @relation(fields: [productLink], references: [link])
-  content           String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          Int      @id @default(autoincrement())
+  userId      String
+  link        String
+  createdAt   DateTime @default(now())
+  clicks      Int      @default(0)
+  orders      Int      @default(0)
+  earned      Float    @default(0)
+  productLink String
+  title       String
+  description String?
+  image       String
+  brandName   String
+  brand       Brand    @relation(fields: [brandName], references: [name], onDelete: Cascade)
+  content     String?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([createdAt])
 }
 
-model Product {
-  link        String @unique @id
-  tittle      String
-  description String?
-  image       String
-  brandName   String
-  brand       Brand  @relation(fields: [brandName], references: [name], onDelete: Cascade)
-  affiliateLinks AffiliateLink[]
-}
-
 model Brand {
-  name        String  @unique
-  commission  Float
-  products    Product[]
+  name           String          @unique
+  commission     Float
+  affiliateLinks AffiliateLink[]
 }
 
 enum SocialMediaType {
