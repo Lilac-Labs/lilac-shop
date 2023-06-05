@@ -35,7 +35,7 @@ import { fetcher } from '@/lib/utils'
 import { LoadingCircle, LoadingDots } from '@/components/shared/icons'
 import { Button } from '@/components/ui/button'
 import { useCreateNewLinkModal } from '@/components/linksPage/create-new-link-modal'
-import { AffiliateLink } from '@/lib/types'
+import { AffiliateLink, Brand } from '@/lib/types'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData>[]
@@ -67,11 +67,11 @@ export function DataTable<TData, TValue>({
   }, [userInfo.id, newLinkAdded])
 
   const productSearchFilter: FilterFn<any> = (row, id, value, addMeta) => {
-    const product = row.getValue(id) as AffiliateLink
-
-    return (
-      product.title.toLowerCase() + product.brand.name.toLowerCase()
-    ).includes(value.toLowerCase())
+    const title = row.original.title as string
+    const brand = row.original.brand as Brand
+    return (title.toLowerCase() + brand.name.toLowerCase()).includes(
+      value.toLowerCase(),
+    )
   }
 
   const table = useReactTable({
