@@ -10,10 +10,10 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  getPaginationRowModel,
   useReactTable,
   FilterFn,
 } from '@tanstack/react-table'
-import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -31,11 +31,10 @@ import {
 } from '@/components/ui/table'
 
 import { Input } from '@/components/ui/input'
-import { fetcher } from '@/lib/utils'
 import { LoadingCircle, LoadingDots } from '@/components/shared/icons'
 import { Button } from '@/components/ui/button'
 import { useCreateNewLinkModal } from '@/components/linksPage/create-new-link-modal'
-import { AffiliateLink, Brand } from '@/lib/types'
+import { Brand } from '@/lib/types'
 import { useAffiliateLinksContext } from '@/lib/context/AffiliateLinksProvider'
 
 interface DataTableProps<TData, TValue> {
@@ -45,7 +44,6 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
 }: DataTableProps<TData, TValue>) {
-  const { userInfo } = useUserInfoContext()
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'createdAt', desc: true },
   ])
@@ -57,7 +55,6 @@ export function DataTable<TData, TValue>({
   const { CreateNewLinkModal, setShowCreateNewLinkModal } =
     useCreateNewLinkModal(setAffiliateLinksUpdated)
   const data = affiliateLinks as TData[]
-  console.log('data', affiliateLinks)
 
   const productSearchFilter: FilterFn<any> = (row, id, value, addMeta) => {
     const title = row.original.title as string
@@ -75,6 +72,7 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
       columnFilters,
@@ -83,6 +81,7 @@ export function DataTable<TData, TValue>({
       productSearch: productSearchFilter,
     },
   })
+  // console log current page
 
   return (
     <div>
@@ -161,6 +160,51 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="flex items-center justify-center space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+        >
+          1
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          &lt;
+        </Button>
+        <Input
+          type="number"
+          className="h-9 w-9 rounded-md text-center"
+          min={1}
+          max={table.getPageCount()}
+          defaultValue={table.getState().pagination.pageIndex + 1}
+          onChange={(e) => {
+            const page = e.target.value ? Number(e.target.value) - 1 : 0
+            table.setPageIndex(page)
+          }}
+        ></Input>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          &gt;
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          {table.getPageCount()}
+        </Button>
       </div>
     </div>
   )
