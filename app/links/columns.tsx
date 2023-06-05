@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAffiliateLinksContext } from '@/lib/context/AffiliateLinksProvider'
+import { useEditLinkModal } from '@/components/linksPage/edit-link-modal'
 
 export const columns: ColumnDef<AffiliateLink>[] = [
   {
@@ -58,8 +59,13 @@ export const columns: ColumnDef<AffiliateLink>[] = [
       const title = row.original.title as string
       const brand = row.original.brand as Brand
       const productLink = row.original.productLink as string
+      const { EditLinkModal, setShowEditLinkModal } = useEditLinkModal(
+        setAffiliateLinksUpdated,
+        row.original,
+      )
       return (
         <div className="text-leftg">
+          <EditLinkModal />
           <div>
             <img src={image} className="mx-auto h-24 w-24 object-contain" />
           </div>
@@ -72,7 +78,15 @@ export const columns: ColumnDef<AffiliateLink>[] = [
             0,
           )}% commission`}</p>
           <div className="flex flex-row ">
-            <button className="mr-5 text-grey hover:text-black"> EDIT </button>
+            <button
+              className="mr-5 text-grey hover:text-black"
+              onClick={() => {
+                setShowEditLinkModal(true)
+              }}
+            >
+              {' '}
+              EDIT{' '}
+            </button>
             <button
               className="text-grey hover:text-black"
               onClick={() => {
