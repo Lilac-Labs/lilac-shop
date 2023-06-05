@@ -1,10 +1,11 @@
 'use client'
-import { getOrdinal } from '@/lib/utils'
+import { fetcher, getOrdinal } from '@/lib/utils'
 import { ColumnDef } from '@tanstack/react-table'
 import { AffiliateLink, Brand } from 'lib/types'
 import Link from 'next/link'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useAffiliateLinksContext } from '@/lib/context/AffiliateLinksProvider'
 
 export const columns: ColumnDef<AffiliateLink>[] = [
   {
@@ -52,12 +53,13 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     accessorKey: 'product',
     filterFn: 'productSearch',
     cell: ({ row }) => {
+      const { setAffiliateLinksUpdated } = useAffiliateLinksContext()
       const image = row.original.image as string
       const title = row.original.title as string
       const brand = row.original.brand as Brand
       const productLink = row.original.productLink as string
       return (
-        <div className="text-center">
+        <div className="text-leftg">
           <div>
             <img src={image} className="mx-auto h-24 w-24 object-contain" />
           </div>
@@ -69,6 +71,19 @@ export const columns: ColumnDef<AffiliateLink>[] = [
           <p className="text-grey">{`${brand.commission.toFixed(
             0,
           )}% commission`}</p>
+          <div className="flex flex-row ">
+            <button className="mr-5 text-grey hover:text-black"> EDIT </button>
+            <button
+              className="text-grey hover:text-black"
+              onClick={() => {
+                fetcher(`/api/affiliateLink/${row.original.id}`, {
+                  method: 'DELETE',
+                }).then(() => setAffiliateLinksUpdated(true))
+              }}
+            >
+              DELETE
+            </button>
+          </div>
         </div>
       )
     },

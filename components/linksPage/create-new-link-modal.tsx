@@ -68,8 +68,8 @@ const CreateNewLinkModal = ({
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values as Product)
-    console.log(`http://localhost:3000/api/affiliateLinks/${userInfo.id}`)
-    fetcher(`http://localhost:3000/api/affiliateLinks/${userInfo.id}`, {
+    console.log(`http://localhost:3000/api/affiliateLink/${userInfo.id}`)
+    fetcher(`http://localhost:3000/api/affiliateLink/${userInfo.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
