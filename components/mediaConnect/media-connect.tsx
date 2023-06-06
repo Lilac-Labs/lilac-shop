@@ -1,5 +1,6 @@
 import IGConnect from "./ig";
 import TikTokConnect from "./tiktok";
+import YoutubeConnect from "./youtube";
 
 
 export default function MediaConnect() {
@@ -12,9 +13,11 @@ export default function MediaConnect() {
                 <h1 className="font-display text-3xl font-bold">
                     Connect your Social Media.
                 </h1>
-                <p className="text-sm">...</p>
-                < TikTokConnect />
+                <p className="text-sm">Supported:</p>
                 < IGConnect />
+                <p className="text-sm">In Development:</p>
+                < TikTokConnect />
+                < YoutubeConnect/>
 
             </div>
         </div>
