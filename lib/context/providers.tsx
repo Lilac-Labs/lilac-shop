@@ -17,7 +17,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         })
           .then((res) => {
             //TODO: change this to createAccount
-            if (path !== '/accountSettings' && res?.bio === null) {
+            if (path !== '/accountSettings' && res?.userName === null) {
               window.location.href = '/accountSettings'
             }
           })

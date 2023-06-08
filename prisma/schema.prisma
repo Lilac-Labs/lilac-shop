@@ -41,6 +41,7 @@ model Session {
 
 model User {
   id             String          @id @default(cuid())
+  userName       String?         @unique
   name           String?
   firstName      String?
   lastName       String?
@@ -55,10 +56,12 @@ model User {
 }
 
 model SocialMedia {
-  link   String          @unique
-  type   SocialMediaType
-  userId String
-  user   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  link         String          @unique
+  sessionToken String          @unique
+  expires      DateTime
+  type         SocialMediaType
+  userId       String
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -70,23 +73,17 @@ model VerificationToken {
 }
 
 model AffiliateLink {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id
   userId      String
-  link        String
-  createdAt   DateTime @default(now())
-  clicks      Int      @default(0)
-  orders      Int      @default(0)
-  earned      Float    @default(0)
-  productLink String
   title       String
   description String?
   image       String
   brandName   String
-  brand       Brand    @relation(fields: [brandName], references: [name], onDelete: Cascade)
+  brand       Brand   @relation(fields: [brandName], references: [name], onDelete: Cascade)
   content     String?
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([createdAt])
+  @@index([id])
 }
 
 model Brand {

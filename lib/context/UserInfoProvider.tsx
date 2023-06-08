@@ -34,6 +34,7 @@ export default function UserInfoProvider({
       )
       const userInfo_: UserInfo = {
         id: res.id,
+        userName: res.userName,
         firstName: res.firstName,
         lastName: res.lastName,
         bio: res.bio,
