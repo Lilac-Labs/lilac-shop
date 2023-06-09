@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { AffiliateLink } from '../types'
+import { AffiliateLink, Link } from '../types'
 import { fetcher } from '../utils'
 import { useUserInfoContext } from './UserInfoProvider'
 
@@ -10,6 +10,7 @@ const AffiliateLinksContext = createContext(
     affiliateLinks: AffiliateLink[]
     affiliateLinksUpdated: boolean
     setAffiliateLinksUpdated: React.Dispatch<React.SetStateAction<boolean>>
+    loading: boolean
   },
 )
 
@@ -27,13 +28,28 @@ export default function AffiliateLinksProvider({
   const [affiliateLinksUpdated, setAffiliateLinksUpdated] =
     useState<boolean>(false)
 
+  const [loading, setLoading] = useState<boolean>(true)
+
   useEffect(() => {
     const getAffiliateLinks = async () => {
-      const res = (await fetcher(
+      const affiliateLinks = (await fetcher(
         `/api/affiliateLink/${userInfo.id}`,
       )) as AffiliateLink[]
 
-      setAffiliateLinks(res)
+      const links = (await fetcher(
+        `https://link-m.herokuapp.com/links/${userInfo.id}`,
+      )) as Link[]
+
+      affiliateLinks.forEach((affiliateLink) => {
+        affiliateLink.link = links.filter(
+          (link) => link.id === affiliateLink.id,
+        )[0]
+      })
+
+      console.log('affiliateLinks', affiliateLinks)
+
+      setAffiliateLinks(affiliateLinks)
+      setLoading(false)
     }
 
     // email is ture when session is true
@@ -49,6 +65,7 @@ export default function AffiliateLinksProvider({
         affiliateLinks,
         affiliateLinksUpdated,
         setAffiliateLinksUpdated,
+        loading,
       }}
     >
       {children}

@@ -25,7 +25,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     },
     accessorKey: 'createdAt',
     cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt'))
+      const date = new Date(row.original.link?.createdAt as Date)
       const monthShortNames = [
         'Jan',
         'Feb',
@@ -58,7 +58,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
       const image = row.original.image as string
       const title = row.original.title as string
       const brand = row.original.brand as Brand
-      const productLink = row.original.productLink as string
+      const productLink = row.original.link?.productLink as string
       const { EditLinkModal, setShowEditLinkModal } = useEditLinkModal(
         setAffiliateLinksUpdated,
         row.original,
@@ -132,7 +132,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     ),
     accessorKey: 'clicks',
     cell: ({ row }) => {
-      const clicks = parseInt(row.getValue('clicks'))
+      const clicks = parseInt(row.original.link?.clicks as string)
 
       return <div className="text-center">{clicks}</div>
     },
@@ -151,7 +151,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     ),
     accessorKey: 'orders',
     cell: ({ row }) => {
-      const orders = parseInt(row.getValue('orders'))
+      const orders = parseInt(row.original.link?.orders as string)
 
       return <div className="text-center">{orders}</div>
     },
@@ -170,7 +170,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     ),
     accessorKey: 'earned',
     cell: ({ row }) => {
-      const earned = parseFloat(row.getValue('earned'))
+      const earned = parseFloat(row.original.link?.earned as string)
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -183,9 +183,15 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     header: () => <div className="text-center">Affiliate Link</div>,
     accessorKey: 'link',
     cell: ({ row }) => {
-      const link = String(row.getValue('link'))
+      const link = String(
+        `https://link-m.herokuapp.com/${row.original.link?.id}`,
+      )
 
-      return <div className="text-center">{link}</div>
+      return (
+        <Link className="text-center" href={link} target="_blank">
+          {link}
+        </Link>
+      )
     },
   },
 ]

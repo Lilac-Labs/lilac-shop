@@ -58,11 +58,13 @@ const CreateNewLinkModal = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      image: '',
-      productLink: '',
-      title: '',
+      image:
+        'https://production-shopmyshelf-pins.s3.us-east-2.amazonaws.com/zoom-1080769-1676507417013-LW5DWPS_045720_1',
+      productLink:
+        'https://shop.lululemon.com/p/womens-leggings/InStill-High-Rise-Tight-25-MD/_/prod10642048?color=54428&skuId=143479160&sz=10',
+      title: 'InStill High-Rise Tight 25',
       description: '',
-      brandName: '',
+      brandName: 'Everlane',
     },
   })
 
@@ -70,11 +72,11 @@ const CreateNewLinkModal = ({
     console.log(values as Product)
     console.log(`http://localhost:3000/api/affiliateLink/${userInfo.id}`)
     fetcher(`http://localhost:3000/api/affiliateLink/${userInfo.id}`, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify(values as Product),
     })
       .then((res) => {
         console.log('Response:', res)

@@ -61,7 +61,7 @@ const EditLinkModal = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       image: affiliateLink.image,
-      productLink: affiliateLink.productLink,
+      productLink: affiliateLink.link?.productLink,
       title: affiliateLink.title,
       description: affiliateLink.description,
       brandName: formatBrandSelect(affiliateLink.brand),
@@ -72,7 +72,7 @@ const EditLinkModal = ({
     console.log(values as Product)
     console.log(`http://localhost:3000/api/affiliateLink/${affiliateLink.id}`)
     fetcher(`http://localhost:3000/api/affiliateLink/${affiliateLink.id}`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
