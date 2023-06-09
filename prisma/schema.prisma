@@ -50,9 +50,9 @@ model User {
   image          String?
   bio            String?
   accounts       Account[]
+  affiliateLinks AffiliateLink[]
   sessions       Session[]
   socialMedias   SocialMedia[]
-  affiliateLinks AffiliateLink[]
 }
 
 model SocialMedia {
@@ -79,8 +79,8 @@ model AffiliateLink {
   description String?
   image       String
   brandName   String
-  brand       Brand   @relation(fields: [brandName], references: [name], onDelete: Cascade)
   content     String?
+  brand       Brand   @relation(fields: [brandName], references: [name], onDelete: Cascade)
   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([id])
