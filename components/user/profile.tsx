@@ -2,13 +2,14 @@
 import { Instagram, Tiktok } from '@/components/shared/icons'
 import Image from 'next/image'
 import { UserInfo } from '@/lib/types'
-import { useSession } from 'next-auth/react'
 import { Button } from '../ui/button'
 import { redirect, useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import ProfilePicture from './profilePic'
 import { ProfileForm } from './profileEditForm'
 import { fetcher } from '@/lib/utils'
+import { Link } from 'lucide-react'
+import { log } from 'console'
 
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
@@ -16,8 +17,12 @@ import { fetcher } from '@/lib/utils'
 
 // Conditionally render a form or a display of the user's profile
 export default function UserProfile({uuid}: {uuid: string}) {
+  
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
-  const router = useRouter()
+
+  const [pageLoaded, setPageLoaded] = useState(false)
+  const [userExist, setUserExist] = useState(false)
+  const [editProfile, setEditProfile] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -25,10 +30,9 @@ export default function UserProfile({uuid}: {uuid: string}) {
         `http://localhost:3000/api/user/byUserName/${uuid}`,
         { cache: 'no-store' },
       )
+      setPageLoaded(true)
       if (res === null) {
         console.log('user not found')
-        //TODO: Handle in middleware before page is loaded.
-        router.replace('/')
       } else {
         setUserInfo({
           id: res.id,
@@ -41,15 +45,20 @@ export default function UserProfile({uuid}: {uuid: string}) {
           image: res.image,
           email: res.email,
         })
+        setUserExist(true)
       }
     })();
   }, []);
-  const [editProfile, setEditProfile] = useState(false);
+  
+
   return (
-    editProfile ? 
-      <EditProfileForm userInfo={userInfo} onEditClick={() => setEditProfile(false)} /> : 
-      <ProfileDisplay userInfo={userInfo} onEditClick={() => setEditProfile(true)} />
-  );
+    pageLoaded ?
+      (userExist ?
+        (editProfile ? 
+          <EditProfileForm userInfo={userInfo} onEditClick={() => setEditProfile(false)} /> : 
+          <ProfileDisplay userInfo={userInfo} onEditClick={() => setEditProfile(true)} />)
+        : <UserDoesNotExist />)
+      : <Loading />)
 } 
 
 // Display the user's profile
@@ -103,6 +112,38 @@ function EditProfileForm({ userInfo, onEditClick }: { userInfo: UserInfo; onEdit
       <div className="flex flex-col items-center">
         <ProfilePicture userInfo={userInfo} />
         <ProfileForm userInfo={userInfo} onEditClick={onEditClick} />
+      </div>
+    </>
+  );
+}
+
+// Edit the user's profile
+function Loading(){
+  
+  return (
+    <>
+      <div className="flex flex-col items-center">
+        <h1> Loading... </h1>
+      </div>
+    </>
+  );
+}
+
+// Edit the user's profile
+function UserDoesNotExist(){
+  
+  const handleClick = () => {
+    console.log('clicked')
+    window.location.href = `/`
+  }
+
+  return (
+    <>
+      <div className="flex flex-col items-center">
+        <h1> Oops. This user does not exist. </h1>
+        <Button onClick={handleClick} className="mt-5">
+          <p>Return to Home</p>
+        </Button>
       </div>
     </>
   );
