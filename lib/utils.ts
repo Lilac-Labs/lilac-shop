@@ -2,6 +2,7 @@ import ms from 'ms'
 import { ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { Brand } from './types'
+import { redirect } from 'next/navigation'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -32,7 +33,6 @@ export async function fetcher<JSON = any>(
       throw new Error('An unexpected error occurred')
     }
   }
-
   return res.json()
 }
 

@@ -1,3 +1,5 @@
+import { Collection } from '@prisma/client'
+
 export type UserInfo = {
   id: string
   userName: string
@@ -12,7 +14,7 @@ export type UserInfo = {
 
 export interface AffiliateLink {
   id: number
-  content?: string
+  collection?: Collection
   title: string
   description?: string
   image: string
