@@ -1,5 +1,6 @@
 'use client'
 
+import { Collection } from '@prisma/client'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { AffiliateLink, Link } from '../types'
 import { fetcher } from '../utils'
@@ -23,6 +24,10 @@ export default function AffiliateLinksProvider({
 
   const [affiliateLinks, setAffiliateLinks] = useState<AffiliateLink[]>(
     [] as AffiliateLink[],
+  )
+
+  const [collections, setCollections] = useState<Collection[]>(
+    [] as Collection[],
   )
 
   const [affiliateLinksUpdated, setAffiliateLinksUpdated] =

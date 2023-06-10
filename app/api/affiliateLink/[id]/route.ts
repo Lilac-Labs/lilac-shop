@@ -37,42 +37,6 @@ export async function POST(
 
   console.log('createLinkParams', createLinkParams)
 
-  for (let i = 0; i < 50; i++) {
-    const link: Link = await fetcher('https://link-m.herokuapp.com/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(createLinkParams),
-    }).catch((e) => {
-      console.log('errorrr', e)
-      return NextResponse.error()
-    })
-
-    if (!link) {
-      return NextResponse.error()
-    }
-
-    const affiliateLink = await prisma.affiliateLink.create({
-      data: {
-        id: link.id,
-        user: {
-          connect: {
-            id: params.id,
-          },
-        },
-        title: product.title,
-        image: product.image,
-        description: product.description,
-        brand: {
-          connect: {
-            name: product.brandName,
-          },
-        },
-      },
-    })
-  }
-
   const link: Link = await fetcher('https://link-m.herokuapp.com/', {
     method: 'POST',
     headers: {
@@ -168,11 +132,11 @@ export async function DELETE(
     })
     .then((res) => {
       console.log('deleted', res)
-      return res
+      return NextResponse.json(res)
     })
     .catch((e) => {
       return NextResponse.json(
-        { error: 'failed to delete affiliateLink' },
+        { error: 'failed to delete affiliateLink, ', e },
         { status: 400 },
       )
     })

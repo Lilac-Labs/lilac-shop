@@ -33,13 +33,13 @@ export default async function RootLayout({
         className={cx(sfPro.variable, inter.variable)}
         suppressHydrationWarning={true}
       >
-        <div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" />
+        {/* <div className="fixed z-0 h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" /> */}
         <Providers>
           <Suspense fallback="...">
             {/* @ts-expect-error Server Component */}
             <Nav />
           </Suspense>
-          <main className="flex min-h-screen w-full flex-col items-center justify-center py-32">
+          <main className="z-10 h-fit min-h-screen w-full px-10 py-20">
             {children}
           </main>
         </Providers>

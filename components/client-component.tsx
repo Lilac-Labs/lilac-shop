@@ -8,11 +8,11 @@ export const User = () => {
   const { userInfo } = useUserInfoContext()
 
   return (
-    <>
+    <div>
       <h1>Client Session</h1>
-      <pre>{JSON.stringify(session)}</pre>
+      <p>{JSON.stringify(session)}</p>
       <p>Userinfo {JSON.stringify(userInfo)}</p>
       <p>{Object.keys(userInfo).length}</p>
-    </>
+    </div>
   )
 }
