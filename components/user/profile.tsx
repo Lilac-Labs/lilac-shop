@@ -10,6 +10,7 @@ import { ProfileForm } from './profileEditForm'
 import { fetcher } from '@/lib/utils'
 import { Link } from 'lucide-react'
 import { log } from 'console'
+import { useSession } from 'next-auth/react'
 
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
@@ -17,9 +18,7 @@ import { log } from 'console'
 
 // Conditionally render a form or a display of the user's profile
 export default function UserProfile({uuid}: {uuid: string}) {
-  
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
-
   const [pageLoaded, setPageLoaded] = useState(false)
   const [userExist, setUserExist] = useState(false)
   const [editProfile, setEditProfile] = useState(false);
@@ -30,7 +29,7 @@ export default function UserProfile({uuid}: {uuid: string}) {
         `http://localhost:3000/api/user/byUserName/${uuid}`,
         { cache: 'no-store' },
       )
-      setPageLoaded(true)
+      
       if (res === null) {
         console.log('user not found')
       } else {
@@ -47,6 +46,7 @@ export default function UserProfile({uuid}: {uuid: string}) {
         })
         setUserExist(true)
       }
+      setPageLoaded(true)
     })();
   }, []);
   
@@ -63,6 +63,8 @@ export default function UserProfile({uuid}: {uuid: string}) {
 
 // Display the user's profile
 function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditClick: () => void }) {
+  const {status} = useSession()
+
   return (
     <div className="flex flex-col items-center">
       <ProfilePicture userInfo={userInfo} />
@@ -73,14 +75,17 @@ function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditC
         <h1 className="z-30 text-center text-2xl font-bold">
           {userInfo.lastName}
         </h1>
-        <button className="z-30" onClick={onEditClick}>
-          <Image
-            alt="edit profile"
-            src="/edit.png"
-            width={20}
-            height={20}
-          />
-        </button>
+
+        {(status === 'authenticated') && 
+          <button className="z-30" onClick={onEditClick}>
+            <Image
+              alt="edit profile"
+              src="/edit.png"
+              width={20}
+              height={20}
+            />
+          </button>
+          }
       </div>
       <p className="text-md text-center">{userInfo.bio}</p>
       <div className="flex">
