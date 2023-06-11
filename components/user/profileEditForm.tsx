@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
  
 import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+
 import {
   Form,
   FormControl,
@@ -16,6 +18,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { UserInfo } from "@/lib/types"
+import { Dispatch, SetStateAction } from "react"
+import { fetcher } from "@/lib/utils"
  
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -25,25 +29,59 @@ const formSchema = z.object({
   bio: z.string().min(1, {
     message: "Bio cannot be empty.",
     }),
+  
+  ig: z.string().min(1, {
+    message: "Instagram cannot be empty.",
+    }),
+
+  tiktok: z.string().min(1, {
+    message: "Tiktok cannot be empty.",
+    }),
 
 })
- 
-export function ProfileForm({userInfo, onEditClick}: { userInfo: UserInfo; onEditClick: () => void }) {
+export function ProfileForm({userInfo, updateUserInfo, onEditClick}: { userInfo: UserInfo; updateUserInfo: Dispatch<SetStateAction<UserInfo>>; onEditClick: () => void }) {
+
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-        name: "",
-        bio: "",
+        name: userInfo.firstName + " " + userInfo.lastName,
+        bio: userInfo.bio,
+        ig: userInfo.ig,
+        tiktok: userInfo.tk,
       },
     })
    
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
       // Do something with the form values.
       // ✅ This will be type-safe and validated.
       console.log(values)
-      //setUserInfo(...)
+      const newUserInfo = { ...userInfo,
+        firstName: values.name.split(" ")[0],
+        lastName: values.name.split(" ")[1],
+        bio: values.bio,
+        ig: values.ig,
+        tk: values.tiktok,
+      }
+
+      updateUserInfo(newUserInfo)
+      onEditClick()
+
+      // Make call to accountUpdate API
+      await fetcher('http://localhost:3000/api/accountUpdate', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newUserInfo),
+      })
+        .then((res) => {
+          console.log('Response:', res)
+        })
+        .catch((err) => {
+          console.log('Error:', err)
+        })
     }
 
     return (
@@ -67,7 +105,31 @@ export function ProfileForm({userInfo, onEditClick}: { userInfo: UserInfo; onEdi
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Bio" {...field} />
+                    <Textarea placeholder="Type your bio here." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ig"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Tiktok" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tiktok"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Instagram" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

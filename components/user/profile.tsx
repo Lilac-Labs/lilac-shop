@@ -2,13 +2,17 @@
 import { Instagram, Tiktok } from '@/components/shared/icons'
 import Image from 'next/image'
 import { UserInfo } from '@/lib/types'
-import { useSession } from 'next-auth/react'
 import { Button } from '../ui/button'
 import { redirect, useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, use, useEffect, useState } from 'react'
 import ProfilePicture from './profilePic'
 import { ProfileForm } from './profileEditForm'
 import { fetcher } from '@/lib/utils'
+import { Link } from 'lucide-react'
+import { log } from 'console'
+import { useSession } from 'next-auth/react'
+import { getServerSession, Session } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
@@ -16,10 +20,22 @@ import { fetcher } from '@/lib/utils'
 
 // Conditionally render a form or a display of the user's profile
 export default function UserProfile({uuid}: {uuid: string}) {
+  // Profile Display/Form Information
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
-  const router = useRouter()
+
+  // Authentication Information
+  const [userSession, setUserSession] = useState<Session>({} as Session)
+
+  // conditional rendering variables
+  const [pageLoaded, setPageLoaded] = useState(false)
+  const [userExist, setUserExist] = useState(false)
+  const [editProfile, setEditProfile] = useState(false);
+
+  const { data: session } = useSession()
 
   useEffect(() => {
+
+    // Get the user's information
     (async () => {
       const res =  await fetcher(
         `http://localhost:3000/api/user/byUserName/${uuid}`,
@@ -27,8 +43,6 @@ export default function UserProfile({uuid}: {uuid: string}) {
       )
       if (res === null) {
         console.log('user not found')
-        //TODO: Handle in middleware before page is loaded.
-        router.replace('/')
       } else {
         setUserInfo({
           id: res.id,
@@ -39,21 +53,59 @@ export default function UserProfile({uuid}: {uuid: string}) {
           ig: res.ig,
           tk: res.tk,
           image: res.image,
+          // TODO: EMAIL SHOULD NOT BE PUBLIC INFO (NEED TO HASH OR NOT SEND)
           email: res.email,
         })
+        setUserExist(true)
       }
+      setPageLoaded(true)
     })();
   }, []);
-  const [editProfile, setEditProfile] = useState(false);
+
+
+
+  // Once the user's information is loaded, set to state.
+  useEffect(() => {
+      if (session === null) {
+        console.log('user not authenticated')
+        setUserSession({} as Session)
+      } else {
+        console.log('user authenticated')
+        setUserSession(session)
+      }
+  }, [session])
+
   return (
-    editProfile ? 
-      <EditProfileForm userInfo={userInfo} onEditClick={() => setEditProfile(false)} /> : 
-      <ProfileDisplay userInfo={userInfo} onEditClick={() => setEditProfile(true)} />
-  );
+    pageLoaded ?
+      (userExist ?
+        (editProfile ? 
+          <EditProfileForm userInfo={userInfo} updateUserInfo={setUserInfo} onEditClick={() => setEditProfile(false)} /> : 
+          <ProfileDisplay userInfo={userInfo} userSession={userSession} onEditClick={() => setEditProfile(true)} />)
+        : <UserDoesNotExist />)
+      : <Loading />)
 } 
 
 // Display the user's profile
-function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditClick: () => void }) {
+function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: UserInfo; userSession: Session; onEditClick: () => void }) {
+  
+  const {status} = useSession()
+
+  // Only allow the user to edit if
+  // (1) they are authenticated
+  // (2) they are the owner of the profile
+  const checkEditPermission = () => {
+    if (status === 'authenticated') {
+      // TODO: DO NOT USE EMAIL AS A UNIQUE IDENTIFIER
+      if (userInfo.email === userSession?.user?.email)
+        {
+          console.log('user is owner')
+          return true
+        }
+    }
+    console.log('user is not owner')
+    return false
+  }
+
   return (
     <div className="flex flex-col items-center">
       <ProfilePicture userInfo={userInfo} />
@@ -64,14 +116,18 @@ function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditC
         <h1 className="z-30 text-center text-2xl font-bold">
           {userInfo.lastName}
         </h1>
-        <button className="z-30" onClick={onEditClick}>
-          <Image
-            alt="edit profile"
-            src="/edit.png"
-            width={20}
-            height={20}
-          />
-        </button>
+
+        {(checkEditPermission()) && 
+          <button className="z-30" onClick={onEditClick}>
+        
+            <Image
+              alt="edit profile"
+              src="/edit.png"
+              width={20}
+              height={20}
+            />
+          </button>
+          }
       </div>
       <p className="text-md text-center">{userInfo.bio}</p>
       <div className="flex">
@@ -97,12 +153,44 @@ function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditC
 }
 
 // Edit the user's profile
-function EditProfileForm({ userInfo, onEditClick }: { userInfo: UserInfo; onEditClick: () => void }) {
+function EditProfileForm({ userInfo, updateUserInfo, onEditClick }: { userInfo: UserInfo; updateUserInfo: Dispatch<SetStateAction<UserInfo>>; onEditClick: () => void }) {
   return (
     <>
       <div className="flex flex-col items-center">
         <ProfilePicture userInfo={userInfo} />
-        <ProfileForm userInfo={userInfo} onEditClick={onEditClick} />
+        <ProfileForm userInfo={userInfo} updateUserInfo={updateUserInfo} onEditClick={onEditClick} />
+      </div>
+    </>
+  );
+}
+
+// Edit the user's profile
+function Loading(){
+  
+  return (
+    <>
+      <div className="flex flex-col items-center">
+        <h1> Loading... </h1>
+      </div>
+    </>
+  );
+}
+
+// Edit the user's profile
+function UserDoesNotExist(){
+  
+  const handleClick = () => {
+    console.log('clicked')
+    window.location.href = `/`
+  }
+
+  return (
+    <>
+      <div className="flex flex-col items-center">
+        <h1> Oops. This user does not exist. </h1>
+        <Button onClick={handleClick} className="mt-5">
+          <p>Return to Home</p>
+        </Button>
       </div>
     </>
   );
