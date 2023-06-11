@@ -53,6 +53,7 @@ export default function UserProfile({uuid}: {uuid: string}) {
           ig: res.ig,
           tk: res.tk,
           image: res.image,
+          // TODO: EMAIL SHOULD NOT BE PUBLIC INFO (NEED TO HASH OR NOT SEND)
           email: res.email,
         })
         setUserExist(true)
@@ -94,6 +95,7 @@ function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: User
   // (2) they are the owner of the profile
   const checkEditPermission = () => {
     if (status === 'authenticated') {
+      // TODO: DO NOT USE EMAIL AS A UNIQUE IDENTIFIER
       if (userInfo.email === userSession?.user?.email)
         {
           console.log('user is owner')
