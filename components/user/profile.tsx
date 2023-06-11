@@ -79,7 +79,7 @@ export default function UserProfile({uuid}: {uuid: string}) {
     pageLoaded ?
       (userExist ?
         (editProfile ? 
-          <EditProfileForm userInfo={userInfo} onEditClick={() => setEditProfile(false)} /> : 
+          <EditProfileForm userInfo={userInfo} updateUserInfo={setUserInfo} onEditClick={() => setEditProfile(false)} /> : 
           <ProfileDisplay userInfo={userInfo} userSession={userSession} onEditClick={() => setEditProfile(true)} />)
         : <UserDoesNotExist />)
       : <Loading />)
@@ -153,12 +153,12 @@ function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: User
 }
 
 // Edit the user's profile
-function EditProfileForm({ userInfo, onEditClick }: { userInfo: UserInfo; onEditClick: () => void }) {
+function EditProfileForm({ userInfo, updateUserInfo, onEditClick }: { userInfo: UserInfo; updateUserInfo: Dispatch<SetStateAction<UserInfo>>; onEditClick: () => void }) {
   return (
     <>
       <div className="flex flex-col items-center">
         <ProfilePicture userInfo={userInfo} />
-        <ProfileForm userInfo={userInfo} onEditClick={onEditClick} />
+        <ProfileForm userInfo={userInfo} updateUserInfo={updateUserInfo} onEditClick={onEditClick} />
       </div>
     </>
   );
