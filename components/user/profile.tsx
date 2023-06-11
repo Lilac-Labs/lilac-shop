@@ -4,13 +4,15 @@ import Image from 'next/image'
 import { UserInfo } from '@/lib/types'
 import { Button } from '../ui/button'
 import { redirect, useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, use, useEffect, useState } from 'react'
 import ProfilePicture from './profilePic'
 import { ProfileForm } from './profileEditForm'
 import { fetcher } from '@/lib/utils'
 import { Link } from 'lucide-react'
 import { log } from 'console'
 import { useSession } from 'next-auth/react'
+import { getServerSession, Session } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
@@ -18,18 +20,27 @@ import { useSession } from 'next-auth/react'
 
 // Conditionally render a form or a display of the user's profile
 export default function UserProfile({uuid}: {uuid: string}) {
+  // Profile Display/Form Information
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
+
+  // Authentication Information
+  const [userSession, setUserSession] = useState<Session>({} as Session)
+
+  // conditional rendering variables
   const [pageLoaded, setPageLoaded] = useState(false)
   const [userExist, setUserExist] = useState(false)
   const [editProfile, setEditProfile] = useState(false);
 
+  const { data: session } = useSession()
+
   useEffect(() => {
+
+    // Get the user's information
     (async () => {
       const res =  await fetcher(
         `http://localhost:3000/api/user/byUserName/${uuid}`,
         { cache: 'no-store' },
       )
-      
       if (res === null) {
         console.log('user not found')
       } else {
@@ -49,21 +60,49 @@ export default function UserProfile({uuid}: {uuid: string}) {
       setPageLoaded(true)
     })();
   }, []);
-  
+
+
+
+  // Once the user's information is loaded, set to state.
+  useEffect(() => {
+      if (session === null) {
+        console.log('user not authenticated')
+        setUserSession({} as Session)
+      } else {
+        console.log('user authenticated')
+        setUserSession(session)
+      }
+  }, [session])
 
   return (
     pageLoaded ?
       (userExist ?
         (editProfile ? 
           <EditProfileForm userInfo={userInfo} onEditClick={() => setEditProfile(false)} /> : 
-          <ProfileDisplay userInfo={userInfo} onEditClick={() => setEditProfile(true)} />)
+          <ProfileDisplay userInfo={userInfo} userSession={userSession} onEditClick={() => setEditProfile(true)} />)
         : <UserDoesNotExist />)
       : <Loading />)
 } 
 
 // Display the user's profile
-function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditClick: () => void }) {
+function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: UserInfo; userSession: Session; onEditClick: () => void }) {
+  
   const {status} = useSession()
+
+  // Only allow the user to edit if
+  // (1) they are authenticated
+  // (2) they are the owner of the profile
+  const checkEditPermission = () => {
+    if (status === 'authenticated') {
+      if (userInfo.email === userSession?.user?.email)
+        {
+          console.log('user is owner')
+          return true
+        }
+    }
+    console.log('user is not owner')
+    return false
+  }
 
   return (
     <div className="flex flex-col items-center">
@@ -76,8 +115,9 @@ function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditC
           {userInfo.lastName}
         </h1>
 
-        {(status === 'authenticated') && 
+        {(checkEditPermission()) && 
           <button className="z-30" onClick={onEditClick}>
+        
             <Image
               alt="edit profile"
               src="/edit.png"
