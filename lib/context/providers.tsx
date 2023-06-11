@@ -12,7 +12,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       const s = await getSession()
       const path = window.location.pathname
       if (s) {
-        fetcher(`http://localhost:3000/api/user/byEmail/${s.user?.email}`, {
+        fetcher(`http://localhost:3000/api/user/byUuid/${s.user?.email}`, {
           next: { revalidate: 10 },
         })
           .then((res) => {

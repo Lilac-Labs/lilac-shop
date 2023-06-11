@@ -10,18 +10,16 @@ import ProfilePicture from './profilePic'
 import { ProfileForm } from './profileEditForm'
 import { fetcher } from '@/lib/utils'
 
-
 // https://ui.shadcn.com/docs/forms/react-hook-form
 
-
 // Conditionally render a form or a display of the user's profile
-export default function UserProfile({uuid}: {uuid: string}) {
+export default function UserProfile({ uuid }: { uuid: string }) {
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
   const router = useRouter()
 
   useEffect(() => {
-    (async () => {
-      const res =  await fetcher(
+    ;(async () => {
+      const res = await fetcher(
         `http://localhost:3000/api/user/byUserName/${uuid}`,
         { cache: 'no-store' },
       )
@@ -42,18 +40,30 @@ export default function UserProfile({uuid}: {uuid: string}) {
           email: res.email,
         })
       }
-    })();
-  }, []);
-  const [editProfile, setEditProfile] = useState(false);
-  return (
-    editProfile ? 
-      <EditProfileForm userInfo={userInfo} onEditClick={() => setEditProfile(false)} /> : 
-      <ProfileDisplay userInfo={userInfo} onEditClick={() => setEditProfile(true)} />
-  );
-} 
+    })()
+  }, [])
+  const [editProfile, setEditProfile] = useState(false)
+  return editProfile ? (
+    <EditProfileForm
+      userInfo={userInfo}
+      onEditClick={() => setEditProfile(false)}
+    />
+  ) : (
+    <ProfileDisplay
+      userInfo={userInfo}
+      onEditClick={() => setEditProfile(true)}
+    />
+  )
+}
 
 // Display the user's profile
-function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditClick: () => void }) {
+function ProfileDisplay({
+  userInfo,
+  onEditClick,
+}: {
+  userInfo: UserInfo
+  onEditClick: () => void
+}) {
   return (
     <div className="flex flex-col items-center">
       <ProfilePicture userInfo={userInfo} />
@@ -65,12 +75,7 @@ function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditC
           {userInfo.lastName}
         </h1>
         <button className="z-30" onClick={onEditClick}>
-          <Image
-            alt="edit profile"
-            src="/edit.png"
-            width={20}
-            height={20}
-          />
+          <Image alt="edit profile" src="/edit.png" width={20} height={20} />
         </button>
       </div>
       <p className="text-md text-center">{userInfo.bio}</p>
@@ -97,13 +102,19 @@ function ProfileDisplay({ userInfo, onEditClick }: { userInfo: UserInfo; onEditC
 }
 
 // Edit the user's profile
-function EditProfileForm({ userInfo, onEditClick }: { userInfo: UserInfo; onEditClick: () => void }) {
+function EditProfileForm({
+  userInfo,
+  onEditClick,
+}: {
+  userInfo: UserInfo
+  onEditClick: () => void
+}) {
   return (
     <>
-      <div className="flex flex-col items-center">
+      <>
         <ProfilePicture userInfo={userInfo} />
         <ProfileForm userInfo={userInfo} onEditClick={onEditClick} />
-      </div>
+      </>
     </>
-  );
+  )
 }
