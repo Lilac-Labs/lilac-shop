@@ -18,7 +18,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 // Conditionally render a form or a display of the user's profile
 
-export default function UserProfile({uuid}: {uuid: string}) {
+export default function UserProfile({ uuid }: { uuid: string }) {
   // Profile Display/Form Information
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
 
@@ -28,16 +28,14 @@ export default function UserProfile({uuid}: {uuid: string}) {
   // conditional rendering variables
   const [pageLoaded, setPageLoaded] = useState(false)
   const [userExist, setUserExist] = useState(false)
-  const [editProfile, setEditProfile] = useState(false);
+  const [editProfile, setEditProfile] = useState(false)
 
   const { data: session } = useSession()
 
   useEffect(() => {
-
-
     // Get the user's information
-    (async () => {
-      const res =  await fetcher(
+    ;(async () => {
+      const res = await fetcher(
         `http://localhost:3000/api/user/byUserName/${uuid}`,
         { cache: 'no-store' },
       )
@@ -59,36 +57,54 @@ export default function UserProfile({uuid}: {uuid: string}) {
         setUserExist(true)
       }
       setPageLoaded(true)
-    })();
-  }, []);
-
-
+    })()
+  }, [])
 
   // Once the user's information is loaded, set to state.
   useEffect(() => {
-      if (session === null) {
-        console.log('user not authenticated')
-        setUserSession({} as Session)
-      } else {
-        console.log('user authenticated')
-        setUserSession(session)
-      }
+    if (session === null) {
+      console.log('user not authenticated')
+      setUserSession({} as Session)
+    } else {
+      console.log('user authenticated')
+      setUserSession(session)
+    }
   }, [session])
 
-  return (
-    pageLoaded ?
-      (userExist ?
-        (editProfile ? 
-          <EditProfileForm userInfo={userInfo} updateUserInfo={setUserInfo} onEditClick={() => setEditProfile(false)} /> : 
-          <ProfileDisplay userInfo={userInfo} userSession={userSession} onEditClick={() => setEditProfile(true)} />)
-        : <UserDoesNotExist />)
-      : <Loading />)
-} 
+  return pageLoaded ? (
+    userExist ? (
+      editProfile ? (
+        <EditProfileForm
+          userInfo={userInfo}
+          updateUserInfo={setUserInfo}
+          onEditClick={() => setEditProfile(false)}
+        />
+      ) : (
+        <ProfileDisplay
+          userInfo={userInfo}
+          userSession={userSession}
+          onEditClick={() => setEditProfile(true)}
+        />
+      )
+    ) : (
+      <UserDoesNotExist />
+    )
+  ) : (
+    <Loading />
+  )
+}
 
 // Display the user's profile
-function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: UserInfo; userSession: Session; onEditClick: () => void }) {
-  
-  const {status} = useSession()
+function ProfileDisplay({
+  userInfo,
+  userSession,
+  onEditClick,
+}: {
+  userInfo: UserInfo
+  userSession: Session
+  onEditClick: () => void
+}) {
+  const { status } = useSession()
 
   // Only allow the user to edit if
   // (1) they are authenticated
@@ -96,11 +112,10 @@ function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: User
   const checkEditPermission = () => {
     if (status === 'authenticated') {
       // TODO: DO NOT USE EMAIL AS A UNIQUE IDENTIFIER
-      if (userInfo.email === userSession?.user?.email)
-        {
-          console.log('user is owner')
-          return true
-        }
+      if (userInfo.email === userSession?.user?.email) {
+        console.log('user is owner')
+        return true
+      }
     }
     console.log('user is not owner')
     return false
@@ -117,18 +132,11 @@ function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: User
           {userInfo.lastName}
         </h1>
 
-        {(checkEditPermission()) && 
+        {checkEditPermission() && (
           <button className="z-30" onClick={onEditClick}>
-        
-            <Image
-              alt="edit profile"
-              src="/edit.png"
-              width={20}
-              height={20}
-            />
+            <Image alt="edit profile" src="/edit.png" width={20} height={20} />
           </button>
-          }
-
+        )}
       </div>
       <p className="text-md text-center">{userInfo.bio}</p>
       <div className="flex">
@@ -155,34 +163,43 @@ function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: User
 
 // Edit the user's profile
 
-function EditProfileForm({ userInfo, updateUserInfo, onEditClick }: { userInfo: UserInfo; updateUserInfo: Dispatch<SetStateAction<UserInfo>>; onEditClick: () => void }) {
-
+function EditProfileForm({
+  userInfo,
+  updateUserInfo,
+  onEditClick,
+}: {
+  userInfo: UserInfo
+  updateUserInfo: Dispatch<SetStateAction<UserInfo>>
+  onEditClick: () => void
+}) {
   return (
     <>
-      <>
+      <div>
         <ProfilePicture userInfo={userInfo} />
 
-        <ProfileForm userInfo={userInfo} updateUserInfo={updateUserInfo} onEditClick={onEditClick} />
+        <ProfileForm
+          userInfo={userInfo}
+          updateUserInfo={updateUserInfo}
+          onEditClick={onEditClick}
+        />
       </div>
     </>
-  );
+  )
 }
 
 // Edit the user's profile
-function Loading(){
-  
+function Loading() {
   return (
     <>
       <div className="flex flex-col items-center">
         <h1> Loading... </h1>
       </div>
     </>
-  );
+  )
 }
 
 // Edit the user's profile
-function UserDoesNotExist(){
-  
+function UserDoesNotExist() {
   const handleClick = () => {
     console.log('clicked')
     window.location.href = `/`
@@ -197,6 +214,5 @@ function UserDoesNotExist(){
         </Button>
       </div>
     </>
-  );
-
+  )
 }
