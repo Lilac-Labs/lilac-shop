@@ -14,11 +14,10 @@ import { useSession } from 'next-auth/react'
 import { getServerSession, Session } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
-
 // https://ui.shadcn.com/docs/forms/react-hook-form
 
-
 // Conditionally render a form or a display of the user's profile
+
 export default function UserProfile({uuid}: {uuid: string}) {
   // Profile Display/Form Information
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
@@ -34,6 +33,7 @@ export default function UserProfile({uuid}: {uuid: string}) {
   const { data: session } = useSession()
 
   useEffect(() => {
+
 
     // Get the user's information
     (async () => {
@@ -128,6 +128,7 @@ function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: User
             />
           </button>
           }
+
       </div>
       <p className="text-md text-center">{userInfo.bio}</p>
       <div className="flex">
@@ -153,11 +154,14 @@ function ProfileDisplay({ userInfo, userSession, onEditClick }: { userInfo: User
 }
 
 // Edit the user's profile
+
 function EditProfileForm({ userInfo, updateUserInfo, onEditClick }: { userInfo: UserInfo; updateUserInfo: Dispatch<SetStateAction<UserInfo>>; onEditClick: () => void }) {
+
   return (
     <>
-      <div className="flex flex-col items-center">
+      <>
         <ProfilePicture userInfo={userInfo} />
+
         <ProfileForm userInfo={userInfo} updateUserInfo={updateUserInfo} onEditClick={onEditClick} />
       </div>
     </>
@@ -194,4 +198,5 @@ function UserDoesNotExist(){
       </div>
     </>
   );
+
 }

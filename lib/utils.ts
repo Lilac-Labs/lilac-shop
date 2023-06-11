@@ -3,6 +3,7 @@ import { ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { Brand } from './types'
 import { redirect } from 'next/navigation'
+import { NextRequest } from 'next/server'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -34,6 +35,16 @@ export async function fetcher<JSON = any>(
     }
   }
   return res.json()
+}
+
+export const parse = (req: NextRequest) => {
+  let domain = req.headers.get('host') as string
+  domain = domain.replace('www.', '') // remove www. from domain
+  const path = req.nextUrl.pathname
+  const key = decodeURIComponent(path.split('/')[1]) // decodeURIComponentto handle foreign languages like Hebrew
+  const fullKey = decodeURIComponent(path).slice(1)
+
+  return { domain, path, key, fullKey }
 }
 
 export function nFormatter(num: number, digits?: number) {

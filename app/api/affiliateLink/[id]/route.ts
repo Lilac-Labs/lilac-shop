@@ -7,21 +7,25 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  console.log('params', params.id)
   const user = await prisma.user.findUnique({
     where: {
       id: params.id,
     },
     select: {
-      affiliateLinks: {
+      userProfile: {
         include: {
-          brand: true,
+          affiliateLinks: {
+            include: {
+              brand: true,
+            },
+          },
         },
       },
     },
   })
 
-  return NextResponse.json(user?.affiliateLinks)
+  console.log('user', user)
+  return NextResponse.json(user?.userProfile?.affiliateLinks)
 }
 
 export async function POST(
@@ -55,9 +59,9 @@ export async function POST(
   const affiliateLink = await prisma.affiliateLink.create({
     data: {
       id: link.id,
-      user: {
+      userProfile: {
         connect: {
-          id: params.id,
+          userId: params.id,
         },
       },
       title: product.title,

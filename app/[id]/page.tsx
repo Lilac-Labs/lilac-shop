@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import UserProfile from '@/components/user/profile'
+import Collections from './Collections'
 
 export default async function Page({ params }: { params: { id: string } }) {
   return (
@@ -20,6 +21,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
         <UserProfile uuid={params.id} />
+        <Collections />
       </div>
     </div>
   )
