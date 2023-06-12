@@ -1,9 +1,8 @@
 'use client'
-import {ReactNode, useEffect, useState} from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import * as Form from '@radix-ui/react-form'
 import { fetcher } from '@/lib/utils'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
-import { redirect } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 
 export default function AccountUpdate() {
@@ -130,23 +129,33 @@ export default function AccountUpdate() {
 
   // State values that depend on userInfo need to be rehydrated
   useEffect(() => {
-    setEnteredUUid(userInfo.userName ? userInfo.userName : '')
-    setEnteredFirstName(userInfo.firstName ? userInfo.firstName : '')
-    setEnteredLastName(userInfo.lastName ? userInfo.lastName : '')
-    setEnteredBio(userInfo.bio ? userInfo.bio : '')
+    setEnteredUUid(
+      userInfo.userProfile?.userName ? userInfo.userProfile?.userName : '',
+    )
+    setEnteredFirstName(
+      userInfo.userProfile?.firstName ? userInfo.userProfile?.firstName : '',
+    )
+    setEnteredLastName(
+      userInfo.userProfile?.lastName ? userInfo.userProfile?.lastName : '',
+    )
+    setEnteredBio(userInfo.userProfile?.bio ? userInfo.userProfile?.bio : '')
     setFormLoaded(true)
 
     const validateForm = async () => {
-      setEnteredUUidValid(await isValidUUid(userInfo.userName))
-      setEnteredFirstNameValid(isValidFirstName(userInfo.firstName))
-      setEnteredLastNameValid(isValidLastName(userInfo.lastName))
-      setEnteredBioValid(isValidBio(userInfo.bio))
+      setEnteredUUidValid(await isValidUUid(userInfo.userProfile?.userName))
+      setEnteredFirstNameValid(
+        isValidFirstName(userInfo.userProfile?.firstName),
+      )
+      setEnteredLastNameValid(isValidLastName(userInfo.userProfile?.lastName))
+      setEnteredBioValid(isValidBio(userInfo.userProfile?.bio))
     }
     validateForm()
   }, [userInfo])
 
   // return boolean and string
-  const isValidUUid = async (newUniqueId: string): Promise<boolean> => {
+  const isValidUUid = async (
+    newUniqueId: string | undefined,
+  ): Promise<boolean> => {
     console.log('new uuid:', newUniqueId)
     // Check if its undefined
     if (newUniqueId === undefined) {
@@ -165,7 +174,7 @@ export default function AccountUpdate() {
       return false
     }
     // Check if it's the same as the old uniqueId
-    if (newUniqueId === userInfo.userName) {
+    if (newUniqueId === userInfo.userProfile?.userName) {
       setEnteredUUidErrorMsg('✅')
       return true
     }
@@ -184,7 +193,7 @@ export default function AccountUpdate() {
   }
 
   // return boolean and string
-  const isValidFirstName = (firstName: string): boolean => {
+  const isValidFirstName = (firstName: string | undefined): boolean => {
     console.log('new first name:', firstName)
     // Check if its undefined
     if (firstName === undefined) {
@@ -201,7 +210,7 @@ export default function AccountUpdate() {
   }
 
   // return boolean and string
-  const isValidLastName = (lastName: string): boolean => {
+  const isValidLastName = (lastName: string | undefined): boolean => {
     console.log('new last name:', lastName)
     // Check if its undefined
     if (lastName === undefined) {
@@ -218,10 +227,10 @@ export default function AccountUpdate() {
   }
 
   // return boolean and string
-  const isValidBio = (bio: string): boolean => {
+  const isValidBio = (bio: string | undefined | null): boolean => {
     console.log('new bio:', bio)
     // Check if its undefined
-    if (bio === undefined) {
+    if (bio === undefined || bio === null) {
       // hacky way of getting rid of errors from first render before userInfo is hydrated
       return false
     }
@@ -292,13 +301,19 @@ export default function AccountUpdate() {
 
     // Get data from form
     const inputs = {
-      email: userInfo.email, // User cannot change for now.
+      newUser: userInfo.userProfile === null,
+      uuid: userInfo.id,
+      //email: userInfo.email, // User cannot change for now.
       userName: (e.currentTarget.elements[0] as HTMLInputElement).value,
       firstName: (e.currentTarget.elements[1] as HTMLInputElement).value,
       lastName: (e.currentTarget.elements[2] as HTMLInputElement).value,
       bio: (e.currentTarget.elements[3] as HTMLInputElement).value,
       // image is selectedFile if it exists, otherwise it is the current image
-      image: storageLink ? storageLink : userInfo.image,
+      image: storageLink
+        ? storageLink
+        : userInfo.userProfile?.image
+        ? userInfo.userProfile?.image
+        : userInfo.image,
     }
     // Make call to accountUpdate API
     await fetcher('http://localhost:3000/api/accountUpdate', {
@@ -319,8 +334,8 @@ export default function AccountUpdate() {
     // Redirect to profile
     // https://github.com/vercel/next.js/issues/42556
     console.log('Redirecting to:', enteredUUid)
-    // router.replace(`/${uniqueid}`)
-    window.location.href = `/${enteredUUid}`
+    router.replace(`/${enteredUUid}`)
+    // window.location.href = `/${enteredUUid}`
     // TODO: instead of server side redirect, use client side redirect to avoid unnecessary rerender of entire app.
   }
 

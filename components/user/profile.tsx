@@ -1,7 +1,8 @@
 'use client'
 import { Instagram, Tiktok } from '@/components/shared/icons'
 import Image from 'next/image'
-import { UserInfo } from '@/lib/types'
+import { UserProfile } from '@/lib/types'
+
 import { Button } from '../ui/button'
 import { redirect, useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, use, useEffect, useState } from 'react'
@@ -18,9 +19,9 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 // Conditionally render a form or a display of the user's profile
 
-export default function UserProfile({ uuid }: { uuid: string }) {
+export default function UserProfile({ userName }: { userName: string }) {
   // Profile Display/Form Information
-  const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
+  const [userProfile, setUserProfile] = useState<UserProfile>({} as UserProfile)
 
   // Authentication Information
   const [userSession, setUserSession] = useState<Session>({} as Session)
@@ -30,29 +31,28 @@ export default function UserProfile({ uuid }: { uuid: string }) {
   const [userExist, setUserExist] = useState(false)
   const [editProfile, setEditProfile] = useState(false)
 
-  const { data: session } = useSession()
-
   useEffect(() => {
     // Get the user's information
     ;(async () => {
       const res = await fetcher(
-        `http://localhost:3000/api/user/byUserName/${uuid}`,
+        `http://localhost:3000/api/user/byUserName/${userName}`,
         { cache: 'no-store' },
       )
       if (res === null) {
         console.log('user not found')
       } else {
-        setUserInfo({
-          id: res.id,
+        console.log(res)
+        setUserProfile({
           userName: res.userName,
           firstName: res.firstName,
           lastName: res.lastName,
           bio: res.bio,
-          ig: res.ig,
-          tk: res.tk,
           image: res.image,
-          // TODO: EMAIL SHOULD NOT BE PUBLIC INFO (NEED TO HASH OR NOT SEND)
-          email: res.email,
+          uuid: res.uuid,
+          socialMedias: res.socialMedias,
+          // TODO: dyamic
+          ig: 'https://www.instagram.com/',
+          tk: 'https://www.tiktok.com/',
         })
         setUserExist(true)
       }
@@ -60,29 +60,17 @@ export default function UserProfile({ uuid }: { uuid: string }) {
     })()
   }, [])
 
-  // Once the user's information is loaded, set to state.
-  useEffect(() => {
-    if (session === null) {
-      console.log('user not authenticated')
-      setUserSession({} as Session)
-    } else {
-      console.log('user authenticated')
-      setUserSession(session)
-    }
-  }, [session])
-
   return pageLoaded ? (
     userExist ? (
       editProfile ? (
         <EditProfileForm
-          userInfo={userInfo}
-          updateUserInfo={setUserInfo}
+          userProfile={userProfile}
+          setUserProfile={setUserProfile}
           onEditClick={() => setEditProfile(false)}
         />
       ) : (
         <ProfileDisplay
-          userInfo={userInfo}
-          userSession={userSession}
+          userProfile={userProfile}
           onEditClick={() => setEditProfile(true)}
         />
       )
@@ -96,23 +84,21 @@ export default function UserProfile({ uuid }: { uuid: string }) {
 
 // Display the user's profile
 function ProfileDisplay({
-  userInfo,
-  userSession,
+  userProfile,
   onEditClick,
 }: {
-  userInfo: UserInfo
-  userSession: Session
+  userProfile: UserProfile
   onEditClick: () => void
 }) {
-  const { status } = useSession()
+  const { data: session, status } = useSession()
 
   // Only allow the user to edit if
   // (1) they are authenticated
   // (2) they are the owner of the profile
   const checkEditPermission = () => {
     if (status === 'authenticated') {
-      // TODO: DO NOT USE EMAIL AS A UNIQUE IDENTIFIER
-      if (userInfo.email === userSession?.user?.email) {
+      // @ts-ignore
+      if (userProfile.uuid === session?.user?.id) {
         console.log('user is owner')
         return true
       }
@@ -123,13 +109,13 @@ function ProfileDisplay({
 
   return (
     <div className="flex flex-col items-center">
-      <ProfilePicture userInfo={userInfo} />
+      <ProfilePicture userProfile={userProfile} />
       <div className="flex flex-row">
         <h1 className="z-30 mx-2 text-center text-2xl font-bold">
-          {userInfo.firstName}
+          {userProfile.firstName}
         </h1>
         <h1 className="z-30 text-center text-2xl font-bold">
-          {userInfo.lastName}
+          {userProfile.lastName}
         </h1>
 
         {checkEditPermission() && (
@@ -138,10 +124,10 @@ function ProfileDisplay({
           </button>
         )}
       </div>
-      <p className="text-md text-center">{userInfo.bio}</p>
+      <p className="text-md text-center">{userProfile.bio}</p>
       <div className="flex">
         <a
-          href={userInfo.ig}
+          href={userProfile.ig}
           target="_blank"
           rel="noreferrer"
           className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"
@@ -149,7 +135,7 @@ function ProfileDisplay({
           <Instagram className="h-5 w-5 text-[#1d9bf0]" />
         </a>
         <a
-          href={userInfo.tk}
+          href={userProfile.tk}
           target="_blank"
           rel="noreferrer"
           className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"
@@ -164,22 +150,22 @@ function ProfileDisplay({
 // Edit the user's profile
 
 function EditProfileForm({
-  userInfo,
-  updateUserInfo,
+  userProfile,
+  setUserProfile,
   onEditClick,
 }: {
-  userInfo: UserInfo
-  updateUserInfo: Dispatch<SetStateAction<UserInfo>>
+  userProfile: UserProfile
+  setUserProfile: Dispatch<SetStateAction<UserProfile>>
   onEditClick: () => void
 }) {
   return (
     <>
       <div>
-        <ProfilePicture userInfo={userInfo} />
+        <ProfilePicture userProfile={userProfile} />
 
         <ProfileForm
-          userInfo={userInfo}
-          updateUserInfo={updateUserInfo}
+          userProfile={userProfile}
+          setUserProfile={setUserProfile}
           onEditClick={onEditClick}
         />
       </div>

@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const { userInfo } = useUserInfoContext()
   return (
     <div className="flex flex-col">
-      <Link href={`/${userInfo?.userName}`} className="">
+      <Link href={`/${userInfo?.userProfile?.userName}`} className="">
         Your shop
       </Link>
       <p>Hello Collection: {params.id}</p>

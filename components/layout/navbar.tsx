@@ -43,7 +43,7 @@ export default function NavBar({ session }: { session: Session | null }) {
 
           {session && !isUserInfo && (
             <Link
-              href={`/${userInfo?.userName}`}
+              href={`/${userInfo?.userProfile?.userName}`}
               className="mx-4 flex items-center font-display text-xl"
             >
               <p>Profile</p>

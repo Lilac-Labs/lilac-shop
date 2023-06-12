@@ -10,6 +10,9 @@ export async function GET(
     where: {
       userName: params.userName,
     },
+    include: {
+      socialMedias: true,
+    },
   })
   console.log('user', user)
   return NextResponse.json(user)
