@@ -2,7 +2,11 @@ import { Button } from '@/components/ui/button'
 import UserProfile from '@/components/user/profile'
 import Collections from './Collections'
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({
+  params,
+}: {
+  params: { userName: string }
+}) {
   return (
     <div className="content-container">
       <div className="flex flex-col items-center">
@@ -20,7 +24,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             </Button>
           </div>
         </div>
-        <UserProfile uuid={params.id} />
+        <UserProfile userName={params.userName} />
         <Collections />
       </div>
     </div>

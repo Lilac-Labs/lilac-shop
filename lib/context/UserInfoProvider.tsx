@@ -32,17 +32,14 @@ export default function UserInfoProvider({
         `http://localhost:3000/api/user/byUuid/${session?.user?.id}`,
         { cache: 'no-store' },
       )
-      console.log('res', res)
+
       const userInfo_: UserInfo = {
         id: res.id,
-        userName: res.userName,
-        firstName: res.firstName,
-        lastName: res.lastName,
-        bio: res.bio,
-        ig: res.ig,
-        tk: res.tk,
-        image: res.image,
         email: res.email,
+        image: res.image,
+        name: res.name,
+        emailVerified: res.emailVerified,
+        userProfile: res.userProfile,
       }
       setUserInfo(userInfo_)
     }

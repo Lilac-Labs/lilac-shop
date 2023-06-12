@@ -1,15 +1,20 @@
-import { Collection } from '@prisma/client'
+import {
+  Collection,
+  SocialMedia,
+  User,
+  UserProfile as _UserProfile,
+} from '@prisma/client'
 
-export type UserInfo = {
-  id: string
-  userName: string
-  email: string
-  firstName: string
-  lastName: string
-  bio: string
-  image: string
-  tk: string
+export interface UserInfo extends User {
+  // use image from userProfile
+  // image from User is from gogole privder and will not be updated
+  userProfile?: UserProfile
+}
+
+export interface UserProfile extends _UserProfile {
+  socialMedias: SocialMedia[]
   ig: string
+  tk: string
 }
 
 export interface AffiliateLink {

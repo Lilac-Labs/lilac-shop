@@ -52,14 +52,15 @@ model User {
 
 model UserProfile {
   userName       String          @id @unique
-  firstName      String
-  lastName       String
-  bio            String?
+  firstName      String          @default("")
+  lastName       String          @default("")
+  bio            String          @default("")
+  image          String
   collections    Collection[]
   socialMedias   SocialMedia[]
   affiliateLinks AffiliateLink[]
-  userId         String          @unique
-  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  uuid           String          @unique
+  user           User            @relation(fields: [uuid], references: [id], onDelete: Cascade)
 }
 
 model SocialMedia {
@@ -67,8 +68,8 @@ model SocialMedia {
   sessionToken String          @unique
   expires      DateTime
   type         SocialMediaType
-  userName     String
-  userProfile  UserProfile     @relation(fields: [userName], references: [userName], onDelete: Cascade)
+  uuid         String
+  userProfile  UserProfile     @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -81,7 +82,7 @@ model VerificationToken {
 
 model AffiliateLink {
   id           Int         @id
-  userName     String
+  uuid         String
   title        String
   description  String?
   image        String
@@ -89,7 +90,7 @@ model AffiliateLink {
   collectionId Int?
   collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   brand        Brand       @relation(fields: [brandName], references: [name], onDelete: Cascade)
-  userProfile  UserProfile @relation(fields: [userName], references: [userName], onDelete: Cascade)
+  userProfile  UserProfile @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
 
   @@index([id])
 }
@@ -102,10 +103,10 @@ model Brand {
 
 model Collection {
   id             Int             @id @default(autoincrement())
-  userName       String
+  uuid           String
   title          String
   description    String?
-  userProfile    UserProfile     @relation(fields: [userName], references: [userName], onDelete: Cascade)
+  userProfile    UserProfile     @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
   affiliateLinks AffiliateLink[]
 }
 
