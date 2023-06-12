@@ -30,56 +30,7 @@ export async function GET(
   )
 }
 
-export async function POST(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
-  const product: Product = await request.json()
-
-  const createLinkParams = {
-    userId: params.id,
-    productLink: product.productLink,
-  } as CreateLinkParams
-
-  console.log('createLinkParams', createLinkParams)
-
-  const link: Link = await fetcher('https://link-m.herokuapp.com/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(createLinkParams),
-  }).catch((e) => {
-    console.log('errorrr', e)
-    return NextResponse.error()
-  })
-
-  if (!link) {
-    return NextResponse.error()
-  }
-
-  const affiliateLink = await prisma.affiliateLink.create({
-    data: {
-      id: link.id,
-      userProfile: {
-        connect: {
-          userId: params.id,
-        },
-      },
-      title: product.title,
-      image: product.image,
-      description: product.description,
-      brand: {
-        connect: {
-          name: product.brandName,
-        },
-      },
-    },
-  })
-  return NextResponse.json(affiliateLink)
-}
-
-export async function PUT(
+export async function PATCH(
   request: Request,
   { params }: { params: { id: string } },
 ) {

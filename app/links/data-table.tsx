@@ -48,7 +48,7 @@ export function DataTable<TData, TValue>({
     { id: 'createdAt', desc: true },
   ])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  // const [data, setData] = useState<TData[]>([])
+
   const { affiliateLinks, setAffiliateLinksUpdated, loading } =
     useAffiliateLinksContext()
   const { CreateNewLinkModal, setShowCreateNewLinkModal } =

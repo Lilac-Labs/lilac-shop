@@ -1,14 +1,18 @@
 import prisma from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
+interface PostParams {
+  uuid: string
+}
+
 export async function POST(request: NextRequest) {
-  const params = await request.json()
+  const params = (await request.json()) as PostParams
   const newCollection = await prisma.collection.create({
     data: {
       title: 'Collection Name Here',
       userProfile: {
         connect: {
-          userId: params.userId,
+          uuid: params.uuid,
         },
       },
     },

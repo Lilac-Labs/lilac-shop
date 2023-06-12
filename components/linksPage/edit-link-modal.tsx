@@ -72,7 +72,7 @@ const EditLinkModal = ({
     console.log(values as Product)
     console.log(`http://localhost:3000/api/affiliateLink/${affiliateLink.id}`)
     fetcher(`http://localhost:3000/api/affiliateLink/${affiliateLink.id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
