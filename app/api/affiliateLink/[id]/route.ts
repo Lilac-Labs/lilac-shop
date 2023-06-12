@@ -11,7 +11,7 @@ export async function GET(
     where: {
       id: params.id,
     },
-    select: {
+    include: {
       userProfile: {
         include: {
           affiliateLinks: {
@@ -25,7 +25,9 @@ export async function GET(
   })
 
   console.log('user', user)
-  return NextResponse.json(user?.userProfile?.affiliateLinks)
+  return NextResponse.json(
+    user?.userProfile ? user.userProfile.affiliateLinks : [],
+  )
 }
 
 export async function POST(
