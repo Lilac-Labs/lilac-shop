@@ -18,20 +18,21 @@ export default function UserInfoProvider({
 }: {
   children: React.ReactNode
 }) {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  const user = session?.user
 
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
 
   const [userInfoUpdated, setUserInfoUpdated] = useState<boolean>(false)
 
-  const email = session?.user?.email
-
   useEffect(() => {
     const getUserInfo = async () => {
       const res = await fetcher(
-        `http://localhost:3000/api/user/byEmail/${email}`,
+        // @ts-ignore
+        `http://localhost:3000/api/user/byUuid/${session?.user?.id}`,
         { cache: 'no-store' },
       )
+      console.log('res', res)
       const userInfo_: UserInfo = {
         id: res.id,
         userName: res.userName,
@@ -47,11 +48,11 @@ export default function UserInfoProvider({
     }
 
     // email is ture when session is true
-    if (email) {
+    if (status === 'authenticated') {
       getUserInfo()
       setUserInfoUpdated(false)
     }
-  }, [email, userInfoUpdated])
+  }, [status, userInfoUpdated])
 
   return (
     <UserInfoContext.Provider

@@ -11,20 +11,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
     const getSession_ = async () => {
       const s = await getSession()
       const path = window.location.pathname
-      if (s) {
-        fetcher(`http://localhost:3000/api/user/byUuid/${s.user?.email}`, {
-          next: { revalidate: 10 },
-        })
-          .then((res) => {
-            //TODO: change this to createAccount
-            if (path !== '/accountSettings' && res?.userName === null) {
-              window.location.href = '/accountSettings'
-            }
-          })
-          .catch((err) => {
-            console.log('err', err)
-          })
-      }
+      // if (s) {
+      //   fetcher(`http://localhost:3000/api/user/byUuid/${s.user}`, {
+      //     next: { revalidate: 10 },
+      //   })
+      //     .then((res) => {
+      //       //TODO: change this to createAccount
+      //       if (path !== '/accountSettings' && res?.userName === null) {
+      //         window.location.href = '/accountSettings'
+      //       }
+      //     })
+      //     .catch((err) => {
+      //       console.log('err', err)
+      //     })
+      // }
     }
     getSession_()
   }, [])
