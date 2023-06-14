@@ -1,32 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-// id is user id
+// id is user userName
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
-  const user = await prisma.user.findUnique({
+  const userProfile = await prisma.userProfile.findUnique({
     where: {
-      id: params.id,
+      userName: params.id,
     },
     select: {
-      userProfile: {
-        select: {
-          collections: {
-            include: {
-              affiliateLinks: true,
-            },
-          },
+      collections: {
+        include: {
+          affiliateLinks: true,
         },
       },
     },
   })
+  if (!userProfile) {
+    return NextResponse.json({ error: 'user not found' }, { status: 404 })
+  }
 
-  return NextResponse.json(user?.userProfile?.collections)
+  return NextResponse.json(userProfile?.collections)
 }
 
-// id is user id
+// id is user userName
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } },
@@ -36,7 +35,7 @@ export async function POST(
       title: 'Collection Name Here',
       userProfile: {
         connect: {
-          uuid: params.id,
+          userName: params.id,
         },
       },
     },

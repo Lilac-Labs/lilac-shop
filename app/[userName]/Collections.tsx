@@ -7,21 +7,46 @@ import { motion } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import CollectionDropdown from './collection-dropdown'
+import { Collection } from '@/lib/types'
 
 export default function Collections({ userName }: { userName: string }) {
   const { status } = useSession()
   const { userInfo } = useUserInfoContext()
-  const { collections } = useAffiliateLinksContext()
-  console.log(collections)
+  const { collections: ownerCollections } = useAffiliateLinksContext()
+  const isOwner = userInfo.userProfile?.userName === userName
+  const [collections, setUserProfile] = useState<Collection[]>(
+    ownerCollections as Collection[],
+  )
   const router = useRouter()
 
+  useEffect(() => {
+    // get user's collections
+    const fetchCollections = async () => {
+      const res = await fetcher(
+        `http://localhost:3000/api/collection/${userName}`,
+      )
+      if (res === null) {
+        console.log('user not found')
+      } else {
+        console.log(res)
+        setUserProfile(res)
+      }
+    }
+    if (!isOwner) {
+      fetchCollections()
+    }
+  }, [isOwner])
+
   const addCollectionOnClick = () => {
-    fetcher(`http://localhost:3000/api/collection/${userInfo.id}`, {
-      method: 'POST',
-    }).then((res) => {
+    fetcher(
+      `http://localhost:3000/api/collection/${userInfo.userProfile?.userName}`,
+      {
+        method: 'POST',
+      },
+    ).then((res) => {
       router.replace(`/collections/${String(res.id)}`)
     })
   }
@@ -59,28 +84,31 @@ export default function Collections({ userName }: { userName: string }) {
             </div>
             <div className="flex flex-row justify-between">
               <p className="text-lg">{collection.title}</p>
-              <div
-                onClick={(event) => {
-                  event.preventDefault()
-                }}
-              >
-                <CollectionDropdown
-                  collectionId={collection.id}
-                ></CollectionDropdown>
-              </div>
+              {isOwner && (
+                <div
+                  onClick={(event) => {
+                    event.preventDefault()
+                  }}
+                >
+                  <CollectionDropdown
+                    collectionId={collection.id}
+                  ></CollectionDropdown>
+                </div>
+              )}
             </div>
 
             <p>{collection.affiliateLinks.length} products</p>
           </Link>
         )
       })}
-
-      <div className="flex flex-row justify-center">
-        <Button className="w-48" onClick={addCollectionOnClick}>
-          {' '}
-          ADD COLLECTION +
-        </Button>
-      </div>
+      {isOwner && (
+        <div className="flex flex-row justify-center">
+          <Button className="w-48" onClick={addCollectionOnClick}>
+            {' '}
+            ADD COLLECTION +
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
