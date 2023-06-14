@@ -9,7 +9,7 @@ export default async function Page({
 }) {
   return (
     <div className="content-container">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col">
         <div className="profile-header flex flex-row items-center justify-center">
           {/* TODO: Add button functionality */}
           <div className="share-link-btn btn">

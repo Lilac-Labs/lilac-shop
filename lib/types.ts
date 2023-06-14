@@ -1,5 +1,5 @@
 import {
-  Collection,
+  Collection as _Collection,
   SocialMedia,
   User,
   UserProfile as _UserProfile,
@@ -17,9 +17,13 @@ export interface UserProfile extends _UserProfile {
   tk: string
 }
 
+export interface Collection extends _Collection {
+  affiliateLinks: AffiliateLink[]
+}
+
 export interface AffiliateLink {
   id: number
-  collection?: Collection
+  collection?: _Collection
   title: string
   description?: string
   image: string
