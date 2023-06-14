@@ -10,6 +10,7 @@ const UserInfoContext = createContext(
     userInfo: UserInfo
     userInfoUpdated: boolean
     setUserInfoUpdated: React.Dispatch<React.SetStateAction<boolean>>
+    loading: boolean
   },
 )
 
@@ -24,6 +25,8 @@ export default function UserInfoProvider({
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
 
   const [userInfoUpdated, setUserInfoUpdated] = useState<boolean>(false)
+
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -42,6 +45,7 @@ export default function UserInfoProvider({
         userProfile: res.userProfile,
       }
       setUserInfo(userInfo_)
+      setLoading(false)
     }
 
     // email is ture when session is true
@@ -53,7 +57,7 @@ export default function UserInfoProvider({
 
   return (
     <UserInfoContext.Provider
-      value={{ userInfo, userInfoUpdated, setUserInfoUpdated }}
+      value={{ userInfo, userInfoUpdated, setUserInfoUpdated, loading }}
     >
       {children}
     </UserInfoContext.Provider>
