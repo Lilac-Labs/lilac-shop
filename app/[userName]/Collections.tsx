@@ -19,11 +19,8 @@ export default function Collections() {
   const router = useRouter()
 
   const addCollectionOnClick = () => {
-    fetcher('http://localhost:3000/api/collection', {
+    fetcher(`http://localhost:3000/api/collection/${userInfo.id}`, {
       method: 'POST',
-      body: JSON.stringify({
-        uuid: userInfo.id,
-      }),
     }).then((res) => {
       router.replace(`/collections/${String(res.id)}`)
     })

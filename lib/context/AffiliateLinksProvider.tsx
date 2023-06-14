@@ -91,8 +91,6 @@ export default function AffiliateLinksProvider({
     }
   }, [userInfo.id])
 
-  console.log('collections', collections)
-
   return (
     <AffiliateLinksContext.Provider
       value={{
