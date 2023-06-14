@@ -19,6 +19,7 @@ import Link from 'next/link'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 import { Button } from '@/components/ui/button'
 import { fetcher } from '@/lib/utils'
+import { useAffiliateLinksContext } from '@/lib/context/AffiliateLinksProvider'
 
 export default function CollectionDropdown({
   collectionId,
@@ -26,15 +27,16 @@ export default function CollectionDropdown({
   collectionId: number
 }) {
   const { userInfo } = useUserInfoContext()
+  const { collections, setCollections } = useAffiliateLinksContext()
   const [openPopover, setOpenPopover] = useState(false)
 
   const deleteOnClick = async () => {
-    await fetcher(`/api/collections/${collectionId}`, {
+    await fetcher(`/api/collection/${collectionId}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     })
+    setCollections(
+      collections.filter((collection) => collection.id !== collectionId),
+    )
   }
 
   return (
@@ -42,7 +44,10 @@ export default function CollectionDropdown({
       <Popover
         content={
           <div className="w-full rounded-md bg-white p-2 sm:w-56">
-            <button className="relative flex w-full items-center justify-start space-x-2 rounded-md p-2 text-left text-sm transition-all duration-75 hover:bg-gray-100">
+            <button
+              className="relative flex w-full items-center justify-start space-x-2 rounded-md p-2 text-left text-sm transition-all duration-75 hover:bg-gray-100"
+              onClick={deleteOnClick}
+            >
               <Delete className="h-4 w-4" />
               <p className="text-sm">Delete</p>
             </button>
