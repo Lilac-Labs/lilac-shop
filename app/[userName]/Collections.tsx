@@ -15,18 +15,20 @@ import { Collection } from '@/lib/types'
 export default function Collections({ userName }: { userName: string }) {
   const { status } = useSession()
   const { userInfo } = useUserInfoContext()
-  const { collections: ownerCollections } = useAffiliateLinksContext()
+  const { collections: ownerCollections, setCollections } =
+    useAffiliateLinksContext()
   const isOwner = userInfo.userProfile?.userName === userName
   const [collections, setUserProfile] = useState<Collection[]>(
     ownerCollections as Collection[],
   )
+  const [collectiondUpdated, setCollectionUpdated] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
     // get user's collections
     const fetchCollections = async () => {
       const res = await fetcher(
-        `http://localhost:3000/api/collection/${userName}`,
+        `http://localhost:3000/api/collection/byUserName/${userName}`,
       )
       if (res === null) {
         console.log('user not found')
@@ -38,16 +40,26 @@ export default function Collections({ userName }: { userName: string }) {
     if (!isOwner) {
       fetchCollections()
     }
-  }, [isOwner])
+  }, [isOwner, collectiondUpdated])
+
+  useEffect(() => {
+    if (isOwner) {
+      setUserProfile(ownerCollections as Collection[])
+    }
+  }, [ownerCollections])
 
   const addCollectionOnClick = () => {
     fetcher(
-      `http://localhost:3000/api/collection/${userInfo.userProfile?.userName}`,
+      `http://localhost:3000/api/collection/byUserName/${userInfo.userProfile?.userName}`,
       {
         method: 'POST',
       },
-    ).then((res) => {
-      router.replace(`/collections/${String(res.id)}`)
+    ).then((res: Collection) => {
+      if (res !== null) {
+        console.log('collectyions post result', res)
+        setCollections([...collections, res])
+        router.replace(`/collections/${String(res.id)}`)
+      }
     })
   }
   return (

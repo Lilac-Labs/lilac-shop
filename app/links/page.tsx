@@ -1,4 +1,3 @@
-import { makeData } from './makeData'
 import { columns } from './columns'
 import { DataTable } from './data-table'
 import { fetcher } from '@/lib/utils'
