@@ -103,11 +103,11 @@ model Brand {
 
 model Collection {
   id             Int             @id @default(autoincrement())
-  uuid           String
+  userName           String
   title          String
   active         Boolean         @default(true)
   description    String?
-  userProfile    UserProfile     @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
+  userProfile    UserProfile     @relation(fields: [userName], references: [userName], onDelete: Cascade)
   affiliateLinks AffiliateLink[]
 }
 

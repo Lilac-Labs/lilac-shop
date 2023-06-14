@@ -1,47 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-// id is user userName
+// id is user collectionId
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
-  const userProfile = await prisma.userProfile.findUnique({
+  console.log('get collection by id', params.id)
+  const collection = await prisma.collection.findUnique({
     where: {
-      userName: params.id,
+      id: +params.id,
     },
-    select: {
-      collections: {
-        include: {
-          affiliateLinks: true,
-        },
-      },
+    include: {
+      affiliateLinks: true,
     },
   })
-  if (!userProfile) {
-    return NextResponse.json({ error: 'user not found' }, { status: 404 })
+  if (!collection) {
+    return NextResponse.json({ error: 'collection not found' }, { status: 404 })
   }
 
-  return NextResponse.json(userProfile?.collections)
-}
-
-// id is user userName
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const newCollection = await prisma.collection.create({
-    data: {
-      title: 'Collection Name Here',
-      userProfile: {
-        connect: {
-          userName: params.id,
-        },
-      },
-    },
-  })
-
-  return NextResponse.json(newCollection)
+  return NextResponse.json(collection)
 }
 
 // id is collection id

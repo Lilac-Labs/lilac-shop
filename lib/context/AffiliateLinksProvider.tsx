@@ -78,18 +78,18 @@ export default function AffiliateLinksProvider({
   useEffect(() => {
     const getCollections = async () => {
       const collections = (await fetcher(
-        `/api/collection/${userInfo.userProfile?.userName}`,
+        `/api/collection/byUserName/${userInfo.userProfile?.userName}`,
       )) as Collection[]
       setCollections(collections)
 
       setCollectionLoading(false)
     }
 
-    if (userInfo.id) {
+    if (userInfo.userProfile?.userName) {
       getCollections()
       setAffiliateLinksUpdated(false)
     }
-  }, [userInfo.id])
+  }, [userInfo.userProfile?.userName])
 
   return (
     <AffiliateLinksContext.Provider
