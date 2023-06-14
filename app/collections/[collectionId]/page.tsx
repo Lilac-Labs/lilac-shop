@@ -1,24 +1,13 @@
-'use client'
-import UserProfile from '@/components/user/profile'
-import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
-import { UserInfo } from '@/lib/types'
-import { fetcher } from '@/lib/utils'
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { use } from 'react'
+import CollectionComponents from './collection-components'
 
 export default async function Page({
   params,
 }: {
   params: { collectionId: string }
 }) {
-  const { userInfo } = useUserInfoContext()
   return (
-    <div className="flex flex-col">
-      <Link href={`/${userInfo?.userProfile?.userName}`} className="">
-        Your shop
-      </Link>
-      <p>Hello Collection: {params.collectionId}</p>
-    </div>
+    <>
+      <CollectionComponents collectionId={params.collectionId} />
+    </>
   )
 }
