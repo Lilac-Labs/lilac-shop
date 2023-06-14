@@ -14,26 +14,28 @@ import { log } from 'console'
 import { useSession } from 'next-auth/react'
 import { getServerSession, Session } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
 
 // Conditionally render a form or a display of the user's profile
 
 export default function UserProfile({ userName }: { userName: string }) {
+  const { userInfo, loading } = useUserInfoContext()
   // Profile Display/Form Information
-  const [userProfile, setUserProfile] = useState<UserProfile>({} as UserProfile)
-
-  // Authentication Information
-  const [userSession, setUserSession] = useState<Session>({} as Session)
-
+  const [userProfile, setUserProfile] = useState<UserProfile>(
+    userInfo.userProfile as UserProfile,
+  )
+  const isOwner = userInfo.userProfile?.userName === userName
+  console.log('isOwner', isOwner)
   // conditional rendering variables
-  const [pageLoaded, setPageLoaded] = useState(false)
-  const [userExist, setUserExist] = useState(false)
+  // if user is owner and userInfo is laoded page is loaded
+  const [pageLoaded, setPageLoaded] = useState(isOwner && !loading)
   const [editProfile, setEditProfile] = useState(false)
 
   useEffect(() => {
     // Get the user's information
-    ;(async () => {
+    const fetchUserInfo = async () => {
       const res = await fetcher(
         `http://localhost:3000/api/user/byUserName/${userName}`,
         { cache: 'no-store' },
@@ -54,28 +56,28 @@ export default function UserProfile({ userName }: { userName: string }) {
           ig: 'https://www.instagram.com/',
           tk: 'https://www.tiktok.com/',
         })
-        setUserExist(true)
       }
       setPageLoaded(true)
-    })()
-  }, [])
+    }
+
+    if (!isOwner) {
+      fetchUserInfo()
+    }
+  }, [loading])
 
   return pageLoaded ? (
-    userExist ? (
-      editProfile ? (
-        <EditProfileForm
-          userProfile={userProfile}
-          setUserProfile={setUserProfile}
-          onEditClick={() => setEditProfile(false)}
-        />
-      ) : (
-        <ProfileDisplay
-          userProfile={userProfile}
-          onEditClick={() => setEditProfile(true)}
-        />
-      )
+    editProfile ? (
+      <EditProfileForm
+        userProfile={userProfile}
+        setUserProfile={setUserProfile}
+        onEditClick={() => setEditProfile(false)}
+      />
     ) : (
-      <UserDoesNotExist />
+      <ProfileDisplay
+        userProfile={userProfile}
+        onEditClick={() => setEditProfile(true)}
+        isOwner={isOwner}
+      />
     )
   ) : (
     <Loading />
@@ -86,29 +88,46 @@ export default function UserProfile({ userName }: { userName: string }) {
 function ProfileDisplay({
   userProfile,
   onEditClick,
+  isOwner,
 }: {
   userProfile: UserProfile
   onEditClick: () => void
+  isOwner: boolean
 }) {
   const { data: session, status } = useSession()
+  console.log('ProfileDisplay', isOwner)
 
   // Only allow the user to edit if
   // (1) they are authenticated
   // (2) they are the owner of the profile
-  const checkEditPermission = () => {
-    if (status === 'authenticated') {
-      // @ts-ignore
-      if (userProfile.uuid === session?.user?.id) {
-        console.log('user is owner')
-        return true
-      }
-    }
-    console.log('user is not owner')
-    return false
-  }
+  // const checkEditPermission = () => {
+  //   if (status === 'authenticated') {
+  //     // @ts-ignore
+  //     if (userProfile.uuid === session?.user?.id) {
+  //       console.log('user is owner')
+  //       return true
+  //     }
+  //   }
+  //   console.log('user is not owner')
+  //   return false
+  // }
 
   return (
     <div className="flex flex-col items-center">
+      <div className="profile-header flex flex-row items-center justify-center">
+        {/* TODO: Add button functionality */}
+        <div className="share-link-btn btn">
+          <Button className="mt-5">
+            <p>Copy Link</p>
+          </Button>
+        </div>
+        {/* TODO: Add button functionality */}
+        <div className="analytics-link-label btn">
+          <Button className="mt-5">
+            <p>Show Analytics</p>
+          </Button>
+        </div>
+      </div>
       <ProfilePicture userProfile={userProfile} />
       <div className="flex flex-row">
         <h1 className="z-30 mx-2 text-center text-2xl font-bold">
@@ -118,7 +137,7 @@ function ProfileDisplay({
           {userProfile.lastName}
         </h1>
 
-        {checkEditPermission() && (
+        {isOwner && (
           <button className="z-30" onClick={onEditClick}>
             <Image alt="edit profile" src="/edit.png" width={20} height={20} />
           </button>
@@ -160,7 +179,7 @@ function EditProfileForm({
 }) {
   return (
     <>
-      <div>
+      <div className="flex flex-col items-center">
         <ProfilePicture userProfile={userProfile} />
 
         <ProfileForm
@@ -179,25 +198,6 @@ function Loading() {
     <>
       <div className="flex flex-col items-center">
         <h1> Loading... </h1>
-      </div>
-    </>
-  )
-}
-
-// Edit the user's profile
-function UserDoesNotExist() {
-  const handleClick = () => {
-    console.log('clicked')
-    window.location.href = `/`
-  }
-
-  return (
-    <>
-      <div className="flex flex-col items-center">
-        <h1> Oops. This user does not exist. </h1>
-        <Button onClick={handleClick} className="mt-5">
-          <p>Return to Home</p>
-        </Button>
       </div>
     </>
   )

@@ -11,7 +11,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import CollectionDropdown from './collection-dropdown'
 
-export default function Collections() {
+export default function Collections({ userName }: { userName: string }) {
   const { status } = useSession()
   const { userInfo } = useUserInfoContext()
   const { collections } = useAffiliateLinksContext()
