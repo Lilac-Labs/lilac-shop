@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import UserProfile from '@/components/user/profile'
-import Collections from './Collections'
+import Collections from './collections'
 
 export default async function Page({
   params,

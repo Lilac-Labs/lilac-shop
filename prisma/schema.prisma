@@ -105,6 +105,7 @@ model Collection {
   id             Int             @id @default(autoincrement())
   uuid           String
   title          String
+  active         Boolean         @default(true)
   description    String?
   userProfile    UserProfile     @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
   affiliateLinks AffiliateLink[]

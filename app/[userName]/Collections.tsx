@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Image from 'next/image'
+import CollectionDropdown from './collection-dropdown'
 
 export default function Collections() {
   const { status } = useSession()
@@ -59,7 +60,19 @@ export default function Collections() {
                 </div>
               )}
             </div>
-            <p className="text-lg">{collection.title}</p>
+            <div className="flex flex-row justify-between">
+              <p className="text-lg">{collection.title}</p>
+              <div
+                onClick={(event) => {
+                  event.preventDefault()
+                }}
+              >
+                <CollectionDropdown
+                  collectionId={collection.id}
+                ></CollectionDropdown>
+              </div>
+            </div>
+
             <p>{collection.affiliateLinks.length} products</p>
           </Link>
         )
