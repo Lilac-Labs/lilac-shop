@@ -20,26 +20,3 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(newCollection)
 }
-
-export async function GET(request: NextRequest) {
-  const { userId } = await request.json()
-
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      userProfile: {
-        select: {
-          collections: {
-            include: {
-              affiliateLinks: true,
-            },
-          },
-        },
-      },
-    },
-  })
-
-  return NextResponse.json(user?.userProfile?.collections)
-}

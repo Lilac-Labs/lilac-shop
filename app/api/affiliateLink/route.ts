@@ -1,6 +1,6 @@
 import { AffiliateLink, CreateLinkParams, Link, Product } from '@/lib/types'
 import { fetcher } from '@/lib/utils'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
 export async function POST(request: Request) {

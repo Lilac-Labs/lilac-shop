@@ -7,14 +7,18 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { use } from 'react'
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({
+  params,
+}: {
+  params: { collectionId: string }
+}) {
   const { userInfo } = useUserInfoContext()
   return (
     <div className="flex flex-col">
       <Link href={`/${userInfo?.userProfile?.userName}`} className="">
         Your shop
       </Link>
-      <p>Hello Collection: {params.id}</p>
+      <p>Hello Collection: {params.collectionId}</p>
     </div>
   )
 }

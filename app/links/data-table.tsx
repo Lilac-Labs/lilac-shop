@@ -49,13 +49,11 @@ export function DataTable<TData, TValue>({
   ])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-  const { affiliateLinks, setAffiliateLinksUpdated, loading } =
+  const { affiliateLinks, setAffiliateLinksUpdated, affiliateLinkLoading } =
     useAffiliateLinksContext()
   const { CreateNewLinkModal, setShowCreateNewLinkModal } =
     useCreateNewLinkModal(setAffiliateLinksUpdated)
   const data = affiliateLinks as TData[]
-
-  console.log('data', data)
 
   const productSearchFilter: FilterFn<any> = (row, id, value, addMeta) => {
     const title = row.original.title as string
@@ -140,7 +138,7 @@ export function DataTable<TData, TValue>({
                   ))}
                 </TableRow>
               ))
-            ) : loading ? (
+            ) : affiliateLinkLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}

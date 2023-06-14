@@ -1,17 +1,22 @@
 'use client'
 
-import { Collection } from '@prisma/client'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { AffiliateLink, Link } from '../types'
+import { AffiliateLink, Link, Collection } from '../types'
 import { fetcher } from '../utils'
 import { useUserInfoContext } from './UserInfoProvider'
 
 const AffiliateLinksContext = createContext(
   {} as {
     affiliateLinks: AffiliateLink[]
+    setAffiliateLinks: React.Dispatch<React.SetStateAction<AffiliateLink[]>>
     affiliateLinksUpdated: boolean
     setAffiliateLinksUpdated: React.Dispatch<React.SetStateAction<boolean>>
-    loading: boolean
+    collections: Collection[]
+    setCollections: React.Dispatch<React.SetStateAction<Collection[]>>
+    collectionsUpdated: boolean
+    setCollectionsUpdated: React.Dispatch<React.SetStateAction<boolean>>
+    affiliateLinkLoading: boolean
+    collectionLoading: boolean
   },
 )
 
@@ -33,8 +38,13 @@ export default function AffiliateLinksProvider({
   const [affiliateLinksUpdated, setAffiliateLinksUpdated] =
     useState<boolean>(false)
 
-  const [loading, setLoading] = useState<boolean>(true)
+  const [collectionsUpdated, setCollectionsUpdated] = useState<boolean>(false)
 
+  const [affiliateLinkLoading, setAffiliateLinkLoading] =
+    useState<boolean>(true)
+  const [collectionLoading, setCollectionLoading] = useState<boolean>(true)
+
+  // set affiliateLinks
   useEffect(() => {
     const getAffiliateLinks = async () => {
       const affiliateLinks = (await fetcher(
@@ -54,7 +64,7 @@ export default function AffiliateLinksProvider({
       console.log('affiliateLinks', affiliateLinks)
 
       setAffiliateLinks(affiliateLinks)
-      setLoading(false)
+      setAffiliateLinkLoading(false)
     }
 
     // email is ture when session is true
@@ -64,13 +74,38 @@ export default function AffiliateLinksProvider({
     }
   }, [userInfo.id, affiliateLinksUpdated])
 
+  // set collections
+  useEffect(() => {
+    const getCollections = async () => {
+      const collections = (await fetcher(
+        `/api/collection/${userInfo.id}`,
+      )) as Collection[]
+      setCollections(collections)
+
+      setCollectionLoading(false)
+    }
+
+    if (userInfo.id) {
+      getCollections()
+      setAffiliateLinksUpdated(false)
+    }
+  }, [userInfo.id])
+
+  console.log('collections', collections)
+
   return (
     <AffiliateLinksContext.Provider
       value={{
         affiliateLinks,
+        setAffiliateLinks,
         affiliateLinksUpdated,
         setAffiliateLinksUpdated,
-        loading,
+        collections,
+        setCollections,
+        collectionsUpdated,
+        setCollectionsUpdated,
+        affiliateLinkLoading,
+        collectionLoading,
       }}
     >
       {children}
