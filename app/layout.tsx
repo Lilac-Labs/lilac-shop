@@ -39,9 +39,10 @@ export default async function RootLayout({
             {/* @ts-expect-error Server Component */}
             <Nav />
           </Suspense>
-          <main className="z-10 h-fit min-h-screen w-full px-10 py-20">
+          {/*children*/}
+          <div className="z-10 h-fit min-h-screen w-screen py-20">
             {children}
-          </main>
+          </div>
         </Providers>
         <Footer />
         <Analytics />
