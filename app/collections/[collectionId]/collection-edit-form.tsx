@@ -23,6 +23,7 @@ import { Dispatch, SetStateAction, useRef, useState } from 'react'
 import { fetcher } from '@/lib/utils'
 import { Edit } from 'lucide-react'
 import useAutosizeTextArea from '@/lib/hooks/use-autosize-textarea'
+import { Separator } from '@/components/ui/separator'
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -38,16 +39,14 @@ export function CollectionForm({
   collection: Collection
   setCollection: Dispatch<SetStateAction<Collection>>
 }) {
-  const [editMode, setEditMode] = useState<boolean>(false)
+  const [readOnly, setReadOnly] = useState<boolean>(true)
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: collection.title,
       description:
-        collection.description === null || collection.description === ''
-          ? 'Description here'
-          : collection.description,
+        collection.description === null ? '' : collection.description,
     },
   })
 
@@ -56,7 +55,13 @@ export function CollectionForm({
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('save')
+    console.log(values)
+    const res = await fetcher(`/api/collection/byId/${collection.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(values),
+    })
+    setCollection(res)
+    setReadOnly(true)
   }
 
   return (
@@ -74,7 +79,16 @@ export function CollectionForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} className="border-none outline-none" />
+                      <Input
+                        {...field}
+                        // make the input uneditable
+                        className={`${
+                          readOnly
+                            ? 'border-none focus-visible:ring-transparent'
+                            : ''
+                        }`}
+                        readOnly={readOnly}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -90,7 +104,13 @@ export function CollectionForm({
                         <Textarea
                           {...field}
                           ref={textAreaRef}
-                          className="h-auto min-h-fit resize-none overflow-hidden border-none"
+                          placeholder="Description here"
+                          className={`h-auto min-h-fit resize-none overflow-hidden  ${
+                            readOnly
+                              ? 'border-none focus-visible:ring-transparent'
+                              : ''
+                          }`}
+                          readOnly={readOnly}
                         />
                       </span>
                     </FormControl>
@@ -98,34 +118,39 @@ export function CollectionForm({
                   </FormItem>
                 )}
               />
+              {!readOnly && (
+                <div className="mt-10 flex flex-row justify-evenly bg-white text-center">
+                  <Button
+                    type="submit"
+                    className="
+                bg-black
+                "
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    type="reset"
+                    className="
+                    bg-grey
+                    "
+                    onClick={() => {
+                      setReadOnly(true)
+                      form.reset()
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
             </form>
           </Form>
         </div>
-        <button>
+        <button onClick={() => setReadOnly(false)}>
           <Edit className="h-6 w-6" />
         </button>
       </div>
-      {editMode && (
-        <div className="items-left border-back-200 flex flex-row justify-evenly border-b bg-white text-center">
-          <Button
-            type="submit"
-            className="
-                bg-black
-                "
-          >
-            Save
-          </Button>
-          <Button
-            type="reset"
-            className="
-                    bg-grey
-                    "
-            onClick={() => console.log('cancel')}
-          >
-            Cancel
-          </Button>
-        </div>
-      )}
+
+      <Separator className="my-4 h-[3px] bg-gray-500" />
     </div>
   )
 }
