@@ -22,6 +22,30 @@ export async function GET(
   return NextResponse.json(collection)
 }
 
+interface PatchBody {
+  title: string
+  description: string
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const body = (await request.json()) as PatchBody
+
+  const collection = await prisma.collection.update({
+    where: {
+      id: +params.id,
+    },
+    data: {
+      title: body.title,
+      description: body.description || null,
+    },
+  })
+  console.log('updated collection', params.id)
+  return NextResponse.json(collection)
+}
+
 // id is collection id
 export async function DELETE(
   request: NextRequest,
