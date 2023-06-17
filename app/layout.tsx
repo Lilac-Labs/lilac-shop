@@ -40,9 +40,9 @@ export default async function RootLayout({
             <Nav />
           </Suspense>
           {/*children*/}
-          <div className="z-10 h-fit min-h-screen w-screen py-20">
+          <main className="z-10 h-fit min-h-screen w-full py-20">
             {children}
-          </div>
+          </main>
         </Providers>
         <Footer />
         <Analytics />

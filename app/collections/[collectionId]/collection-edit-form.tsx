@@ -149,8 +149,6 @@ export function CollectionForm({
           <Edit className="h-6 w-6" />
         </button>
       </div>
-
-      <Separator className="my-4 h-[3px] bg-gray-500" />
     </div>
   )
 }

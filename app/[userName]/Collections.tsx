@@ -15,10 +15,10 @@ import { Collection } from '@/lib/types'
 export default function Collections({ userName }: { userName: string }) {
   const { status } = useSession()
   const { userInfo } = useUserInfoContext()
-  const { collections: ownerCollections, setCollections } =
+  const { collections: ownerCollections, setCollections: setOwnerCollections } =
     useAffiliateLinksContext()
   const isOwner = userInfo.userProfile?.userName === userName
-  const [collections, setUserProfile] = useState<Collection[]>(
+  const [collections, setCollections] = useState<Collection[]>(
     ownerCollections as Collection[],
   )
   const [collectiondUpdated, setCollectionUpdated] = useState(false)
@@ -34,7 +34,7 @@ export default function Collections({ userName }: { userName: string }) {
         console.log('user not found')
       } else {
         console.log(res)
-        setUserProfile(res)
+        setCollections(res)
       }
     }
     if (!isOwner) {
@@ -44,7 +44,7 @@ export default function Collections({ userName }: { userName: string }) {
 
   useEffect(() => {
     if (isOwner) {
-      setUserProfile(ownerCollections as Collection[])
+      setCollections(ownerCollections as Collection[])
     }
   }, [ownerCollections])
 
@@ -57,7 +57,7 @@ export default function Collections({ userName }: { userName: string }) {
     ).then((res: Collection) => {
       if (res !== null) {
         console.log('collectyions post result', res)
-        setCollections([...collections, res])
+        setOwnerCollections([...collections, res])
         router.replace(`/collections/${String(res.id)}`)
       }
     })
