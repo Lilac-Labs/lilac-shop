@@ -52,6 +52,7 @@ export interface Product {
   title: string
   description: string
   brandName: string
+  collectonId?: string
 }
 
 export interface Brand {

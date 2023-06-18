@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react'
 import { CollectionForm } from './collection-edit-form'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { useAddNewALModal } from '@/components/collection/add-new-AL-modal'
+import { useAddNewProductModal } from '@/components/collection/add-new-product-modal'
 import { useSignInModal } from '@/components/layout/sign-in-modal'
 
 export default function CollectionComponents({
@@ -30,8 +30,8 @@ export default function CollectionComponents({
   const [loading, setLoading] = useState<boolean>(true)
 
   const [userProfile, setUserProfile] = useState<UserProfile>({} as UserProfile)
-  const { AddNewALModal, setShowAddNewALModal } = useAddNewALModal()
-  const { SignInModal, setShowSignInModal } = useSignInModal()
+  const { AddNewProductModal, setShowAddNewProductModal } =
+    useAddNewProductModal(collectionId, collection, setCollection)
 
   useEffect(() => {
     const fetchCollection = async () => {
@@ -61,7 +61,7 @@ export default function CollectionComponents({
 
   return (
     <>
-      <AddNewALModal />
+      <AddNewProductModal />
 
       <div className="flex flex-col">
         {loading ? (
@@ -119,7 +119,7 @@ export default function CollectionComponents({
                 </div>
               ))}
 
-              <button onClick={() => setShowAddNewALModal(true)}>
+              <button onClick={() => setShowAddNewProductModal(true)}>
                 <Image
                   src="/addNew.jpg"
                   alt="Empty collection"
