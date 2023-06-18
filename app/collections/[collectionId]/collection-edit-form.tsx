@@ -62,7 +62,11 @@ export function CollectionForm({
       method: 'PATCH',
       body: JSON.stringify(values),
     })
-    setCollection(res)
+    setCollection({
+      ...collection,
+      title: res.title,
+      description: res.description,
+    })
     setReadOnly(true)
   }
 
