@@ -37,7 +37,7 @@ export default function SearchExistingProducts({
       <div className="grid grid-cols-2">
         {affiliateLinksToDisplay.map((link) => {
           return (
-            <div className="text-left">
+            <div className="text-left" key={link.id}>
               {/* <EditLinkModal /> */}
               <div className="flex flex-row">
                 <img
