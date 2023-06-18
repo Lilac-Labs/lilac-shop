@@ -31,7 +31,7 @@ export default function CollectionComponents({
 
   const [userProfile, setUserProfile] = useState<UserProfile>({} as UserProfile)
   const { AddNewProductModal, setShowAddNewProductModal } =
-    useAddNewProductModal(collectionId, collection, setCollection)
+    useAddNewProductModal(collectionId)
 
   useEffect(() => {
     const fetchCollection = async () => {
@@ -57,7 +57,7 @@ export default function CollectionComponents({
     }
 
     fetchCollection()
-  }, [])
+  }, [ownerCollections])
 
   return (
     <>

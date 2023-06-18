@@ -52,6 +52,10 @@ export async function POST(request: Request) {
           }
         : undefined,
     },
+    include: {
+      brand: true,
+      collection: true,
+    },
   })
   return NextResponse.json(affiliateLink)
 }
