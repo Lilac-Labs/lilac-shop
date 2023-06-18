@@ -17,16 +17,14 @@ const AddNewProductModal = ({
   showAddNewProductModal,
   setShowAddNewProductModal,
   collectionId,
-  collection,
-  setCollection,
 }: {
   showAddNewProductModal: boolean
   setShowAddNewProductModal: Dispatch<SetStateAction<boolean>>
   collectionId: string
-  collection: Collection
-  setCollection: Dispatch<SetStateAction<Collection>>
 }) => {
   const { userInfo } = useUserInfoContext()
+  const { collections, setCollections, affiliateLinks, setAffiliateLinks } =
+    useAffiliateLinksContext()
   const [showAddNewProduct, setShowAddNewProduct] = useState(false)
   const [showSearchExistingProduct, setShowSearchExistingProduct] =
     useState(false)
@@ -47,10 +45,18 @@ const AddNewProductModal = ({
     })
       .then((res) => {
         console.log('Response:', res)
-        setCollection({
-          ...collection,
-          affiliateLinks: [...collection.affiliateLinks, res],
-        })
+        setAffiliateLinks([...affiliateLinks, res])
+        setCollections(
+          collections.map((collection) => {
+            if (collection.id === +collectionId) {
+              return {
+                ...collection,
+                affiliateLinks: [...collection.affiliateLinks, res],
+              }
+            }
+            return collection
+          }),
+        )
       })
       .finally(() => {
         console.log('Finally')
@@ -100,11 +106,7 @@ const AddNewProductModal = ({
   )
 }
 
-export function useAddNewProductModal(
-  collectionId: string,
-  collection: Collection,
-  setCollection: Dispatch<SetStateAction<Collection>>,
-) {
+export function useAddNewProductModal(collectionId: string) {
   const [showAddNewProductModal, setShowAddNewProductModal] = useState(false)
 
   const AddNewProductModalCallback = useCallback(() => {
@@ -113,8 +115,6 @@ export function useAddNewProductModal(
         showAddNewProductModal={showAddNewProductModal}
         setShowAddNewProductModal={setShowAddNewProductModal}
         collectionId={collectionId}
-        collection={collection}
-        setCollection={setCollection}
       />
     )
   }, [showAddNewProductModal, setShowAddNewProductModal])
