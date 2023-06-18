@@ -15,7 +15,9 @@ export const columns: ColumnDef<AffiliateLink>[] = [
         <div className="text-center">
           <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            onClick={() => {
+              column.toggleSorting(column.getIsSorted() === 'asc')
+            }}
           >
             Created
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -24,6 +26,9 @@ export const columns: ColumnDef<AffiliateLink>[] = [
       )
     },
     accessorKey: 'createdAt',
+    accessorFn: (row) => {
+      return new Date(row.link?.createdAt as Date)
+    },
     cell: ({ row }) => {
       const date = new Date(row.original.link?.createdAt as Date)
       const monthShortNames = [
@@ -123,7 +128,9 @@ export const columns: ColumnDef<AffiliateLink>[] = [
       <div className="text-center">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() => {
+            column.toggleSorting(column.getIsSorted() === 'asc')
+          }}
         >
           Clicks
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -131,6 +138,9 @@ export const columns: ColumnDef<AffiliateLink>[] = [
       </div>
     ),
     accessorKey: 'clicks',
+    accessorFn: (row) => {
+      return parseInt(row.link?.clicks as string)
+    },
     cell: ({ row }) => {
       const clicks = parseInt(row.original.link?.clicks as string)
 
@@ -150,6 +160,9 @@ export const columns: ColumnDef<AffiliateLink>[] = [
       </div>
     ),
     accessorKey: 'orders',
+    accessorFn: (row) => {
+      return parseInt(row.link?.orders as string)
+    },
     cell: ({ row }) => {
       const orders = parseInt(row.original.link?.orders as string)
 
