@@ -44,6 +44,13 @@ export async function POST(request: Request) {
           name: product.brandName,
         },
       },
+      collection: product.collectonId
+        ? {
+            connect: {
+              id: +product.collectonId,
+            },
+          }
+        : undefined,
     },
   })
   return NextResponse.json(affiliateLink)
