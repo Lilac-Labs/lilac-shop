@@ -57,5 +57,5 @@ export async function POST(request: Request) {
       collection: true,
     },
   })
-  return NextResponse.json(affiliateLink)
+  return NextResponse.json({ ...affiliateLink, link: link })
 }

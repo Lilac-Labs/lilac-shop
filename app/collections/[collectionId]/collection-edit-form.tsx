@@ -35,9 +35,11 @@ const formSchema = z.object({
 export function CollectionForm({
   collection,
   setCollection,
+  isOwner,
 }: {
   collection: Collection
   setCollection: Dispatch<SetStateAction<Collection>>
+  isOwner: boolean
 }) {
   const [readOnly, setReadOnly] = useState<boolean>(true)
   // 1. Define your form.
@@ -118,7 +120,7 @@ export function CollectionForm({
                   </FormItem>
                 )}
               />
-              {!readOnly && (
+              {!readOnly && isOwner && (
                 <div className="mt-10 flex flex-row justify-evenly bg-white text-center">
                   <Button
                     type="submit"
@@ -145,9 +147,11 @@ export function CollectionForm({
             </form>
           </Form>
         </div>
-        <button onClick={() => setReadOnly(false)}>
-          <Edit className="h-6 w-6" />
-        </button>
+        {isOwner && (
+          <button onClick={() => setReadOnly(false)}>
+            <Edit className="h-6 w-6" />
+          </button>
+        )}
       </div>
     </div>
   )

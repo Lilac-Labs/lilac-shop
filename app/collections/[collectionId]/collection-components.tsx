@@ -26,6 +26,7 @@ export default function CollectionComponents({
   // set isOwner to true if the collection belongs to the user
   const [isOwner, setIsOwner] = useState<boolean>(false)
 
+  const [collectionNotFound, setCollectionNotFound] = useState<boolean>(false)
   const [collection, setCollection] = useState<Collection>({} as Collection)
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -35,12 +36,19 @@ export default function CollectionComponents({
 
   useEffect(() => {
     const fetchCollection = async () => {
-      const res = await fetcher(`/api/collection/byId/${collectionId}`)
-
-      const userProfile = await fetcher(`/api/user/byUserName/${res.userName}`)
-      setCollection(res)
-      setUserProfile(userProfile)
-      setLoading(false)
+      fetcher(`/api/collection/byId/${collectionId}`)
+        .then(async (res) => {
+          const userProfile = await fetcher(
+            `/api/user/byUserName/${res.userName}`,
+          )
+          setCollection(res)
+          setUserProfile(userProfile)
+          setLoading(false)
+        })
+        .catch((err) => {
+          console.log(err)
+          setCollectionNotFound(true)
+        })
     }
 
     const collectionData = ownerCollections?.find(
@@ -59,6 +67,23 @@ export default function CollectionComponents({
     fetchCollection()
   }, [ownerCollections])
 
+  if (collectionNotFound) {
+    return (
+      <div className="flex flex-col items-center">
+        <h1> Oops. This collection does not exist. </h1>
+        <Button
+          onClick={() => {
+            console.log('clicked')
+            window.location.href = `/`
+          }}
+          className="mt-5"
+        >
+          <p>Return to Home</p>
+        </Button>
+      </div>
+    )
+  }
+
   return (
     <>
       <AddNewProductModal />
@@ -73,13 +98,16 @@ export default function CollectionComponents({
             <Link href={`/${collection.userName}`}>
               <div className="relative flex w-full flex-row items-center justify-start space-x-2 rounded-md p-2 text-left text-sm transition-all duration-75 ">
                 <ArrowLeft className="h-4 w-4" />
-                <p className='text-sm"'>Your shop</p>
+                <p className='text-sm"'>
+                  {isOwner ? 'Your shop' : `${userProfile.firstName}'s shop`}
+                </p>
               </div>
             </Link>
             <div className="my-8">
               <CollectionForm
                 collection={collection}
                 setCollection={setCollection}
+                isOwner={isOwner}
               />
               <Separator className="my-4 h-[3px] bg-gray-500" />
               <div className="mx-2 flex flex-row">
@@ -92,7 +120,9 @@ export default function CollectionComponents({
                       width={40}
                       height={40}
                     />
-                    <p className="text-md">{collection.userName}</p>
+                    <p className="text-md">
+                      {userProfile.firstName + ' ' + userProfile.lastName}
+                    </p>
                   </div>
                 </Link>
                 <Separator
@@ -118,15 +148,18 @@ export default function CollectionComponents({
                   <p>{link.title}</p>
                 </div>
               ))}
-
-              <button onClick={() => setShowAddNewProductModal(true)}>
-                <Image
-                  src="/addNew.jpg"
-                  alt="Empty collection"
-                  width={150}
-                  height={150}
-                />
-              </button>
+              {isOwner && (
+                <div className="flex flex-col items-center justify-center">
+                  <button onClick={() => setShowAddNewProductModal(true)}>
+                    <Image
+                      src="/addNew.jpg"
+                      alt="Empty collection"
+                      width={150}
+                      height={150}
+                    />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ) : (

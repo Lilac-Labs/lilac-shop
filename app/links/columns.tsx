@@ -111,16 +111,11 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     header: () => <div className="text-center">Content</div>,
     accessorKey: 'content',
     cell: ({ row }) => {
-      const content = String(row.getValue('content'))
+      const content = row.original.collection?.title
       if (content === undefined) {
-        return (
-          <Link href={content}>
-            {' '}
-            <p>Link to Content</p>{' '}
-          </Link>
-        )
+        return <p>-</p>
       }
-      return <div className="text-center">-</div>
+      return <div className="text-center">{content}</div>
     },
   },
   {
