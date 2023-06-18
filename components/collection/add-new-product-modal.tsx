@@ -12,6 +12,7 @@ import { z } from 'zod'
 import { fetcher } from '@/lib/utils'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 import { Collection, Product } from '@/lib/types'
+import SearchExistingProducts from './search-existing-products'
 
 const AddNewProductModal = ({
   showAddNewProductModal,
@@ -71,7 +72,7 @@ const AddNewProductModal = ({
         showModal={showAddNewProductModal}
         setShowModal={setShowAddNewProductModal}
       >
-        <div className="w-full overflow-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border md:border-gray-200">
+        <div className="max-h-[50%] w-full overflow-y-auto overflow-x-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border md:border-gray-200">
           <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center md:px-16">
             {(showAddNewProduct || showSearchExistingProduct) && (
               <button
@@ -88,7 +89,10 @@ const AddNewProductModal = ({
           {showAddNewProduct ? (
             <CreateNewLinkComponent onSubmit={addNewProductOnSubmit} />
           ) : showSearchExistingProduct ? (
-            <p>Search</p>
+            <SearchExistingProducts
+              collectionId={collectionId}
+              setShowAddNewProductModal={setShowAddNewProductModal}
+            />
           ) : (
             <div className="flex flex-row justify-between">
               <Button
@@ -97,7 +101,12 @@ const AddNewProductModal = ({
               >
                 Add New Product
               </Button>
-              <Button className="flex">Search Existing Product</Button>
+              <Button
+                className="flex"
+                onClick={() => setShowSearchExistingProduct(true)}
+              >
+                Search Existing Product
+              </Button>
             </div>
           )}
         </div>
