@@ -6,6 +6,7 @@ import Nav from '@/components/layout/nav'
 import Footer from '@/components/layout/footer'
 import { Suspense } from 'react'
 import { Providers } from '@/lib/context/providers'
+import { Toast } from '@radix-ui/react-toast'
 
 export const metadata = {
   title: 'Precedent - Building blocks for your Next.js project',

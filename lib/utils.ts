@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge'
 import { Brand } from './types'
 import { redirect } from 'next/navigation'
 import { NextRequest } from 'next/server'
+import { useToast } from '@/components/ui/use-toast'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -100,4 +101,12 @@ export function getOrdinal(n: number): string {
 
 export const formatBrandSelect = (brand: Brand) => {
   return `${brand.name}, ${brand.commission}% commission`
+}
+
+export const copyToClipboard = (text: string) => {
+  const { toast } = useToast()
+  navigator.clipboard.writeText(text)
+  toast({
+    title: 'Copied to clipboard',
+  })
 }

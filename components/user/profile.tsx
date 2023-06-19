@@ -8,13 +8,15 @@ import { redirect, useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, use, useEffect, useState } from 'react'
 import ProfilePicture from './profilePic'
 import { ProfileForm } from './profileEditForm'
-import { fetcher } from '@/lib/utils'
+import { copyToClipboard, fetcher } from '@/lib/utils'
 import { Link } from 'lucide-react'
 import { log } from 'console'
 import { useSession } from 'next-auth/react'
 import { getServerSession, Session } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
+import { useToast } from '../ui/use-toast'
+import { Toast } from '../ui/toast'
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
 
@@ -96,37 +98,33 @@ function ProfileDisplay({
 }) {
   const { data: session, status } = useSession()
   console.log('ProfileDisplay', isOwner)
-
-  // Only allow the user to edit if
-  // (1) they are authenticated
-  // (2) they are the owner of the profile
-  // const checkEditPermission = () => {
-  //   if (status === 'authenticated') {
-  //     // @ts-ignore
-  //     if (userProfile.uuid === session?.user?.id) {
-  //       console.log('user is owner')
-  //       return true
-  //     }
-  //   }
-  //   console.log('user is not owner')
-  //   return false
-  // }
+  const { toast } = useToast()
 
   return (
     <div className="flex flex-col items-center">
       <div className="profile-header flex flex-row items-center justify-center">
         {/* TODO: Add button functionality */}
         <div className="share-link-btn btn">
-          <Button className="mt-5">
+          <Button
+            className="mt-5"
+            onClick={() => {
+              toast({
+                title: 'Copied to clipboard',
+              })
+              navigator.clipboard.writeText(
+                'withlilac.com/' + userProfile.userName,
+              )
+            }}
+          >
             <p>Copy Link</p>
           </Button>
         </div>
         {/* TODO: Add button functionality */}
-        <div className="analytics-link-label btn">
+        {/* <div className="analytics-link-label btn">
           <Button className="mt-5">
             <p>Show Analytics</p>
           </Button>
-        </div>
+        </div> */}
       </div>
       <ProfilePicture userProfile={userProfile} />
       <div className="flex flex-row">

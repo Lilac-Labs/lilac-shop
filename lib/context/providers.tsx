@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { fetcher } from '../utils'
 import AffiliateLinksProvider from './AffiliateLinksProvider'
 import { useRouter } from 'next/navigation'
+import { ToastProvider } from '@/components/ui/toast'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -37,7 +38,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider refetchOnWindowFocus={false}>
       <UserInfoProvider>
-        <AffiliateLinksProvider>{children}</AffiliateLinksProvider>
+        <AffiliateLinksProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </AffiliateLinksProvider>
       </UserInfoProvider>
     </SessionProvider>
   )
