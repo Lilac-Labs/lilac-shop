@@ -106,7 +106,7 @@ model Brand {
 model Collection {
   id             Int             @id @default(autoincrement())
   userName       String
-  uuid           String          @unique
+  uuid           String          
   title          String
   active         Boolean         @default(true)
   description    String?
