@@ -39,7 +39,7 @@ export default function UserProfile({ userName }: { userName: string }) {
     // Get the user's information
     const fetchUserInfo = async () => {
       const res = await fetcher(
-        `http://localhost:3000/api/user/byUserName/${userName}`,
+        `http://localhost:3000/api/users/by-username/${userName}`,
         { cache: 'no-store' },
       )
       if (res === null) {
@@ -129,10 +129,10 @@ function ProfileDisplay({
       <ProfilePicture userProfile={userProfile} />
       <div className="flex flex-row">
         <h1 className="z-30 mx-2 text-center text-2xl font-bold">
-          {userProfile.firstName}
+          {userProfile?.firstName}
         </h1>
         <h1 className="z-30 text-center text-2xl font-bold">
-          {userProfile.lastName}
+          {userProfile?.lastName}
         </h1>
 
         {isOwner && (
@@ -141,10 +141,10 @@ function ProfileDisplay({
           </button>
         )}
       </div>
-      <p className="text-md text-center">{userProfile.bio}</p>
+      <p className="text-md text-center">{userProfile?.bio}</p>
       <div className="flex">
         <a
-          href={userProfile.ig}
+          href={userProfile?.ig}
           target="_blank"
           rel="noreferrer"
           className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"
@@ -152,7 +152,7 @@ function ProfileDisplay({
           <Instagram className="h-5 w-5 text-[#1d9bf0]" />
         </a>
         <a
-          href={userProfile.tk}
+          href={userProfile?.tk}
           target="_blank"
           rel="noreferrer"
           className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"

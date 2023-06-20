@@ -180,7 +180,7 @@ export default function AccountUpdate() {
     }
     // Check if uniqueId is available
     const res = await fetcher(
-      `http://localhost:3000/api/user/byUserName/${newUniqueId}`,
+      `http://localhost:3000/api/users/by-username/${newUniqueId}`,
       { cache: 'no-store' },
     )
     if (res === null) {
@@ -316,7 +316,7 @@ export default function AccountUpdate() {
         : userInfo.image,
     }
     // Make call to accountUpdate API
-    await fetcher('http://localhost:3000/api/accountUpdate', {
+    await fetcher('http://localhost:3000/api/account-update', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

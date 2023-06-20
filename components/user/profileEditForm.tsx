@@ -76,7 +76,7 @@ export function ProfileForm({
     onEditClick()
 
     // Make call to accountUpdate API
-    await fetcher('http://localhost:3000/api/accountUpdate', {
+    await fetcher('http://localhost:3000/api/account-update', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ export default function UserInfoProvider({
     const getUserInfo = async () => {
       const res = await fetcher(
         // @ts-ignore
-        `http://localhost:3000/api/user/byUuid/${session?.user?.id}`,
+        `http://localhost:3000/api/users/by-uuid/${session?.user?.id}`,
         { cache: 'no-store' },
       )
 
