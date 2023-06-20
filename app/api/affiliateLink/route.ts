@@ -11,8 +11,6 @@ export async function POST(request: Request) {
     productLink: product.productLink,
   } as CreateLinkParams
 
-  console.log('createLinkParams', createLinkParams)
-
   const link: Link = await fetcher('https://link-m.herokuapp.com/', {
     method: 'POST',
     headers: {
@@ -20,7 +18,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify(createLinkParams),
   }).catch((e) => {
-    console.log('errorrr', e)
+    console.log('error', e)
     return NextResponse.error()
   })
 

@@ -24,7 +24,6 @@ export async function GET(
     },
   })
 
-  console.log('user', user)
   return NextResponse.json(
     user?.userProfile ? user.userProfile.affiliateLinks : [],
   )

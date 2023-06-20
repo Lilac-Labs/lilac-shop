@@ -6,7 +6,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
-  console.log('get collection by id', params.id)
   const collection = await prisma.collection.findUnique({
     where: {
       id: +params.id,
@@ -42,7 +41,6 @@ export async function PATCH(
       description: body.description || null,
     },
   })
-  console.log('updated collection', params.id)
   return NextResponse.json(collection)
 }
 
@@ -58,7 +56,6 @@ export async function DELETE(
       },
     })
     .then((res) => {
-      console.log('deleted collection', res)
       return NextResponse.json(res)
     })
     .catch((e) => {
