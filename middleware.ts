@@ -33,5 +33,11 @@ export default withAuth(middleware, {
 })
 
 export const config = {
-  matcher: ['/earnings', '/api/users/by-uuid/:uuid*'],
+  matcher: [
+    '/earnings',
+    '/api/users/by-uuid/:uuid*',
+    '/links',
+    '/accountSettings',
+    '/mediaConnect',
+  ],
 }
