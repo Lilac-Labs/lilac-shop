@@ -46,7 +46,6 @@ export interface CreateLinkParams {
 }
 // for creating a new affiliate link
 export interface Product {
-  uuid: string
   image: string
   productLink: string
   title: string

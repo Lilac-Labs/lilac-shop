@@ -51,24 +51,6 @@ export default function CreateNewLinkComponent({
     },
   })
 
-  //   const onSubmit = (values: z.infer<typeof formSchema>) => {
-  //     fetcher('http://localhost:3000/api/affiliateLink', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ uuid: userInfo.id, ...values } as Product),
-  //     })
-  //       .then((res) => {
-  //         console.log('Response:', res)
-  //       })
-  //       .finally(() => {
-  //         console.log('Finally')
-  //         setNewLinkAdded(true)
-  //         setCreateNewLinkModal(false)
-  //       })
-  //   }
-
   const [brands, setBrands] = useState<Brand[]>([] as Brand[])
   const [loading, setLoading] = useState<boolean>(true)
 

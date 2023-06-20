@@ -3,11 +3,40 @@ import { fetcher } from '@/lib/utils'
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-export async function POST(request: Request) {
+export async function GET(
+  request: Request,
+  { params }: { params: { uuid: string } },
+) {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: params.uuid,
+    },
+    include: {
+      userProfile: {
+        include: {
+          affiliateLinks: {
+            include: {
+              brand: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  return NextResponse.json(
+    user?.userProfile ? user.userProfile.affiliateLinks : [],
+  )
+}
+
+export async function POST(
+  request: Request,
+  { params }: { params: { uuid: string } },
+) {
   const product: Product = await request.json()
 
   const createLinkParams = {
-    userId: product.uuid,
+    userId: params.uuid,
     productLink: product.productLink,
   } as CreateLinkParams
 
@@ -31,7 +60,7 @@ export async function POST(request: Request) {
       id: link.id,
       userProfile: {
         connect: {
-          uuid: product.uuid,
+          uuid: params.uuid,
         },
       },
       title: product.title,

@@ -95,9 +95,12 @@ export const columns: ColumnDef<AffiliateLink>[] = [
             <button
               className="text-grey hover:text-black"
               onClick={() => {
-                fetcher(`/api/affiliateLink/${row.original.id}`, {
-                  method: 'DELETE',
-                }).then(() => setAffiliateLinksUpdated(true))
+                fetcher(
+                  `/api/users/by-uuid/-/affiliatelinks/${row.original.id}`,
+                  {
+                    method: 'DELETE',
+                  },
+                ).then(() => setAffiliateLinksUpdated(true))
               }}
             >
               DELETE
