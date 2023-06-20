@@ -28,12 +28,11 @@ export default function Collections({ userName }: { userName: string }) {
     // get user's collections
     const fetchCollections = async () => {
       const res = await fetcher(
-        `http://localhost:3000/api/collection/byUserName/${userName}`,
+        `/api/users/by-username/${userName}/collections`,
       )
       if (res === null) {
         console.log('user not found')
       } else {
-        console.log(res)
         setCollections(res)
       }
     }
@@ -49,12 +48,9 @@ export default function Collections({ userName }: { userName: string }) {
   }, [ownerCollections])
 
   const addCollectionOnClick = () => {
-    fetcher(
-      `http://localhost:3000/api/collection/byUserName/${userInfo.userProfile?.userName}`,
-      {
-        method: 'POST',
-      },
-    ).then((res: Collection) => {
+    fetcher(`/api/users/by-uuid/${userInfo.id}/collections`, {
+      method: 'POST',
+    }).then((res: Collection) => {
       if (res !== null) {
         console.log('collectyions post result', res)
         setOwnerCollections([...collections, res])

@@ -35,7 +35,7 @@ export default function CollectionsProvider({
   useEffect(() => {
     const getCollections = async () => {
       const collections = (await fetcher(
-        `/api/collection/byUserName/${userInfo.userProfile?.userName}`,
+        `/api/users/by-username/${userInfo.userProfile?.userName}/collections`,
       )) as Collection[]
 
       setCollections(collections)

@@ -36,10 +36,10 @@ export default function CollectionComponents({
 
   useEffect(() => {
     const fetchCollection = async () => {
-      fetcher(`/api/collection/byId/${collectionId}`)
+      fetcher(`/api/users/by-username/-/collections/${collectionId}`)
         .then(async (res) => {
           const userProfile = await fetcher(
-            `/api/user/byUserName/${res.userName}`,
+            `/api/users/by-username/${res.userName}`,
           )
           setCollection(res)
           setUserProfile(userProfile)

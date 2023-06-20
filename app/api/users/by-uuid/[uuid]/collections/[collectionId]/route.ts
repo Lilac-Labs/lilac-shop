@@ -1,26 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-// id is user collectionId
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const collection = await prisma.collection.findUnique({
-    where: {
-      id: +params.id,
-    },
-    include: {
-      affiliateLinks: true,
-    },
-  })
-  if (!collection) {
-    return NextResponse.json({ error: 'collection not found' }, { status: 404 })
-  }
-
-  return NextResponse.json(collection)
-}
-
 interface PatchBody {
   title: string
   description: string
@@ -28,13 +8,13 @@ interface PatchBody {
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { collectionId: string } },
 ) {
   const body = (await request.json()) as PatchBody
 
   const collection = await prisma.collection.update({
     where: {
-      id: +params.id,
+      id: +params.collectionId,
     },
     data: {
       title: body.title,
@@ -47,12 +27,12 @@ export async function PATCH(
 // id is collection id
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { collectionId: string } },
 ) {
   const collection = await prisma.collection
     .delete({
       where: {
-        id: +params.id,
+        id: +params.collectionId,
       },
     })
     .then((res) => {

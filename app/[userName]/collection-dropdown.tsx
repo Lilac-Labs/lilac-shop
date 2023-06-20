@@ -31,7 +31,7 @@ export default function CollectionDropdown({
   const [openPopover, setOpenPopover] = useState(false)
 
   const deleteOnClick = async () => {
-    await fetcher(`/api/collection/byId/${collectionId}`, {
+    await fetcher(`/api/users/by-uuid/-/collections/${collectionId}`, {
       method: 'DELETE',
     })
     console.log('delete collection', collectionId)

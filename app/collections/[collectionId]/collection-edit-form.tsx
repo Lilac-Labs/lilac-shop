@@ -58,10 +58,13 @@ export function CollectionForm({
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
-    const res = await fetcher(`/api/collection/byId/${collection.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(values),
-    })
+    const res = await fetcher(
+      `/api/users/by-uuid/-/collections/${collection.id}`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify(values),
+      },
+    )
     setCollection({
       ...collection,
       title: res.title,

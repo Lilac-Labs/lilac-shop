@@ -9,7 +9,7 @@ import { Providers } from '@/lib/context/providers'
 import { Toast } from '@radix-ui/react-toast'
 
 export const metadata = {
-  title: 'Precedent - Building blocks for your Next.js project',
+  title: 'Lilac - Dedicated to make infulencer marketing easy',
   description:
     'Precedent is the all-in-one solution for your Next.js project. It includes a design system, authentication, analytics, and more.',
   twitter: {

@@ -24,24 +24,3 @@ export async function GET(
 
   return NextResponse.json(userProfile?.collections)
 }
-
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { userName: string } },
-) {
-  const newCollection = await prisma.collection.create({
-    data: {
-      title: 'Collection Name Here',
-      userProfile: {
-        connect: {
-          userName: params.userName,
-        },
-      },
-    },
-    include: {
-      affiliateLinks: true,
-    },
-  })
-
-  return NextResponse.json(newCollection)
-}

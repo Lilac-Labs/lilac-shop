@@ -61,6 +61,8 @@ model UserProfile {
   affiliateLinks AffiliateLink[]
   uuid           String          @unique
   user           User            @relation(fields: [uuid], references: [id], onDelete: Cascade)
+
+  @@unique([userName, uuid])
 }
 
 model SocialMedia {
@@ -103,11 +105,12 @@ model Brand {
 
 model Collection {
   id             Int             @id @default(autoincrement())
-  userName           String
+  userName       String
+  uuid           String          @unique
   title          String
   active         Boolean         @default(true)
   description    String?
-  userProfile    UserProfile     @relation(fields: [userName], references: [userName], onDelete: Cascade)
+  userProfile    UserProfile     @relation(fields: [userName, uuid], references: [userName, uuid], onDelete: Cascade)
   affiliateLinks AffiliateLink[]
 }
 
