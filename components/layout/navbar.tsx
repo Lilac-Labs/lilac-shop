@@ -23,7 +23,7 @@ export default function NavBar({ session }: { session: Session | null }) {
       <SignInModal />
       <CreatorsApplyModal />
       <div
-        className={`mb-0.5 fixed top-0 w-full ${
+        className={`fixed top-0 mb-0.5 w-full ${
           scrolled
             ? 'border-b border-gray-200 bg-white/50 backdrop-blur-xl'
             : 'bg-white/0'
@@ -59,14 +59,14 @@ export default function NavBar({ session }: { session: Session | null }) {
             </Link>
           )}
 
-          {session && !isUserInfo && (
+          {/* {session && !isUserInfo && (
             <Link
               href="/earnings"
               className="mx-4 flex items-center font-display text-xl"
             >
               <p>Earnings</p>
             </Link>
-          )}
+          )} */}
 
           <div>
             {session ? (

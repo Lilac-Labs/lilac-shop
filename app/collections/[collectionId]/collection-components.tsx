@@ -3,7 +3,7 @@ import { LoadingDots } from '@/components/shared/icons'
 import { Separator } from '@/components/ui/separator'
 import { useAffiliateLinksContext } from '@/lib/context/AffiliateLinksProvider'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
-import { Collection, UserInfo, UserProfile } from '@/lib/types'
+import { AffiliateLink, Collection, UserInfo, UserProfile } from '@/lib/types'
 import { fetcher } from '@/lib/utils'
 import { ArrowLeft } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -14,6 +14,8 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useAddNewProductModal } from '@/components/collection/add-new-product-modal'
 import { useSignInModal } from '@/components/layout/sign-in-modal'
+import ProductDropdown from './product-dropdown'
+import { useEditLinkModal } from '@/components/linksPage/edit-link-modal'
 
 export default function CollectionComponents({
   collectionId,
@@ -33,6 +35,8 @@ export default function CollectionComponents({
   const [userProfile, setUserProfile] = useState<UserProfile>({} as UserProfile)
   const { AddNewProductModal, setShowAddNewProductModal } =
     useAddNewProductModal(collectionId)
+
+  console.log('collection', collection.affiliateLinks)
 
   useEffect(() => {
     const fetchCollection = async () => {
@@ -63,8 +67,6 @@ export default function CollectionComponents({
     } else {
       fetchCollection()
     }
-
-    fetchCollection()
   }, [ownerCollections])
 
   if (collectionNotFound) {
@@ -88,7 +90,7 @@ export default function CollectionComponents({
     <>
       <AddNewProductModal />
 
-      <div className="flex flex-col">
+      <div className="ml-[10%] mr-[10%] flex w-[80%] flex-col">
         {loading ? (
           <div className="item-center flex justify-center">
             <LoadingDots />
@@ -135,18 +137,11 @@ export default function CollectionComponents({
 
             <div className="grid grid-cols-3">
               {collection.affiliateLinks.map((link) => (
-                <div
-                  className="flex flex-col items-center justify-center"
+                <Product
+                  link={link}
+                  collectionId={+collectionId}
                   key={link.id}
-                >
-                  <Image
-                    src={link.image}
-                    alt={String(link.id)}
-                    width={150}
-                    height={150}
-                  />
-                  <p>{link.title}</p>
-                </div>
+                />
               ))}
               {isOwner && (
                 <div className="flex flex-col items-center justify-center">
@@ -167,5 +162,39 @@ export default function CollectionComponents({
         )}
       </div>
     </>
+  )
+}
+
+const Product = ({
+  link,
+  collectionId,
+}: {
+  link: AffiliateLink
+  collectionId: number
+}) => {
+  // useEditLinkModal
+  const { EditLinkModal, setShowEditLinkModal } = useEditLinkModal(link)
+  return (
+    <div className="mx-10 flex flex-col border" key={link.id}>
+      <EditLinkModal />
+      <div className="flex flex-col justify-end">
+        <ProductDropdown
+          alId={link.id}
+          collectionId={collectionId}
+          setShowEditLinkModal={setShowEditLinkModal}
+        />
+      </div>
+      <div className=" flex flex-col items-center justify-center">
+        <Link href={`https://link-m.herokuapp.com/${link.id}`} key={link.id}>
+          <Image
+            src={link.image}
+            alt={String(link.id)}
+            width={150}
+            height={150}
+          />
+        </Link>
+        <p className="mt-6">{link.title}</p>
+      </div>
+    </div>
   )
 }

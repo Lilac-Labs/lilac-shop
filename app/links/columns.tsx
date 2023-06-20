@@ -65,7 +65,6 @@ export const columns: ColumnDef<AffiliateLink>[] = [
       const brand = row.original.brand as Brand
       const productLink = row.original.link?.productLink as string
       const { EditLinkModal, setShowEditLinkModal } = useEditLinkModal(
-        setAffiliateLinksUpdated,
         row.original,
       )
       return (
