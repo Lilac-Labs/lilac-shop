@@ -16,7 +16,7 @@ export default async function SignUpRedirect() {
   // if (status) {
   //   const { email } = session?.user || {};
 
-  //   const res = await fetcher(`${process.env.BASE_URL}/api/user/byEmail/${email}`, { next: { revalidate: 10 } });
+  //   const res = await fetcher(`${process.env.BASE_URL}/api/users/byEmail/${email}`, { next: { revalidate: 10 } });
 
   //   console.log(asPath)
   //   if (asPath!== "/profile" && res.bio === null) {

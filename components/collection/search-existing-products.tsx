@@ -46,21 +46,23 @@ export default function SearchExistingProducts({
                 />
                 <button
                   onClick={() => {
-                    fetcher('http://localhost:3000/api/affiliateLink', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
+                    fetcher(
+                      `/api/users/by-uuid/${userInfo.id}/affiliatelinks`,
+                      {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          collectonId: collectionId,
+                          image: link.image,
+                          title: link.title,
+                          description: link.description,
+                          brandName: link.brand.name,
+                          productLink: link.link?.productLink,
+                        } as Product),
                       },
-                      body: JSON.stringify({
-                        uuid: userInfo.id,
-                        collectonId: collectionId,
-                        image: link.image,
-                        title: link.title,
-                        description: link.description,
-                        brandName: link.brand.name,
-                        productLink: link.link?.productLink,
-                      } as Product),
-                    })
+                    )
                       .then((res) => {
                         console.log('Response:', res)
                         setAffiliateLinks([...affiliateLinks, res])

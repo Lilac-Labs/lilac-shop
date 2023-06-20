@@ -70,14 +70,16 @@ const EditLinkModal = ({
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values as Product)
-    console.log(`http://localhost:3000/api/affiliateLink/${affiliateLink.id}`)
-    fetcher(`http://localhost:3000/api/affiliateLink/${affiliateLink.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
+    fetcher(
+      `/api/users/by-uuid/${userInfo.id}/affiliatelinks/${affiliateLink.id}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values as Product),
       },
-      body: JSON.stringify(values as Product),
-    })
+    )
       .then((res) => {
         console.log('Response:', res)
       })

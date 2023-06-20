@@ -36,7 +36,6 @@ export const authOptions: NextAuthOptions = {
       if (profile) {
         token.id = profile.id
       }
-
       return token
     },
   },

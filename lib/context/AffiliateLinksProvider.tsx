@@ -48,7 +48,7 @@ export default function AffiliateLinksProvider({
   useEffect(() => {
     const getAffiliateLinks = async () => {
       const affiliateLinks = (await fetcher(
-        `/api/affiliateLink/${userInfo.id}`,
+        `/api/users/by-uuid/${userInfo.id}/affiliatelinks`,
       )) as AffiliateLink[]
 
       const links = (await fetcher(
@@ -78,7 +78,7 @@ export default function AffiliateLinksProvider({
   useEffect(() => {
     const getCollections = async () => {
       const collections = (await fetcher(
-        `/api/collection/byUserName/${userInfo.userProfile?.userName}`,
+        `/api/users/by-username/${userInfo.userProfile?.userName}/collections`,
       )) as Collection[]
       setCollections(collections)
 

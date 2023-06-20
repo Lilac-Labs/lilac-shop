@@ -3,41 +3,14 @@ import { AffiliateLink, CreateLinkParams, Link, Product } from '@/lib/types'
 import { fetcher } from '@/lib/utils'
 import { NextResponse } from 'next/server'
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: params.id,
-    },
-    include: {
-      userProfile: {
-        include: {
-          affiliateLinks: {
-            include: {
-              brand: true,
-            },
-          },
-        },
-      },
-    },
-  })
-
-  console.log('user', user)
-  return NextResponse.json(
-    user?.userProfile ? user.userProfile.affiliateLinks : [],
-  )
-}
-
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: { alid: string } },
 ) {
   const product: Product = await request.json()
   const updatedAffiliateLink = await prisma.affiliateLink.update({
     where: {
-      id: Number(params.id),
+      id: +params.alid,
     },
     data: {
       title: product.title,
@@ -57,10 +30,10 @@ export async function PATCH(
  */
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: number } },
+  { params }: { params: { alid: number } },
 ) {
   const lmDeleteRes = await fetcher(
-    `https://link-m.herokuapp.com/${params.id}`,
+    `https://link-m.herokuapp.com/${params.alid}`,
     {
       method: 'DELETE',
     },
@@ -84,7 +57,7 @@ export async function DELETE(
   const res = await prisma.affiliateLink
     .delete({
       where: {
-        id: Number(params.id),
+        id: +params.alid,
       },
     })
     .then((res) => {
