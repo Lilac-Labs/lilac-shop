@@ -36,6 +36,7 @@ import {
 import { fetcher, formatBrandSelect } from '@/lib/utils'
 import { Product, Brand, AffiliateLink } from '@/lib/types'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
+import { useAffiliateLinksContext } from '@/lib/context/AffiliateLinksProvider'
 
 const formSchema = z.object({
   image: z.string().url({ message: 'Please enter a valid URL' }),
@@ -48,15 +49,14 @@ const formSchema = z.object({
 const EditLinkModal = ({
   showEditLinkModal,
   setEditLinkModal,
-  setLinkEdited,
   affiliateLink,
 }: {
   showEditLinkModal: boolean
   setEditLinkModal: Dispatch<SetStateAction<boolean>>
-  setLinkEdited: Dispatch<SetStateAction<boolean>>
   affiliateLink: AffiliateLink
 }) => {
   const { userInfo } = useUserInfoContext()
+  const { setAffiliateLinks } = useAffiliateLinksContext()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,7 +85,16 @@ const EditLinkModal = ({
       })
       .finally(() => {
         console.log('Finally')
-        setLinkEdited(true)
+        setAffiliateLinks((prev) => {
+          const index = prev.findIndex((link) => link.id === affiliateLink.id)
+          const newLinks = [...prev]
+          newLinks[index] = {
+            ...newLinks[index],
+            ...values,
+          }
+          return newLinks
+        })
+
         setEditLinkModal(false)
       })
   }
@@ -222,10 +231,7 @@ const EditLinkModal = ({
   )
 }
 
-export function useEditLinkModal(
-  setLinkEdited: Dispatch<SetStateAction<boolean>>,
-  affiliateLink: AffiliateLink,
-) {
+export function useEditLinkModal(affiliateLink: AffiliateLink) {
   const [showEditLinkModal, setShowEditLinkModal] = useState(false)
 
   const EditLinkModalCallback = useCallback(() => {
@@ -233,7 +239,6 @@ export function useEditLinkModal(
       <EditLinkModal
         showEditLinkModal={showEditLinkModal}
         setEditLinkModal={setShowEditLinkModal}
-        setLinkEdited={setLinkEdited}
         affiliateLink={affiliateLink}
       />
     )

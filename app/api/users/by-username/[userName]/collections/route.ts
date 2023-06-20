@@ -13,7 +13,11 @@ export async function GET(
     select: {
       collections: {
         include: {
-          affiliateLinks: true,
+          affiliateLinks: {
+            include: {
+              brand: true,
+            },
+          },
         },
       },
     },
