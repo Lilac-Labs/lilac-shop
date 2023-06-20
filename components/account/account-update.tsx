@@ -302,7 +302,6 @@ export default function AccountUpdate() {
     // Get data from form
     const inputs = {
       newUser: userInfo.userProfile === null,
-      uuid: userInfo.id,
       //email: userInfo.email, // User cannot change for now.
       userName: (e.currentTarget.elements[0] as HTMLInputElement).value,
       firstName: (e.currentTarget.elements[1] as HTMLInputElement).value,
@@ -316,7 +315,7 @@ export default function AccountUpdate() {
         : userInfo.image,
     }
     // Make call to accountUpdate API
-    await fetcher('http://localhost:3000/api/account-update', {
+    await fetcher(`/api/users/by-uuid/${userInfo.id}/account-update`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
