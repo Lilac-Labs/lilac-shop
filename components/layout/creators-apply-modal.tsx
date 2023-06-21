@@ -5,6 +5,7 @@ import { useState, Dispatch, SetStateAction, useCallback, useMemo } from 'react'
 import { LoadingDots, Google } from '@/components/shared/icons'
 import Image from 'next/image'
 import * as Form from '@radix-ui/react-form'
+import ApplyForm from './apply-form'
 
 const CreatorsApplyModal = ({
   showCreatorsApplyModal,
@@ -82,80 +83,7 @@ const CreatorsApplyModal = ({
             Fill out the form below. Someone from our team will be in touch
             shortly.
           </p>
-          <Form.Root className="FromRoot" onSubmit={handleFormSubmit}>
-            <Form.Field className="FormField" name="name">
-              <div className="flex rounded">
-                <Form.Message className="FormMessage" match="valueMissing">
-                  Please enter your name.
-                </Form.Message>
-                <Form.Message className="FormMessage" match="typeMismatch">
-                  Please provide a valid name.
-                </Form.Message>
-              </div>
-              <Form.Control asChild>
-                <input
-                  className="Input w-full rounded valid:border-gray-500 invalid:border-red-500"
-                  type="text"
-                  style={{ marginBottom: 5 }}
-                  required
-                  placeholder="Full Name"
-                />
-              </Form.Control>
-            </Form.Field>
-            <Form.Field className="FormField" name="email">
-              <div className="flex">
-                <Form.Message className="FormMessage" match="valueMissing">
-                  Please enter your email.
-                </Form.Message>
-                <Form.Message className="FormMessage" match="typeMismatch">
-                  Please provide a valid email.
-                </Form.Message>
-              </div>
-              <Form.Control asChild>
-                <input
-                  className="Input w-full rounded valid:border-gray-500 invalid:border-red-500"
-                  type="email"
-                  style={{ marginBottom: 5 }}
-                  required
-                  placeholder="Email Address"
-                />
-              </Form.Control>
-            </Form.Field>
-            <Form.Field className="FormField" name="bio">
-              <div className="flex">
-                <Form.Message className="FormMessage" match="valueMissing">
-                  Please briefly describe who you are and the types of content
-                  you promote regularly on your social channels.
-                </Form.Message>
-              </div>
-              <Form.Control asChild>
-                <textarea
-                  className="w-full rounded valid:border-gray-500 invalid:border-red-500"
-                  required
-                  placeholder="Briefly describe who you are and the types of content you promote regularly on your social channels."
-                />
-              </Form.Control>
-            </Form.Field>
-            <Form.Field className="FormField" name="links">
-              <div className="flex">
-                <Form.Message className="FormMessage" match="valueMissing">
-                  Please provide links to your social media channels.
-                </Form.Message>
-              </div>
-              <Form.Control asChild>
-                <textarea
-                  className="w-full rounded valid:border-gray-500 invalid:border-red-500"
-                  required
-                  placeholder="Links to your social media channels (Instagram, Youtube, TikTok, etc.)"
-                />
-              </Form.Control>
-            </Form.Field>
-            <Form.Submit asChild>
-              <button className="mx-2 rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black">
-                Submit
-              </button>
-            </Form.Submit>
-          </Form.Root>
+          <ApplyForm setCreatorsApplyModal={setCreatorsApplyModal} />
         </div>
 
         <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center md:px-16">

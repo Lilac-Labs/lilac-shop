@@ -5,7 +5,7 @@ import { Github, Twitter } from '@/components/shared/icons'
 import WebVitals from '@/components/home/web-vitals'
 import ComponentGrid from '@/components/home/component-grid'
 import Image from 'next/image'
-import type { ImageLoaderProps } from 'next/image';
+import type { ImageLoaderProps } from 'next/image'
 
 import { nFormatter } from '@/lib/utils'
 import { User } from '@/components/client-component'
@@ -31,7 +31,7 @@ export default async function Home() {
     .catch((e) => console.log(e))
 
   return (
-      <main className="flex flex-col flex-auto">
+<main className="flex flex-col flex-auto">
           <div className="h-full flex flex-auto flex-row justify-center">
             <div className="self-center	z-10 flex-auto flex-col w-full max-w-xl px-5 xl:px-0 items-center ml-5">
               <h1
@@ -84,15 +84,25 @@ export default async function Home() {
                     <span className="hidden sm:inline-block">Contact </span> Us{' '}
                     <span className="font-semibold">{nFormatter(stars)}</span>
                   </p>
-                </a>
+  </a>
               </div>
             </div>
             <div className="z-10 w-full max-w-xl px-5 xl:px-0 flex-auto items-center	mr-5">
               <Image className="flex center w-full rounded-3xl" src="/how-it-works-feature-1.jpg" width={480} height={533} alt="how-it-works"/>
             </div>
           </div>
-
-          <div className="bg-rose-200	my-10 flex flex-auto flex-row justify-center items-center text-center">
+        </div>
+        <div className="z-10 w-full max-w-xl flex-auto items-center px-5 xl:px-0	">
+          <Image
+            className="center flex w-full rounded-3xl"
+            src="/how-it-works-feature-1.jpg"
+            alt="how-it-works-1"
+            width={480}
+            height={533}
+          />
+        </div>
+      </div>
+ <div className="bg-rose-200	my-10 flex flex-auto flex-row justify-center items-center text-center">
             <div>
               <p className="my-5"> Work with our brand partners.</p>
               <div className="mb-3 flex flex-row justify-center h-full w-full">
@@ -115,8 +125,16 @@ export default async function Home() {
                 )
                 )}
             </div>
+
+            <Button className="mt-3 flex w-full">
+              <Link href="/tonykam">
+                <p>Visit Tony's shop</p>
+              </Link>
+            </Button>
           </div>
-      </main>
+        </div>
+      </div>
+    </main>
   )
 }
 

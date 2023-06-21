@@ -101,10 +101,10 @@ function ProfileDisplay({
   const { toast } = useToast()
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="profile-header flex flex-row items-center justify-center">
+    <div className="mx-[20%] flex w-[60%] flex-col items-center">
+      <div className="profile-header flex flex-row items-center justify-center ">
         {/* TODO: Add button functionality */}
-        <div className="share-link-btn btn">
+        {/* <div className="share-link-btn btn">
           <Button
             className="mt-5"
             onClick={() => {
@@ -118,7 +118,7 @@ function ProfileDisplay({
           >
             <p>Copy Link</p>
           </Button>
-        </div>
+        </div> */}
         {/* TODO: Add button functionality */}
         {/* <div className="analytics-link-label btn">
           <Button className="mt-5">
@@ -127,38 +127,50 @@ function ProfileDisplay({
         </div> */}
       </div>
       <ProfilePicture userProfile={userProfile} />
-      <div className="flex flex-row">
-        <h1 className="z-30 mx-2 text-center text-2xl font-bold">
-          {userProfile?.firstName}
-        </h1>
-        <h1 className="z-30 text-center text-2xl font-bold">
-          {userProfile?.lastName}
-        </h1>
 
-        {isOwner && (
-          <button className="z-30" onClick={onEditClick}>
-            <Image alt="edit profile" src="/edit.png" width={20} height={20} />
-          </button>
-        )}
-      </div>
-      <p className="text-md text-center">{userProfile?.bio}</p>
-      <div className="flex">
-        <a
-          href={userProfile?.ig}
-          target="_blank"
-          rel="noreferrer"
-          className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"
-        >
-          <Instagram className="h-5 w-5 text-[#1d9bf0]" />
-        </a>
-        <a
-          href={userProfile?.tk}
-          target="_blank"
-          rel="noreferrer"
-          className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"
-        >
-          <Tiktok className="h-5 w-5 text-[#1d9bf0]" />
-        </a>
+      <div className="mt-5 flex min-w-[500px] flex-col items-center justify-center rounded-md border">
+        <div className=" absolute top-[232px] z-30 bg-white">
+          <div className="flex flex-row">
+            <h1 className="z-30 mx-2 text-center text-2xl font-bold ">
+              {userProfile?.firstName}
+            </h1>
+            <h1 className="z-30 text-center text-2xl font-bold">
+              {userProfile?.lastName}
+            </h1>
+
+            {isOwner && (
+              <button className="mx-2" onClick={onEditClick}>
+                <Image
+                  alt="edit profile"
+                  src="/edit.png"
+                  width={20}
+                  height={20}
+                />
+              </button>
+            )}
+          </div>
+        </div>
+        <p className="text-md mx-5 my-5 overflow-auto text-left">
+          {userProfile?.bio}
+        </p>
+        <div className="absolute top-[351px] z-30 flex h-fit bg-white">
+          <a
+            href={userProfile?.ig}
+            target="_blank"
+            rel="noreferrer"
+            className="mx-auto mr-5 flex h-6 w-6 animate-fade-up items-center justify-center  overflow-hidden rounded-md transition-colors hover:bg-gray-200"
+          >
+            <Instagram className="h-7 w-7" />
+          </a>
+          <a
+            href={userProfile?.tk}
+            target="_blank"
+            rel="noreferrer"
+            className="mx-auto flex h-6 w-6  animate-fade-up items-center justify-center overflow-hidden rounded-md bg-black px-1 transition-colors hover:bg-gray-200"
+          >
+            <Tiktok className="h-4 w-4 invert" />
+          </a>
+        </div>
       </div>
     </div>
   )
