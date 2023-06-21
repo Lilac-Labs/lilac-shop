@@ -22,7 +22,9 @@ export default withAuth(middleware, {
       const session = await (
         await fetch(
           `${
-            process.env.VERCEL ? process.env.VERCEL : process.env.NEXTAUTH_URL
+            process.env.VERCEL
+              ? 'https://lilac-shop-app.vercel.app'
+              : process.env.NEXTAUTH_URL
           }/api/auth/session`,
           {
             method: 'GET',
