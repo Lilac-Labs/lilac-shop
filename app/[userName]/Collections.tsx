@@ -62,8 +62,8 @@ export default function Collections({ userName }: { userName: string }) {
     <div className="flex flex-col">
       {collections.map((collection) => {
         return (
-          <div className="py-6">
-            <Link href={`/collections/${collection.id}`} key={collection.id}>
+          <div className="py-6" key={collection.id}>
+            <Link href={`/collections/${collection.id}`}>
               <div className="border-round border-b-2 border-gray-300 px-5">
                 {collection.affiliateLinks.length === 0 ? (
                   <Image

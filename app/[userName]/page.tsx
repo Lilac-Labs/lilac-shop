@@ -9,7 +9,9 @@ export default async function Page({
 }: {
   params: { userName: string }
 }) {
-  const result = await fetcher(`/api/users/by-username/${params.userName}`)
+  const result = await fetcher(
+    `${process.env.BASE_URL}/api/users/by-username/${params.userName}`,
+  )
   const userExist = result !== null
 
   return (
