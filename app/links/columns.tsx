@@ -57,6 +57,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
   {
     header: () => <div className="text-center">Product</div>,
     accessorKey: 'product',
+    //ts-ignore
     filterFn: 'productSearch',
     cell: ({ row }) => {
       const { setAffiliateLinksUpdated } = useAffiliateLinksContext()
