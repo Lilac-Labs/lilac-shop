@@ -12,12 +12,13 @@ return (
     <div className="w-7/24 mx-5">
         <div className="w-full h-14/24">
             <img className="object-cover
+                            fill
                             flex
                             flex-auto
                             w-full
+                            h-full
                             max-w-64
                             max-h-64
-                            h-full
                             rounded-3xl"
                 src={pfpPath}
                 alt="pfp-image" />
