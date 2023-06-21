@@ -20,12 +20,17 @@ export default withAuth(middleware, {
         ? '__Secure-next-auth.session-token'
         : 'next-auth.session-token'
       const session = await (
-        await fetch('/api/auth/session', {
-          method: 'GET',
-          headers: {
-            Cookie: `${cookieName}=${cookies.get(cookieName)?.value}`,
+        await fetch(
+          `${
+            process.env.VERCEL ? process.env.VERCEL : process.env.NEXTAUTH_URL
+          }/api/auth/session`,
+          {
+            method: 'GET',
+            headers: {
+              Cookie: `${cookieName}=${cookies.get(cookieName)?.value}`,
+            },
           },
-        })
+        )
       ).json()
       return !!session.user
     },
