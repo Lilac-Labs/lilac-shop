@@ -175,26 +175,28 @@ const Product = ({
   // useEditLinkModal
   const { EditLinkModal, setShowEditLinkModal } = useEditLinkModal(link)
   return (
-    <div className="mx-10 flex flex-col border" key={link.id}>
+    <>
       <EditLinkModal />
-      <div className="flex flex-col justify-end">
-        <ProductDropdown
-          alId={link.id}
-          collectionId={collectionId}
-          setShowEditLinkModal={setShowEditLinkModal}
-        />
-      </div>
-      <div className=" flex flex-col items-center justify-center">
-        <Link href={`https://link-m.herokuapp.com/${link.id}`} key={link.id}>
-          <Image
-            src={link.image}
-            alt={String(link.id)}
-            width={150}
-            height={150}
+      <div className="mx-10 flex flex-col border" key={link.id}>
+        <div className="flex flex-col justify-end">
+          <ProductDropdown
+            alId={link.id}
+            collectionId={collectionId}
+            setShowEditLinkModal={setShowEditLinkModal}
           />
-        </Link>
-        <p className="mt-6">{link.title}</p>
+        </div>
+        <div className=" flex flex-col items-center justify-center">
+          <Link href={`https://link-m.herokuapp.com/${link.id}`} key={link.id}>
+            <Image
+              src={link.image}
+              alt={String(link.id)}
+              width={150}
+              height={150}
+            />
+          </Link>
+          <p className="mt-6">{link.title}</p>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

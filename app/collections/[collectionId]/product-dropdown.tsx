@@ -75,7 +75,6 @@ export default function ProductDropdown({
                 className="text-sm"
                 onClick={() => {
                   setShowEditLinkModal(true)
-                  setOpenPopover(false)
                 }}
               >
                 Edit
