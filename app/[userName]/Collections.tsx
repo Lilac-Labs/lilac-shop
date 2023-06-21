@@ -62,51 +62,56 @@ export default function Collections({ userName }: { userName: string }) {
     <div className="flex flex-col">
       {collections.map((collection) => {
         return (
-          <Link href={`/collections/${collection.id}`} key={collection.id}>
-            <div className="border-round justify-start border border-gray-300">
-              {collection.affiliateLinks.length === 0 ? (
-                <Image
-                  src="/addNew.jpg"
-                  alt="Empty collection"
-                  width={150}
-                  height={150}
-                />
-              ) : (
-                <div className="flex flex-row">
-                  {collection.affiliateLinks
-                    .slice(0, 4)
-                    .map((affiliateLink) => {
-                      return (
-                        <div className="basis-1/4" key={affiliateLink.id}>
-                          <Image
-                            src={affiliateLink.image}
-                            alt={affiliateLink.title}
-                            width={150}
-                            height={150}
-                          />
-                        </div>
-                      )
-                    })}
+          <div className="py-6">
+            <Link href={`/collections/${collection.id}`} key={collection.id}>
+              <div className="border-round border-b-2 border-gray-300 px-5">
+                {collection.affiliateLinks.length === 0 ? (
+                  <Image
+                    src="/addNew.jpg"
+                    alt="Empty collection"
+                    width={200}
+                    height={200}
+                  />
+                ) : (
+                  <div className="flex flex-row justify-between">
+                    {collection.affiliateLinks
+                      .slice(0, 4)
+                      .map((affiliateLink) => {
+                        return (
+                          <div className="" key={affiliateLink.id}>
+                            <Image
+                              src={affiliateLink.image}
+                              alt={affiliateLink.title}
+                              width={200}
+                              height={200}
+                            />
+                          </div>
+                        )
+                      })}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col px-5">
+                <div className="flex flex-row justify-between ">
+                  <p className="mt-3 text-lg font-bold">{collection.title}</p>
+                  {isOwner && (
+                    <div
+                      onClick={(event) => {
+                        event.preventDefault()
+                      }}
+                    >
+                      <CollectionDropdown
+                        collectionId={collection.id}
+                      ></CollectionDropdown>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div className="flex flex-row justify-between">
-              <p className="text-lg">{collection.title}</p>
-              {isOwner && (
-                <div
-                  onClick={(event) => {
-                    event.preventDefault()
-                  }}
-                >
-                  <CollectionDropdown
-                    collectionId={collection.id}
-                  ></CollectionDropdown>
-                </div>
-              )}
-            </div>
-
-            <p>{collection.affiliateLinks.length} products</p>
-          </Link>
+                <p className="text-gray-500">
+                  {collection.affiliateLinks.length} products
+                </p>
+              </div>
+            </Link>
+          </div>
         )
       })}
       {isOwner && (

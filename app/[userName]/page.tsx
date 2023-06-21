@@ -15,7 +15,7 @@ export default async function Page({
   const userExist = result !== null
 
   return (
-    <div className="content-container ml-[10%] mr-[10%] w-[80%]">
+    <div className="content-container mx-auto w-[80%] max-w-5xl items-center">
       <div className="flex flex-col">
         {userExist ? (
           <>

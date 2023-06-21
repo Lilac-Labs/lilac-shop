@@ -25,7 +25,7 @@ export default function NavBar({ session }: { session: Session | null }) {
       <div
         className={`fixed top-0 mb-0.5 w-full ${
           scrolled
-            ? 'border-b border-gray-200 bg-white/50 backdrop-blur-xl'
+            ? 'border-b border-gray-200 bg-white/5 backdrop-blur-xl'
             : 'bg-white/0'
         } z-30 transition-all`}
       >
