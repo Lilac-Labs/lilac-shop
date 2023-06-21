@@ -9,9 +9,7 @@ export default async function Page({
 }: {
   params: { userName: string }
 }) {
-  const result = await fetcher(
-    `http://localhost:3000/api/users/by-username/${params.userName}`,
-  )
+  const result = await fetcher(`/api/users/by-username/${params.userName}`)
   const userExist = result !== null
 
   return (

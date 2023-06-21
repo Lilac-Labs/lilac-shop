@@ -179,10 +179,9 @@ export default function AccountUpdate() {
       return true
     }
     // Check if uniqueId is available
-    const res = await fetcher(
-      `http://localhost:3000/api/users/by-username/${newUniqueId}`,
-      { cache: 'no-store' },
-    )
+    const res = await fetcher(`/api/users/by-username/${newUniqueId}`, {
+      cache: 'no-store',
+    })
     if (res === null) {
       setEnteredUUidErrorMsg('✅')
       return true

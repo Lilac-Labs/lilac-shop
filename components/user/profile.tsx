@@ -38,10 +38,9 @@ export default function UserProfile({ userName }: { userName: string }) {
   useEffect(() => {
     // Get the user's information
     const fetchUserInfo = async () => {
-      const res = await fetcher(
-        `http://localhost:3000/api/users/by-username/${userName}`,
-        { cache: 'no-store' },
-      )
+      const res = await fetcher(`/api/users/by-username/${userName}`, {
+        cache: 'no-store',
+      })
       if (res === null) {
         console.log('user not found')
       } else {
