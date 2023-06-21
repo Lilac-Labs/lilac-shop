@@ -23,10 +23,10 @@ export default function NavBar({ session }: { session: Session | null }) {
       <SignInModal />
       <CreatorsApplyModal />
       <div
-        className={`fixed top-0 mb-0.5 w-full ${
+        className={`fixed top-0 mb-0.5 w-full bg-white/0 ${
           scrolled
             ? 'border-b border-gray-200 bg-white/50 backdrop-blur-xl'
-            : 'bg-white/0'
+            : 'bg-white'
         } z-30 transition-all`}
       >
         <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
