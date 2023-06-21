@@ -20,7 +20,7 @@ export default withAuth(middleware, {
         ? '__Secure-next-auth.session-token'
         : 'next-auth.session-token'
       const session = await (
-        await fetch('http://localhost:3000/api/auth/session', {
+        await fetch('/api/auth/session', {
           method: 'GET',
           headers: {
             Cookie: `${cookieName}=${cookies.get(cookieName)?.value}`,

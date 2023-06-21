@@ -55,7 +55,7 @@ export default function CreateNewLinkComponent({
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    fetcher(`http://localhost:3000/api/brands`)
+    fetcher(`/api/brands`)
       .then((data) => {
         setBrands(data as Brand[])
       })

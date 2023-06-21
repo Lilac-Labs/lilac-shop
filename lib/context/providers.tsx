@@ -17,7 +17,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
       if (session) {
         // @ts-ignore
-        fetcher(`http://localhost:3000/api/users/by-uuid/${session.user?.id}`, {
+        fetcher(`/api/users/by-uuid/${session.user?.id}`, {
           next: { revalidate: 10 },
         })
           .then((res) => {
