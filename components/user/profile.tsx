@@ -17,6 +17,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 import { useToast } from '../ui/use-toast'
 import { Toast } from '../ui/toast'
+import useWindowSize from '@/lib/hooks/use-window-size'
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
 
@@ -24,6 +25,7 @@ import { Toast } from '../ui/toast'
 
 export default function UserProfile({ userName }: { userName: string }) {
   const { userInfo, loading } = useUserInfoContext()
+
   // Profile Display/Form Information
   const [userProfile, setUserProfile] = useState<UserProfile>(
     userInfo.userProfile as UserProfile,
@@ -100,10 +102,10 @@ function ProfileDisplay({
   const { toast } = useToast()
 
   return (
-    <div className="mx-[20%] flex w-[60%] flex-col items-center">
-      <div className="profile-header flex flex-row items-center justify-center ">
-        {/* TODO: Add button functionality */}
-        {/* <div className="share-link-btn btn">
+    <div className="mx-[4%] flex w-fit flex-col items-center md:mx-[20%] md:w-[60%]">
+      {/* <div className="profile-header flex flex-row items-center justify-center ">
+
+        <div className="share-link-btn btn">
           <Button
             className="mt-5"
             onClick={() => {
@@ -117,18 +119,18 @@ function ProfileDisplay({
           >
             <p>Copy Link</p>
           </Button>
-        </div> */}
-        {/* TODO: Add button functionality */}
-        {/* <div className="analytics-link-label btn">
+        </div>
+
+        <div className="analytics-link-label btn">
           <Button className="mt-5">
             <p>Show Analytics</p>
           </Button>
-        </div> */}
-      </div>
+        </div>
+      </div> */}
       <ProfilePicture userProfile={userProfile} />
 
-      <div className="mt-5 flex min-w-[500px] flex-col items-center justify-center rounded-md border">
-        <div className=" absolute top-[232px] z-30 bg-white">
+      <div className="mt-5 flex flex-col items-center justify-center rounded-md border md:min-w-[500px]">
+        <div className=" absolute top-[232px] bg-white">
           <div className="flex flex-row">
             <h1 className="z-30 mx-2 text-center text-2xl font-bold ">
               {userProfile?.firstName}
@@ -152,7 +154,7 @@ function ProfileDisplay({
         <p className="text-md mx-5 my-5 overflow-auto text-left">
           {userProfile?.bio}
         </p>
-        <div className="absolute top-[351px] z-30 flex h-fit bg-white">
+        <div className="absolute top-[374px] flex h-fit bg-white md:top-[351px]">
           <a
             href={userProfile?.ig}
             target="_blank"

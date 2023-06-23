@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import CollectionDropdown from './collection-dropdown'
 import { Collection } from '@/lib/types'
+import useWindowSize from '@/lib/hooks/use-window-size'
 
 export default function Collections({ userName }: { userName: string }) {
   const { status } = useSession()
@@ -58,35 +59,55 @@ export default function Collections({ userName }: { userName: string }) {
       }
     })
   }
+
+  const { isSm, isMobile, isLg } = useWindowSize()
+
   return (
-    <div className="flex flex-col">
+    <div className="mt-12 flex flex-col">
       {collections.map((collection) => {
         return (
           <div className="py-6" key={collection.id}>
             <Link href={`/collections/${collection.id}`}>
               <div className="border-round border-b-2 border-gray-300 px-5">
                 {collection.affiliateLinks.length === 0 ? (
-                  <Image
-                    src="/addNew.jpg"
-                    alt="Empty collection"
-                    width={200}
-                    height={200}
-                  />
+                  <div className="jusify-between flex flex-row">
+                    <div className="">
+                      <Image
+                        src="/addNew.jpg"
+                        alt="Empty collection"
+                        width={175}
+                        height={175}
+                      />
+                    </div>
+                    {[...Array(isSm ? 1 : isMobile ? 2 : 3)].map((idx) => {
+                      return <div className="w-[175px]" key={idx}></div>
+                    })}
+                  </div>
                 ) : (
-                  <div className="flex flex-row justify-between">
+                  <div className="flex flex-row justify-between bg-red-500">
                     {collection.affiliateLinks
-                      .slice(0, 4)
+                      .slice(0, isSm ? 2 : isMobile ? 3 : 4)
                       .map((affiliateLink) => {
                         return (
-                          <div className="" key={affiliateLink.id}>
+                          <div className={''} key={affiliateLink.id}>
                             <Image
                               src={affiliateLink.image}
                               alt={affiliateLink.title}
-                              width={200}
-                              height={200}
+                              width={175}
+                              height={175}
                             />
                           </div>
                         )
+                      })}
+                    {collection.affiliateLinks.length <
+                      (isSm ? 2 : isMobile ? 3 : 4) &&
+                      [
+                        ...Array(
+                          (isSm ? 2 : isMobile ? 3 : 4) -
+                            collection.affiliateLinks.length,
+                        ),
+                      ].map((idx) => {
+                        return <div className="w-[175px]" key={idx}></div>
                       })}
                   </div>
                 )}
