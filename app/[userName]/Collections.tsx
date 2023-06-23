@@ -84,7 +84,7 @@ export default function Collections({ userName }: { userName: string }) {
                     })}
                   </div>
                 ) : (
-                  <div className="flex flex-row justify-between bg-red-500">
+                  <div className="flex flex-row justify-between">
                     {collection.affiliateLinks
                       .slice(0, isSm ? 2 : isMobile ? 3 : 4)
                       .map((affiliateLink) => {
