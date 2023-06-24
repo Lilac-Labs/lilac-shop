@@ -9,21 +9,19 @@ export default function ProductDemo({pfpPath, shoplink, product1img, product1lin
         
 
 return (
-    <div className="w-7/24 mx-5">
-        <div className="w-full h-14/24">
+    <div className="
+                    w-full">
+        <div className="bg-green-500
+                        mx-5">
             <img className="object-cover
-                            fill
-                            flex
-                            flex-auto
-                            w-full
-                            h-full
+                            min-w-30
+                            min-h-30
                             max-w-64
                             max-h-64
                             rounded-3xl"
                 src={pfpPath}
                 alt="pfp-image" />
         </div>
-
 
         <div className='w-full flex flex-row justify-evenly -mt-6'>
             <Link href={product1link}>

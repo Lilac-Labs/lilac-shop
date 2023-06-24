@@ -1,11 +1,11 @@
+"use client"
+
 import Card from '@/components/home/card'
 import Balancer from 'react-wrap-balancer'
 import { DEPLOY_URL } from '@/lib/constants'
-import { Github, Twitter } from '@/components/shared/icons'
-import WebVitals from '@/components/home/web-vitals'
-import ComponentGrid from '@/components/home/component-grid'
 import Image from 'next/image'
-import type { ImageLoaderProps } from 'next/image'
+
+import type { ImageLoaderProps } from 'next/image' // How to use this?
 
 import { nFormatter } from '@/lib/utils'
 import { User } from '@/components/client-component'
@@ -13,31 +13,44 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import ProductDemo from '@/components/home/usercard'
 
-export default async function Home() {
-  const { stargazers_count: stars } = await fetch(
-    'https://api.github.com/repos/steven-tey/precedent',
-    {
-      ...(process.env.GITHUB_OAUTH_TOKEN && {
-        headers: {
-          Authorization: `Bearer ${process.env.GITHUB_OAUTH_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-      }),
-      // data will revalidate every 60 seconds
-      next: { revalidate: 60 },
-    },
-  )
-    .then((res) => res.json())
-    .catch((e) => console.log(e))
+import useWindowSize from '@/lib/hooks/use-window-size'
+import { useEffect, useState } from 'react'
+
+
+export default function Home() {
+  const { isSm, isMobile, isLg } = useWindowSize()
 
   return (
-    <main className="flex flex-auto flex-col">
-      <div className="flex h-full flex-auto flex-row justify-center">
-        <div className="z-10	ml-5 w-full max-w-xl flex-auto flex-col items-center self-center px-5 xl:px-0">
+    <main className="flex flex-auto flex-col bg-blue-500">
+      <div className={`bg-green-500
+                      h-full w-full
+                      flex flex-auto
+              ${
+                isLg ? 'flex-col':
+                isSm ? 'flex-col':
+                isMobile ? 'flex-row':
+                'flex-row'
+              }
+              justify-center `}>
+                
+        <div className="bg-yellow-500
+                        w-full h-full
+                        max-w-xl
+                        self-center 
+                        ">
           <h1
-            className="animate-fade-up bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center font-display text-4xl font-bold tracking-[-0.02em] text-transparent opacity-0 drop-shadow-sm md:text-7xl md:leading-[5rem]"
-            style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}
-          >
+            className="animate-fade-up
+            bg-gradient-to-br from-black to-stone-500 bg-clip-text
+            text-center
+            font-display
+            text-4xl font-bold
+            tracking-[-0.02em]
+            text-transparent
+            opacity-0
+            drop-shadow-sm
+            md:text-7xl
+            md:leading-[5rem]"
+            style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}>
             <Balancer> Recommend Products, Earn Commission.</Balancer>
           </h1>
           <p
@@ -49,8 +62,7 @@ export default async function Home() {
               sale. Track analytics for all of your links.
             </Balancer>
           </p>
-          <div
-            className="mx-auto mt-6 flex animate-fade-up items-center justify-center space-x-5 opacity-0"
+          <div className="mx-auto mt-6 flex animate-fade-up items-center justify-center space-x-5 opacity-0"
             style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}
           >
             <a
@@ -88,7 +100,12 @@ export default async function Home() {
             </a> */}
           </div>
         </div>
-        <div className="z-10 mr-5 w-full max-w-xl flex-auto items-center px-5	xl:px-0">
+
+        <div className="bg-red-500 
+                        w-full h-full
+                        max-w-xl
+                        self-center
+                        ">
           <Image
             className="center flex w-full rounded-3xl"
             src="/how-it-works-feature-1.jpg"
@@ -98,10 +115,24 @@ export default async function Home() {
           />
         </div>
       </div>
-
-      <div className="my-10	flex flex-auto flex-row items-center justify-center bg-rose-200 text-center">
+      <div className="bg-rose-200
+                      flex flex-auto flex-row
+                      items-center
+                      justify-center
+                      text-center">
         <div>
-          <p className="my-5"> Work with our brand partners.</p>
+          <p className="my-5
+                        bg-gradient-to-br from-black to-stone-500 bg-clip-text
+                        text-center
+                        font-display
+                        text-xl font-bold
+                        tracking-[-0.02em]
+                        drop-shadow-sm
+                        md:text-7xl
+                        md:leading-[5rem]"
+                        style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}>
+            <Balancer>Work with our brand partners. </Balancer>
+          </p>
           <div className="mb-3 flex h-full w-full flex-row justify-center">
             <Image
               className="mx-2 h-full"
@@ -134,8 +165,13 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="my-10 flex h-full flex-auto flex-row justify-center xl:px-0">
-        <div className="flex w-8/12 flex-row justify-evenly overflow-hidden">
+
+        <div className="bg-red-500
+                      flex flex-row
+                      justify-evenly
+                      self-center
+                      overflow-hidden
+                      ">
           {demo.map(
             ({
               pfpPath,
@@ -156,7 +192,6 @@ export default async function Home() {
             ),
           )}
         </div>
-      </div>
     </main>
   )
 }
