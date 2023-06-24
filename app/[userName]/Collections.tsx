@@ -66,73 +66,76 @@ export default function Collections({ userName }: { userName: string }) {
     <div className="mt-12 flex flex-col">
       {collections.map((collection) => {
         return (
-          <div className="py-6" key={collection.id}>
-            <Link href={`/collections/${collection.id}`}>
-              <div className="border-round border-b-2 border-gray-300 px-5">
-                {collection.affiliateLinks.length === 0 ? (
-                  <div className="jusify-between flex flex-row">
-                    <div className="">
-                      <Image
-                        src="/addNew.jpg"
-                        alt="Empty collection"
-                        width={175}
-                        height={175}
-                      />
-                    </div>
-                    {[...Array(isSm ? 1 : isMobile ? 2 : 3)].map((idx) => {
-                      return <div className="w-[175px]" key={idx}></div>
-                    })}
-                  </div>
-                ) : (
-                  <div className="flex flex-row justify-between">
-                    {collection.affiliateLinks
-                      .slice(0, isSm ? 2 : isMobile ? 3 : 4)
-                      .map((affiliateLink) => {
-                        return (
-                          <div className={''} key={affiliateLink.id}>
-                            <Image
-                              src={affiliateLink.image}
-                              alt={affiliateLink.title}
-                              width={175}
-                              height={175}
-                            />
-                          </div>
-                        )
-                      })}
-                    {collection.affiliateLinks.length <
-                      (isSm ? 2 : isMobile ? 3 : 4) &&
-                      [
-                        ...Array(
-                          (isSm ? 2 : isMobile ? 3 : 4) -
-                            collection.affiliateLinks.length,
-                        ),
-                      ].map((idx) => {
+          (isOwner || collection.affiliateLinks.length > 0) && (
+            <div className="py-6" key={collection.id}>
+              <Link href={`/collections/${collection.id}`}>
+                <div className="border-round border-b-2 border-gray-300 px-5">
+                  {isOwner && collection.affiliateLinks.length === 0 ? (
+                    <div className="jusify-between flex flex-row">
+                      <div className="">
+                        <Image
+                          src="/addNew.jpg"
+                          alt="Empty collection"
+                          width={175}
+                          height={175}
+                        />
+                      </div>
+                      {[...Array(isSm ? 1 : isMobile ? 2 : 3)].map((idx) => {
                         return <div className="w-[175px]" key={idx}></div>
                       })}
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col px-5">
-                <div className="flex flex-row justify-between ">
-                  <p className="mt-3 text-lg font-bold">{collection.title}</p>
-                  {isOwner && (
-                    <div
-                      onClick={(event) => {
-                        event.preventDefault()
-                      }}
-                    >
-                      <CollectionDropdown
-                        collectionId={collection.id}
-                      ></CollectionDropdown>
+                    </div>
+                  ) : (
+                    <div className="flex flex-row justify-between">
+                      {collection.affiliateLinks
+                        .slice(0, isSm ? 2 : isMobile ? 3 : 4)
+                        .map((affiliateLink) => {
+                          return (
+                            <div className={''} key={affiliateLink.id}>
+                              <Image
+                                src={affiliateLink.image}
+                                alt={affiliateLink.title}
+                                width={175}
+                                height={175}
+                              />
+                            </div>
+                          )
+                        })}
+                      {collection.affiliateLinks.length <
+                        (isSm ? 2 : isMobile ? 3 : 4) &&
+                        [
+                          ...Array(
+                            (isSm ? 2 : isMobile ? 3 : 4) -
+                              collection.affiliateLinks.length,
+                          ),
+                        ].map((idx) => {
+                          return <div className="w-[175px]" key={idx}></div>
+                        })}
                     </div>
                   )}
                 </div>
-                <p className="text-gray-500">
-                  {collection.affiliateLinks.length} products
-                </p>
-              </div>
-            </Link>
-          </div>
+
+                <div className="flex flex-col px-5">
+                  <div className="flex flex-row justify-between ">
+                    <p className="mt-3 text-lg font-bold">{collection.title}</p>
+                    {isOwner && (
+                      <div
+                        onClick={(event) => {
+                          event.preventDefault()
+                        }}
+                      >
+                        <CollectionDropdown
+                          collectionId={collection.id}
+                        ></CollectionDropdown>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-gray-500">
+                    {collection.affiliateLinks.length} products
+                  </p>
+                </div>
+              </Link>
+            </div>
+          )
         )
       })}
       {isOwner && (
