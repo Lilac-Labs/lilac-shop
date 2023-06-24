@@ -24,6 +24,7 @@ import { fetcher } from '@/lib/utils'
 import { Edit } from 'lucide-react'
 import useAutosizeTextArea from '@/lib/hooks/use-autosize-textarea'
 import { Separator } from '@/components/ui/separator'
+import useAutosizeInput from '@/lib/hooks/use-autosize-inpu'
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -52,8 +53,11 @@ export function CollectionForm({
     },
   })
 
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
-  useAutosizeTextArea(textAreaRef.current, form.watch('description'))
+  const descriptionRef = useRef<HTMLTextAreaElement>(null)
+  useAutosizeTextArea(descriptionRef.current, form.watch('description'))
+
+  const titleRef = useRef<HTMLTextAreaElement>(null)
+  useAutosizeTextArea(titleRef.current, form.watch('title'))
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -76,11 +80,11 @@ export function CollectionForm({
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-between">
-        <div className="basis-3/4">
+        <div className="basis-4/5">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 border-none "
+              className="space-y-6 border-none "
             >
               <FormField
                 control={form.control}
@@ -88,14 +92,15 @@ export function CollectionForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input
+                      <Textarea
                         {...field}
+                        ref={titleRef}
                         // make the input uneditable
                         className={`${
                           readOnly
                             ? 'border-none focus-visible:ring-transparent'
                             : ''
-                        }`}
+                        } h-fit min-h-fit resize-none overflow-hidden text-3xl font-bold`}
                         readOnly={readOnly}
                       />
                     </FormControl>
@@ -112,7 +117,7 @@ export function CollectionForm({
                       <span className="textarea" role="textbox">
                         <Textarea
                           {...field}
-                          ref={textAreaRef}
+                          ref={descriptionRef}
                           placeholder="Description here"
                           className={`h-auto min-h-fit resize-none overflow-hidden  ${
                             readOnly
