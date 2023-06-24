@@ -85,7 +85,7 @@ export default function CollectionComponents({
       </div>
     )
   }
-
+  console.log('collection.affiliateLinks', collection.affiliateLinks)
   return (
     <>
       <AddNewProductModal />
@@ -99,8 +99,8 @@ export default function CollectionComponents({
           <div>
             <Link href={`/${collection.userName}`}>
               <div className="relative flex w-full flex-row items-center justify-start space-x-2 rounded-md p-2 text-left text-sm transition-all duration-75 ">
-                <ArrowLeft className="h-4 w-4" />
-                <p className='text-sm"'>
+                <ArrowLeft className="h-6 w-6" />
+                <p className="text-md">
                   {isOwner ? 'Your shop' : `${userProfile.firstName}'s shop`}
                 </p>
               </div>
@@ -111,10 +111,10 @@ export default function CollectionComponents({
                 setCollection={setCollection}
                 isOwner={isOwner}
               />
-              <Separator className="my-4 h-[3px] bg-gray-500" />
-              <div className="mx-2 flex flex-row">
+              <Separator className="my-4 h-[2px] bg-gray-500" />
+              <div className="mx-2 mt-5 flex h-5 flex-row items-center justify-start space-x-2 text-left text-sm">
                 <Link href={`/${collection.userName}`}>
-                  <div className="itmes-center relative flex flex-row justify-start space-x-2 p-2 text-left">
+                  <div className="flex flex-row items-center justify-start">
                     <Image
                       className="rounded-full"
                       src={userProfile?.image}
@@ -122,27 +122,29 @@ export default function CollectionComponents({
                       width={40}
                       height={40}
                     />
-                    <p className="text-md">
+                    <p className="">
                       {userProfile.firstName + ' ' + userProfile.lastName}
                     </p>
                   </div>
                 </Link>
                 <Separator
                   orientation="vertical"
-                  className="w-[3px] bg-gray-500"
+                  className="w-[2px] bg-gray-500"
                 />
                 <p> {collection.affiliateLinks.length} PRODUCTS</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-3">
-              {collection.affiliateLinks.map((link) => (
-                <Product
-                  link={link}
-                  collectionId={+collectionId}
-                  key={link.id}
-                />
-              ))}
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+              {!loading &&
+                collection.affiliateLinks.map((link) => (
+                  <Product
+                    link={link}
+                    collectionId={+collectionId}
+                    key={link.id}
+                    isOwner={isOwner}
+                  />
+                ))}
               {isOwner && (
                 <div className="flex flex-col items-center justify-center">
                   <button onClick={() => setShowAddNewProductModal(true)}>
@@ -168,23 +170,28 @@ export default function CollectionComponents({
 const Product = ({
   link,
   collectionId,
+  isOwner,
 }: {
   link: AffiliateLink
   collectionId: number
+  isOwner: boolean
 }) => {
   // useEditLinkModal
   const { EditLinkModal, setShowEditLinkModal } = useEditLinkModal(link)
   return (
     <>
       <EditLinkModal />
-      <div className="mx-10 flex flex-col border" key={link.id}>
-        <div className="flex flex-col justify-end">
-          <ProductDropdown
-            alId={link.id}
-            collectionId={collectionId}
-            setShowEditLinkModal={setShowEditLinkModal}
-          />
-        </div>
+      <div className=" border" key={link.id}>
+        {isOwner && (
+          <div className="flex flex-col justify-end">
+            <ProductDropdown
+              alId={link.id}
+              collectionId={collectionId}
+              setShowEditLinkModal={setShowEditLinkModal}
+            />
+          </div>
+        )}
+
         <div className=" flex flex-col items-center justify-center">
           <Link href={`https://link-m.herokuapp.com/${link.id}`} key={link.id}>
             <Image

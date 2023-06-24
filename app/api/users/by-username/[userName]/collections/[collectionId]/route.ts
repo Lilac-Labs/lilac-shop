@@ -11,7 +11,11 @@ export async function GET(
       id: +params.collectionId,
     },
     include: {
-      affiliateLinks: true,
+      affiliateLinks: {
+        include: {
+          brand: true,
+        },
+      },
     },
   })
   if (!collection) {
