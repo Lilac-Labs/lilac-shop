@@ -6,18 +6,13 @@ import { DEPLOY_URL } from '@/lib/constants'
 import Image from 'next/image'
 
 import type { ImageLoaderProps } from 'next/image' // How to use this?
-
 import { nFormatter } from '@/lib/utils'
 import { User } from '@/components/client-component'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import ProductDemo from '@/components/home/usercard'
-
 import useWindowSize from '@/lib/hooks/use-window-size'
-import { useEffect, useState } from 'react'
 import BrandLogo from '@/components/home/brandlogo'
-
-
 export default function Home() {
   const { isSm, isMobile, isLg } = useWindowSize()
   const debug = false
