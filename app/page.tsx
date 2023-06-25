@@ -179,7 +179,6 @@ export default function Home() {
                       `}>
         <div className={`${debug? 'bg-blue-500' : ''} 
                       flex flex-row
-                      justify-evenly
                       self-center
                       overflow-auto
                       `}>
