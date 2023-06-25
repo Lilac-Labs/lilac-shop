@@ -15,18 +15,23 @@ import ProductDemo from '@/components/home/usercard'
 
 import useWindowSize from '@/lib/hooks/use-window-size'
 import { useEffect, useState } from 'react'
+import BrandLogo from '@/components/home/brandlogo'
 
 
 export default function Home() {
   const { isSm, isMobile, isLg } = useWindowSize()
-  const debug = true
+  const debug = false
 
   return (
     <main className={`${debug? 'bg-blue-500' : ''}
-                    flex flex-auto flex-col`}>
-      <div className={`bg-green-500
-                      h-full w-full
+                    flex flex-auto flex-col
+                    mt-10
+                    `}>
+      <div className={`${debug? 'bg-green-500' : ''}
+                      h-full 
                       flex flex-auto
+                      mx-5
+                      
               ${
                 isLg ? 'flex-col':
                 isSm ? 'flex-col':
@@ -105,6 +110,7 @@ export default function Home() {
         </div>
 
         <div className={`${debug? 'bg-red-500' : ''} 
+                        flex
                         w-full h-full
                         max-w-xl
                         self-center
@@ -114,6 +120,10 @@ export default function Home() {
             className="
                       w-full w-full
                       rounded-3xl
+                      max-w-[300px]
+                      sm:max-w-[300px]
+                      md:max-w-[500px]
+                      lg:max-w-[600px]
                       "
             src="/how-it-works-feature-1.jpg"
             width={480}
@@ -122,72 +132,64 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="bg-rose-200
-                      flex flex-auto flex-row
-                      items-center
-                      justify-center
-                      text-center">
-        <div>
-          <p className="my-5
-                        bg-gradient-to-br from-black to-stone-500 bg-clip-text
-                        text-center
-                        font-display
-                        text-2xl font-bold
-                        tracking-[-0.02em]
-                        drop-shadow-sm
-                        md:text-3xl
-                        md:leading-[5rem]"
-                        style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}>
-            <Balancer>Work with our brand partners. </Balancer>
-          </p>
-          <div className="mb-3
-                          flex
-                          h-full
-                          w-full
-                          flex-row
-                          justify-center
-                          overflow-hidden">
-            <Image
-              className="mx-2 h-full"
-              src="/brand-logos/brand-logo-1.png"
-              width={100}
-              height={100}
-              alt="brand-logo-1"
-            />
-            <Image
-              className="mx-2 h-full"
-              src="/brand-logos/brand-logo-2.png"
-              width={100}
-              height={100}
-              alt="brand-logo-2"
-            />
-            <Image
-              className="mx-3 h-full"
-              src="/brand-logos/brand-logo-3.png"
-              width={60}
-              height={60}
-              alt="brand-logo-3"
-            />
-            <Image
-              className="mx-2 h-full"
-              src="/brand-logos/brand-logo-4.png"
-              width={75}
-              height={75}
-              alt="brand-logo-4"
-            />
+      <div className='bg-rose-200'>
+        <div className="mx-5 bg-rose-200
+                        flex flex-auto flex-row
+                        items-center
+                        justify-center
+                        text-center">
+          <div>
+            <p className="my-5
+                          bg-gradient-to-br from-black to-stone-500 bg-clip-text
+                          text-center
+                          font-display
+                          font-bold
+                          tracking-[-0.02em]
+                          drop-shadow-sm
+                          text-xl
+                          md:text-2xl
+                          lg:text-3xl
+                          "
+                          style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}>
+              <Balancer>Work with our brand partners. </Balancer>
+            </p>
+            <div className="mb-3
+                            flex
+                            h-full
+                            w-full
+                            flex-row
+                            justify-center
+                            overflow-hidden">
+              {brands.map(
+              ({
+                name,
+                logoPath,
+                link,
+              }) => (
+                <BrandLogo  
+                  name={name}
+                  logoPath={logoPath}
+                  link={link}
+                />
+              )
+            )}
+            </div>
           </div>
         </div>
       </div>
 
       <div className={`${debug? 'bg-green-500' : ''} 
                       flex flex-row
-                      justify-center`}>
-        <div className="bg-blue-500
+                      justify-center
+                      mt-10
+                      mx-5
+                      `}>
+        <div className={`${debug? 'bg-blue-500' : ''} 
                       flex flex-row
                       justify-evenly
                       self-center
                       overflow-auto
-                      ">
+                      `}>
           {demo.map(
             ({
               pfpPath,
@@ -212,6 +214,30 @@ export default function Home() {
     </main>
   )
 }
+
+
+const brands = [
+  {
+    name: 'Nike',
+    logoPath: '/brand-logos/brand-logo-1.png',
+    link: 'https://www.nike.com/',
+  },
+  {
+    name: 'Uniqlo',
+    logoPath: '/brand-logos/brand-logo-2.png',
+    link: 'https://www.uniqlo.com/us/en/home/',
+  },
+  {
+    name: 'LuluLemon',
+    logoPath: '/brand-logos/brand-logo-3.png',
+    link: 'https://shop.lululemon.com/',
+  },
+  {
+    name: 'Victoria Secret',
+    logoPath: '/brand-logos/brand-logo-4.png',
+    link: 'https://www.victoriassecret.com/',
+  }
+]
 
 //  Create a list of products for each user
 const demo = [

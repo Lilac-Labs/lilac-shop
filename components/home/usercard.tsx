@@ -10,7 +10,7 @@ export default function ProductDemo({pfpPath, shoplink, product1img, product1lin
 
 return (
     <div>
-        <div className="bg-green-500
+        <div className="
                         mx-5
                         w-64
                         h-64
