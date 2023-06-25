@@ -9,17 +9,17 @@ import { Providers } from '@/lib/context/providers'
 import { Toast } from '@radix-ui/react-toast'
 
 export const metadata = {
-  title: 'Lilac - Dedicated to make infulencer marketing easy',
+  title: "Lilac - Shop your creator's favorite products",
   description:
-    'Precedent is the all-in-one solution for your Next.js project. It includes a design system, authentication, analytics, and more.',
+    "Shop your creator's favorite products and support them with every purchase.",
   twitter: {
     card: 'summary_large_image',
-    title: 'Lilac - Dedicated to make infulencer marketing easy',
+    title: "Lilac - Shop your creator's favorite products",
     description:
       'Precedent is the all-in-one solution for your Next.js project. It includes a design system, authentication, analytics, and more.',
-    creator: '@steventey',
+    creator: '@tokam',
   },
-  metadataBase: new URL('https://precedent.dev'),
+  metadataBase: new URL('https://withlilac.com/'),
   themeColor: '#FFF',
 }
 
