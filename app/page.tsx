@@ -19,9 +19,11 @@ import { useEffect, useState } from 'react'
 
 export default function Home() {
   const { isSm, isMobile, isLg } = useWindowSize()
+  const debug = true
 
   return (
-    <main className="flex flex-auto flex-col bg-blue-500">
+    <main className={`${debug? 'bg-blue-500' : ''}
+                    flex flex-auto flex-col`}>
       <div className={`bg-green-500
                       h-full w-full
                       flex flex-auto
@@ -31,23 +33,24 @@ export default function Home() {
                 isMobile ? 'flex-row':
                 'flex-row'
               }
-              justify-center `}>
+              justify-center`}>
                 
-        <div className="bg-yellow-500
+        <div className={`${debug? 'bg-yellow-500' : ''}
                         w-full h-full
                         max-w-xl
                         self-center 
-                        ">
+                        `}>
           <h1
             className="animate-fade-up
             bg-gradient-to-br from-black to-stone-500 bg-clip-text
             text-center
             font-display
-            text-4xl font-bold
+            font-bold
             tracking-[-0.02em]
             text-transparent
             opacity-0
             drop-shadow-sm
+            text-5xl
             md:text-7xl
             md:leading-[5rem]"
             style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}>
@@ -101,13 +104,17 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-red-500 
+        <div className={`${debug? 'bg-red-500' : ''} 
                         w-full h-full
                         max-w-xl
                         self-center
-                        ">
+                        justify-center items-center
+                        `}>
           <Image
-            className="center flex w-full rounded-3xl"
+            className="
+                      w-full w-full
+                      rounded-3xl
+                      "
             src="/how-it-works-feature-1.jpg"
             width={480}
             height={533}
@@ -125,15 +132,21 @@ export default function Home() {
                         bg-gradient-to-br from-black to-stone-500 bg-clip-text
                         text-center
                         font-display
-                        text-xl font-bold
+                        text-2xl font-bold
                         tracking-[-0.02em]
                         drop-shadow-sm
-                        md:text-7xl
+                        md:text-3xl
                         md:leading-[5rem]"
                         style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}>
             <Balancer>Work with our brand partners. </Balancer>
           </p>
-          <div className="mb-3 flex h-full w-full flex-row justify-center">
+          <div className="mb-3
+                          flex
+                          h-full
+                          w-full
+                          flex-row
+                          justify-center
+                          overflow-hidden">
             <Image
               className="mx-2 h-full"
               src="/brand-logos/brand-logo-1.png"
@@ -166,11 +179,14 @@ export default function Home() {
         </div>
       </div>
 
-        <div className="bg-red-500
+      <div className={`${debug? 'bg-green-500' : ''} 
+                      flex flex-row
+                      justify-center`}>
+        <div className="bg-blue-500
                       flex flex-row
                       justify-evenly
                       self-center
-                      overflow-hidden
+                      overflow-auto
                       ">
           {demo.map(
             ({
@@ -191,6 +207,7 @@ export default function Home() {
               />
             ),
           )}
+        </div>
         </div>
     </main>
   )

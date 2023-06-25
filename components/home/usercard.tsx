@@ -9,10 +9,12 @@ export default function ProductDemo({pfpPath, shoplink, product1img, product1lin
         
 
 return (
-    <div className="
-                    w-full">
+    <div>
         <div className="bg-green-500
-                        mx-5">
+                        mx-5
+                        w-64
+                        h-64
+                        ">
             <img className="object-cover
                             min-w-30
                             min-h-30
