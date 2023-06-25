@@ -4,7 +4,6 @@ import Card from '@/components/home/card'
 import Balancer from 'react-wrap-balancer'
 import { DEPLOY_URL } from '@/lib/constants'
 import Image from 'next/image'
-
 import type { ImageLoaderProps } from 'next/image' // How to use this?
 import { nFormatter } from '@/lib/utils'
 import { User } from '@/components/client-component'
@@ -16,7 +15,6 @@ import BrandLogo from '@/components/home/brandlogo'
 export default function Home() {
   const { isSm, isMobile, isLg } = useWindowSize()
   const debug = false
-
   return (
     <main className={`${debug? 'bg-blue-500' : ''}
                     flex flex-auto flex-col
