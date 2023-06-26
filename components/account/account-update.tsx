@@ -3,9 +3,13 @@ import { ReactNode, useEffect, useState } from 'react'
 import * as Form from '@radix-ui/react-form'
 import { fetcher } from '@/lib/utils'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function AccountUpdate() {
+  const searchParams = useSearchParams()
+
+  const isInit = searchParams.get('init') === 'true'
+
   const [formLoaded, setFormLoaded] = useState(false)
 
   // For Validaiton state to disable submit buttom
@@ -345,8 +349,9 @@ export default function AccountUpdate() {
       >
         <div className="items-left border-back-200 flex flex-col justify-center space-y-3 border-b bg-white px-4 py-6 pt-8 text-center md:px-16">
           <h1 className="font-display text-3xl font-bold">
-            Update your profile.
+            {isInit ? 'Welcome to Lalic!' : 'Update your profile.'}
           </h1>
+          {isInit && <p className="text-sm"> Let's create a profile for you</p>}
           <p className="text-sm">Fields with * are required.</p>
 
           {formLoaded ? (
