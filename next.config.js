@@ -16,13 +16,14 @@ const nextConfig = {
   },
   webpack: (config, { isServer, nextRuntime }) => {
     // Avoid AWS SDK Node.js require issue
-    if (isServer && nextRuntime === "nodejs")
+    if (isServer && nextRuntime === "nodejs") {
       config.plugins.push(
         new webpack.IgnorePlugin({ resourceRegExp: /^aws-crt$/ })
       );
-    config.plugins.push(
-      new webpack.IgnorePlugin({ resourceRegExp: /^aws-sdk$/ })
-    );
+      config.plugins.push(
+        new webpack.IgnorePlugin({ resourceRegExp: /^aws-sdk$/ })
+      );
+    }
     return config;
   },
   async redirects() {
