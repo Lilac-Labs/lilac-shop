@@ -116,9 +116,16 @@ export const columns: ColumnDef<AffiliateLink>[] = [
     cell: ({ row }) => {
       const content = row.original.collection?.title
       if (content === undefined) {
-        return <p>-</p>
+        return <p className="text-center">-</p>
       }
-      return <div className="text-center">{content}</div>
+      return (
+        <Link
+          href={`/collections/${row.original.collection?.id}`}
+          target="_blank"
+        >
+          <p className="text-center underline decoration-solid">{content}</p>
+        </Link>
+      )
     },
   },
   {

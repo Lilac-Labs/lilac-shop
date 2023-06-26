@@ -17,6 +17,7 @@ export async function GET(
           affiliateLinks: {
             include: {
               brand: true,
+              collection: true,
             },
           },
         },
