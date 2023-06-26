@@ -37,13 +37,10 @@ export default async function RootLayout({
         {/* <div className="fixed z-0 h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" /> */}
         <Providers>
           <Suspense fallback="...">
-            {/* @ts-expect-error Server Component */}
             <Nav />
           </Suspense>
           {/*children*/}
-          <main className="z-10 h-fit min-h-screen w-full">
-            {children}
-          </main>
+          <main className="z-10 h-fit min-h-screen w-full">{children}</main>
         </Providers>
         <Footer />
         <Analytics />
