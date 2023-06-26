@@ -22,9 +22,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
         })
           .then((res) => {
             //TODO: change this to createAccount
-            console.log('resssss', res)
-            if (path !== '/accountSettings' && res?.userProfile === null) {
-              router.replace('/accountSettings')
+            if (
+              path !== '/accountSettings/?init=true' &&
+              res?.userProfile === null
+            ) {
+              router.replace('/accountSettings/?init=true')
             }
           })
           .catch((err) => {
