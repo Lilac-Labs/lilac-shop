@@ -14,7 +14,7 @@ import useWindowSize from '@/lib/hooks/use-window-size'
 import BrandLogo from '@/components/home/brandlogo'
 export default function Home() {
   const { isSm, isMobile, isLg } = useWindowSize()
-  const debug = false
+  const debug = true
   return (
     <main className={`${debug? 'bg-blue-500' : ''}
                     flex flex-auto flex-col
@@ -24,19 +24,19 @@ export default function Home() {
                       h-full 
                       flex flex-auto
                       mx-5
-                      
-              ${
-                isLg ? 'flex-col':
-                isSm ? 'flex-col':
-                isMobile ? 'flex-row':
-                'flex-row'
-              }
-              justify-center`}>
+                      my-5
+                      flex-col
+                      sm:flex-col
+                      md:flex-col
+                      lg:flex-row
+                      xl:flex-row
+                      justify-center`}>
                 
         <div className={`${debug? 'bg-yellow-500' : ''}
                         w-full h-full
                         max-w-xl
-                        self-center 
+                        self-center
+                        mb-5
                         `}>
           <h1
             className="animate-fade-up
@@ -63,6 +63,9 @@ export default function Home() {
               sale. Track analytics for all of your links.
             </Balancer>
           </p>
+
+
+
           <div className="mx-auto mt-6 flex animate-fade-up items-center justify-center space-x-5 opacity-0"
             style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}
           >
@@ -88,17 +91,6 @@ export default function Home() {
               </svg>
               <p>Apply</p>
             </a>
-            {/* <a
-              className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-5 py-2 text-sm text-gray-600 shadow-md transition-colors hover:border-gray-800"
-              href="https://github.com/steven-tey/precedent"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <p>
-                <span className="hidden sm:inline-block">Contact </span> Us{' '}
-                <span className="font-semibold">{nFormatter(stars)}</span>
-              </p>
-            </a> */}
           </div>
         </div>
 

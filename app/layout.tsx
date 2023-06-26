@@ -41,7 +41,7 @@ export default async function RootLayout({
             <Nav />
           </Suspense>
           {/*children*/}
-          <main className="z-10 h-fit min-h-screen w-full py-10">
+          <main className="z-10 h-fit min-h-screen w-full">
             {children}
           </main>
         </Providers>
