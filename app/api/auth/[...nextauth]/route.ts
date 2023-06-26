@@ -9,25 +9,21 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      // profile(profile) {
-      //   const user =  prisma.user.findUnique({
-      //     where: {
-      //       email: profile.email as string,
-      //     },
-      //     select: {
-      //       id: true,
-      //     },
-      //   })
-      //   return {
-      //     id: user?.id as string,
-      //     email: profile.email as string,
-      //     image: profile.picture as string,
-      //     userProfile: profile.userProfile as UserProfile,
-      //   }
-      // },
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }: any) {
+      const isWhitelisted = await prisma.whiteListedEmail.findUnique({
+        where: {
+          email: user.email,
+        },
+      })
+      if (isWhitelisted) {
+        return true
+      } else {
+        return '/?apply=true'
+      }
+    },
     async session({ session, token, user }: any) {
       session.user.id = user.id
       return session

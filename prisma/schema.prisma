@@ -97,6 +97,10 @@ model AffiliateLink {
   @@index([id])
 }
 
+model WhiteListedEmail {
+  email String @unique
+}
+
 model Brand {
   name           String          @unique
   commission     Float
