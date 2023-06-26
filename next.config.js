@@ -22,7 +22,7 @@ const nextConfig = {
         new webpack.IgnorePlugin({ resourceRegExp: /^aws-crt$/ })
       );
       config.plugins.push(
-        new webpack.IgnorePlugin({ resourceRegExp: /^aws-sdk$/ })
+        new webpack.IgnorePlugin({ resourceRegExp: /^aws-sdk\/signature-v4-crt$/ })
       );
     }
     return config;
