@@ -104,10 +104,8 @@ function ProfileDisplay({
 
   return (
     <div
-      className="
-                    mx-[4%] flex
-                    w-fit flex-col
-                    items-center
+      className="   mx-[4%] flex
+                    flex-col items-center
                     md:mx-[20%]
                     md:w-[60%]"
     >
