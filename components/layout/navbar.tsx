@@ -23,7 +23,7 @@ export default function NavBar({ session }: { session: Session | null }) {
       <SignInModal />
       <CreatorsApplyModal />
       <div
-        className={`fixed top-0 mb-0.5 w-full bg-white/0 ${
+        className={`top-0 mb-0.5 w-full bg-white/0 ${
           scrolled
             ? 'border-b border-gray-200 bg-white/5 backdrop-blur-xl'
             : 'bg-white/0'

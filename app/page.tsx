@@ -14,11 +14,10 @@ import useWindowSize from '@/lib/hooks/use-window-size'
 import BrandLogo from '@/components/home/brandlogo'
 export default function Home() {
   const { isSm, isMobile, isLg } = useWindowSize()
-  const debug = true
+  const debug = false
   return (
     <main className={`${debug? 'bg-blue-500' : ''}
                     flex flex-auto flex-col
-                    mt-10
                     `}>
       <div className={`${debug? 'bg-green-500' : ''}
                       h-full 
