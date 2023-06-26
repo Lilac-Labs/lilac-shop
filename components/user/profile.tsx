@@ -18,6 +18,7 @@ import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 import { useToast } from '../ui/use-toast'
 import { Toast } from '../ui/toast'
 import useWindowSize from '@/lib/hooks/use-window-size'
+import Banner from './banner'
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
 
@@ -102,40 +103,22 @@ function ProfileDisplay({
   const { toast } = useToast()
 
   return (
-    <div className="mx-[4%] flex w-fit flex-col items-center md:mx-[20%] md:w-[60%]">
-      {/* <div className="profile-header flex flex-row items-center justify-center ">
-
-        <div className="share-link-btn btn">
-          <Button
-            className="mt-5"
-            onClick={() => {
-              toast({
-                title: 'Copied to clipboard',
-              })
-              navigator.clipboard.writeText(
-                'withlilac.com/' + userProfile.userName,
-              )
-            }}
-          >
-            <p>Copy Link</p>
-          </Button>
-        </div>
-
-        <div className="analytics-link-label btn">
-          <Button className="mt-5">
-            <p>Show Analytics</p>
-          </Button>
-        </div>
-      </div> */}
+    <div className="
+                    flex w-fit
+                    flex-col items-center
+                    mx-[4%]
+                    md:mx-[20%]
+                    md:w-[60%]">
+      
+      {/* </div><Banner userProfile={userProfile} /> */}
       <ProfilePicture userProfile={userProfile} />
-
       <div className="mt-5 flex flex-col items-center justify-center rounded-md border md:min-w-[500px]">
-        <div className=" absolute top-[232px] bg-white">
+        <div className="absolute top-[219px] bg-white">
           <div className="flex flex-row">
-            <h1 className="z-30 mx-2 text-center text-2xl font-bold ">
+            <h1 className="mx-2 text-center text-2xl font-bold ">
               {userProfile?.firstName}
             </h1>
-            <h1 className="z-30 text-center text-2xl font-bold">
+            <h1 className="text-center text-2xl font-bold">
               {userProfile?.lastName}
             </h1>
 
