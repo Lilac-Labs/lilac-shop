@@ -103,17 +103,18 @@ function ProfileDisplay({
   const { toast } = useToast()
 
   return (
-    <div className="
-                    flex w-fit
-                    flex-col items-center
-                    mx-[4%]
+    <div
+      className="
+                    mx-[4%] flex
+                    w-fit flex-col
+                    items-center
                     md:mx-[20%]
-                    md:w-[60%]">
-      
+                    md:w-[60%]"
+    >
       {/* </div><Banner userProfile={userProfile} /> */}
       <ProfilePicture userProfile={userProfile} />
       <div className="mt-5 flex flex-col items-center justify-center rounded-md border md:min-w-[500px]">
-        <div className="absolute top-[219px] bg-white">
+        <div className="-mt-4 bg-white">
           <div className="flex flex-row">
             <h1 className="mx-2 text-center text-2xl font-bold ">
               {userProfile?.firstName}
@@ -134,10 +135,10 @@ function ProfileDisplay({
             )}
           </div>
         </div>
-        <p className="text-md mx-5 my-5 overflow-auto text-left">
+        <p className="text-md mx-5 my-2 overflow-auto text-left">
           {userProfile?.bio}
         </p>
-        <div className="absolute top-[374px] flex h-fit bg-white md:top-[351px]">
+        <div className="-mb-3 flex h-fit bg-white">
           <a
             href={userProfile?.ig}
             target="_blank"
