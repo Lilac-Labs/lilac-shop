@@ -80,8 +80,15 @@ export default function Collections({ userName }: { userName: string }) {
                           height={175}
                         />
                       </div>
-                      {[...Array(isSm ? 1 : isMobile ? 2 : 3)].map((idx) => {
-                        return <div className="w-[175px]" key={idx}></div>
+                      {Array.from(
+                        Array(isSm ? 1 : isMobile ? 2 : 3).keys(),
+                      ).map((idx) => {
+                        return (
+                          <div
+                            className="w-[175px]"
+                            key={collection.id + idx}
+                          ></div>
+                        )
                       })}
                     </div>
                   ) : (
@@ -102,13 +109,18 @@ export default function Collections({ userName }: { userName: string }) {
                         })}
                       {collection.affiliateLinks.length <
                         (isSm ? 2 : isMobile ? 3 : 4) &&
-                        [
-                          ...Array(
+                        Array.from(
+                          Array(
                             (isSm ? 2 : isMobile ? 3 : 4) -
                               collection.affiliateLinks.length,
-                          ),
-                        ].map((idx) => {
-                          return <div className="w-[175px]" key={idx}></div>
+                          ).keys(),
+                        ).map((idx) => {
+                          return (
+                            <div
+                              className="w-[175px]"
+                              key={collection.id + 'empty' + idx}
+                            ></div>
+                          )
                         })}
                     </div>
                   )}

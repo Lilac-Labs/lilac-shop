@@ -6,6 +6,7 @@ import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import { useState, Dispatch, SetStateAction, useCallback, useMemo } from 'react'
 import { Input } from '../ui/input'
+import Image from 'next/image'
 
 export default function SearchExistingProducts({
   collectionId,
@@ -32,18 +33,24 @@ export default function SearchExistingProducts({
   }
 
   return (
-    <div className="flex flex-col">
-      <Input onChange={handleSearch} placeholder="Search" />
-      <div className="grid grid-cols-2">
+    <div className="flex flex-col w-[95%] mx-auto">
+      <Input onChange={handleSearch} placeholder="Search" className="mb-5" />
+      <div className="grid grid-cols-2 gap-4">
         {affiliateLinksToDisplay.map((link) => {
           return (
-            <div className="text-left" key={link.id}>
+            <div
+              className="flex flex-col text-left justify-start"
+              key={link.id}
+            >
               {/* <EditLinkModal /> */}
-              <div className="flex flex-row">
-                <img
+              <div className="flex flex-row ">
+                <Image
                   src={link.image}
-                  className="mx-auto h-24 w-24 object-contain"
+                  alt={link.id.toString()}
+                  width={150}
+                  height={150}
                 />
+
                 <button
                   onClick={() => {
                     fetcher(
@@ -86,8 +93,9 @@ export default function SearchExistingProducts({
                         setShowAddNewProductModal(false)
                       })
                   }}
+                  className="justify-center flex w-full bg-yelow-500 content-center"
                 >
-                  <Plus className="ml-2" size={24} />
+                  <Plus className="ml-2 h-6 w-6 self-center" />
                 </button>
               </div>
               <h1 className="">{link.title}</h1>

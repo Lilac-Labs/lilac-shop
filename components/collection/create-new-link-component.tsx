@@ -114,7 +114,6 @@ export default function CreateNewLinkComponent({
             </FormItem>
           )}
         />
-        TODO: add image upload
         <FormField
           control={form.control}
           name="image"
