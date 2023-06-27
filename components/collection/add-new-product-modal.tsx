@@ -71,8 +71,8 @@ const AddNewProductModal = ({
         showModal={showAddNewProductModal}
         setShowModal={setShowAddNewProductModal}
       >
-        <div className="max-h-[50%] w-full overflow-y-auto overflow-x-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border md:border-gray-200">
-          <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center md:px-16">
+        <div className="bg-white max-h-[80%] w-full overflow-y-auto overflow-x-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border md:border-gray-200">
+          <div className="flex flex-row items-center justify-center px-4 py-6 pt-8 text-center md:px-16">
             {(showAddNewProduct || showSearchExistingProduct) && (
               <button
                 onClick={() => {
@@ -80,7 +80,7 @@ const AddNewProductModal = ({
                   setShowSearchExistingProduct(false)
                 }}
               >
-                <ArrowLeft className="h-6 w-6" />
+                <ArrowLeft className="h-7 w-7 mr-3" />
               </button>
             )}
             <h1 className="font-display text-3xl font-bold">Add New Product</h1>
@@ -93,7 +93,7 @@ const AddNewProductModal = ({
               setShowAddNewProductModal={setShowAddNewProductModal}
             />
           ) : (
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-evenly pb-12">
               <Button
                 className="flex"
                 onClick={() => setShowAddNewProduct(true)}

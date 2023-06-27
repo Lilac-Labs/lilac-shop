@@ -18,6 +18,7 @@ module.exports = {
 
     extend: {
       colors: {
+        calebPurple: "#AB71D9",
         grey: '#64748b',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

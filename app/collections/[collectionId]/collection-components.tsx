@@ -36,8 +36,6 @@ export default function CollectionComponents({
   const { AddNewProductModal, setShowAddNewProductModal } =
     useAddNewProductModal(collectionId)
 
-  console.log('collection', collection.affiliateLinks)
-
   useEffect(() => {
     const fetchCollection = async () => {
       fetcher(`/api/users/by-username/-/collections/${collectionId}`)
@@ -85,7 +83,7 @@ export default function CollectionComponents({
       </div>
     )
   }
-  console.log('collection.affiliateLinks', collection.affiliateLinks)
+
   return (
     <>
       <AddNewProductModal />
