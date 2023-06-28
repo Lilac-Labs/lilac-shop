@@ -12,7 +12,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
   {
     header: ({ column }) => {
       return (
-        <div className="text-center">
+        <div className="text-center w-fit">
           <Button
             variant="ghost"
             onClick={() => {
@@ -69,7 +69,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
         row.original,
       )
       return (
-        <div className="text-leftg">
+        <div className="text-left">
           <EditLinkModal />
           <div>
             <img src={image} className="mx-auto h-24 w-24 object-contain" />
@@ -206,7 +206,7 @@ export const columns: ColumnDef<AffiliateLink>[] = [
       )
 
       return (
-        <Link className="text-center" href={link} target="_blank">
+        <Link className="text-center w-fit" href={link} target="_blank">
           {link}
         </Link>
       )
