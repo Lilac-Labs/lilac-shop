@@ -66,12 +66,15 @@ const AddNewProductModal = ({
   }
 
   return (
-    <>
+    <div className="">
       <Modal
         showModal={showAddNewProductModal}
         setShowModal={setShowAddNewProductModal}
       >
-        <div className="bg-white max-h-[80%] w-full overflow-y-auto overflow-x-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border md:border-gray-200">
+        <div
+          className="bg-white max-h-[80%] w-full overflow-y-auto overflow-x-hidden shadow-xl
+         md:max-w-2xl md:rounded-2xl md:border md:border-gray-200"
+        >
           <div className="flex flex-row items-center justify-center px-4 py-6 pt-8 text-center md:px-16">
             {(showAddNewProduct || showSearchExistingProduct) && (
               <button
@@ -110,7 +113,7 @@ const AddNewProductModal = ({
           )}
         </div>
       </Modal>
-    </>
+    </div>
   )
 }
 

@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { useAffiliateLinksContext } from '@/lib/context/AffiliateLinksProvider'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
-import { fetcher } from '@/lib/utils'
+import { fetcher, reorder } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -14,7 +14,6 @@ import { Collection } from '@/lib/types'
 import useWindowSize from '@/lib/hooks/use-window-size'
 
 export default function Collections({ userName }: { userName: string }) {
-  const { status } = useSession()
   const { userInfo } = useUserInfoContext()
   const { collections: ownerCollections, setCollections: setOwnerCollections } =
     useAffiliateLinksContext()
@@ -61,6 +60,24 @@ export default function Collections({ userName }: { userName: string }) {
   }
 
   const { isSm, isMobile, isLg } = useWindowSize()
+
+  // drag and drop
+
+  // const ondragend = (result: any) => {
+  //   if (!result.destination) {
+  //     return
+  //   }
+  //   if (result.destination.index === result.source.index) {
+  //     return
+  //   }
+
+  //   const newCollections = reorder(
+  //     collections,
+  //     result.source.index,
+  //     result.destination.index,
+  //   )
+  //   setCollections(newCollections)
+  // }
 
   return (
     <div className="mt-12 flex flex-col">
