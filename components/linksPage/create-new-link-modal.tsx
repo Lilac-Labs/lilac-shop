@@ -76,7 +76,7 @@ const CreateNewLinkModal = ({
       showModal={showCreateNewLinkModal}
       setShowModal={setCreateNewLinkModal}
     >
-      <div className="w-full overflow-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border md:border-gray-200">
+      <div className="w-full overflow-hidden bg-white shadow-xl md:max-w-2xl md:rounded-2xl md:border md:border-gray-200">
         <CreateNewLinkComponent onSubmit={onSubmit} />
       </div>
     </Modal>
