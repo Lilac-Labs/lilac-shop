@@ -6,6 +6,7 @@ import * as z from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import TextareaAutosize from 'react-textarea-autosize'
 
 import {
   Form,
@@ -96,15 +97,13 @@ export function CollectionForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Textarea
+                      <TextareaAutosize
                         {...field}
-                        ref={titleRef}
-                        // make the input uneditable
                         className={`${
                           readOnly
                             ? 'border-none focus-visible:ring-transparent'
                             : ''
-                        } h-fit min-h-fit resize-none overflow-hidden text-3xl font-bold`}
+                        }   w-full resize-none overflow-hidden rounded-md border border-input text-3xl font-bold`}
                         readOnly={readOnly}
                       />
                     </FormControl>
@@ -118,19 +117,16 @@ export function CollectionForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <span className="textarea" role="textbox">
-                        <Textarea
-                          {...field}
-                          ref={descriptionRef}
-                          placeholder="Description here"
-                          className={`h-auto min-h-fit resize-none overflow-hidden  ${
-                            readOnly
-                              ? 'border-none focus-visible:ring-transparent'
-                              : ''
-                          }`}
-                          readOnly={readOnly}
-                        />
-                      </span>
+                      <TextareaAutosize
+                        {...field}
+                        placeholder="Description here"
+                        className={`min-h-fit w-full resize-none overflow-hidden rounded-md border border-input text-sm ${
+                          readOnly
+                            ? 'border-none focus-visible:ring-transparent'
+                            : ''
+                        }`}
+                        readOnly={readOnly}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
