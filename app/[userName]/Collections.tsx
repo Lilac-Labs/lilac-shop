@@ -19,7 +19,7 @@ import {
   DropResult,
   DraggableProvided,
   DraggableProvidedDragHandleProps,
-} from 'react-beautiful-dnd'
+} from '@hello-pangea/dnd'
 import { Hand, Move } from 'lucide-react'
 
 export default function Collections({ userName }: { userName: string }) {
@@ -31,13 +31,7 @@ export default function Collections({ userName }: { userName: string }) {
   )
 
   const isOwner = userInfo.userProfile?.userName === userName
-  const [isMounted, setIsMounted] = useState(false)
   const [collectiondUpdated, setCollectionUpdated] = useState(false)
-  const router = useRouter()
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
 
   useEffect(() => {
     // get user's collections
@@ -62,96 +56,12 @@ export default function Collections({ userName }: { userName: string }) {
     }
   }, [ownerCollections])
 
-  const addCollectionOnClick = () => {
-    fetcher(`/api/users/by-uuid/${userInfo.id}/collections`, {
-      method: 'POST',
-    }).then((res: Collection) => {
-      if (res !== null) {
-        console.log('collectyions post result', res)
-        setOwnerCollections([...collections, res])
-        router.replace(`/collections/${String(res.id)}`)
-      }
-    })
-  }
-
-  const { isSm, isMobile, isLg } = useWindowSize()
-
-  // drag and drop
-
-  const onDragEnd = (result: DropResult) => {
-    const updateCollectionOrder = async (newOrder: number[]) => {
-      const res = await fetcher(
-        `/api/users/by-uuid/${userInfo.id}/collections/collectionsOrder`,
-        {
-          method: 'PATCH',
-          body: JSON.stringify({
-            newOrder: newOrder,
-          }),
-        },
-      )
-    }
-
-    // console.log('drag end', result)
-    if (!result.destination) {
-      return
-    }
-    if (result.destination.index === result.source.index) {
-      return
-    }
-
-    const newCollections = reorder(
-      collections,
-      result.source.index,
-      result.destination.index,
-    )
-
-    updateCollectionOrder(newCollections.map((collection) => collection.id))
-    setCollections(newCollections)
-  }
-
   return (
     <div className="mt-12 flex flex-col">
-      <DragDropContext onDragEnd={onDragEnd}>
-        {isMounted && (
-          <Droppable droppableId="collections">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {collections.map((collection, index) => {
-                  return (
-                    <Draggable
-                      key={collection.id}
-                      draggableId={String(collection.id)}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                        >
-                          <CollectionElement
-                            collection={collection}
-                            isOwner={isOwner}
-                            dragHandleProps={provided.dragHandleProps}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  )
-                })}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        )}
-      </DragDropContext>
-
-      {isOwner && (
-        <div className="flex flex-row justify-center">
-          <Button className="w-48" onClick={addCollectionOnClick}>
-            {' '}
-            ADD COLLECTION +
-          </Button>
-        </div>
+      {isOwner ? (
+        <OwnerComponents collections={collections} />
+      ) : (
+        <VistorComonents collections={collections} />
       )}
     </div>
   )
@@ -167,7 +77,6 @@ function CollectionElement({
   dragHandleProps: DraggableProvidedDragHandleProps | undefined | null
 }) {
   const { isSm, isMobile, isLg } = useWindowSize()
-  console.log(dragHandleProps, 'provided')
   return (
     <div className="py-6" key={collection.id}>
       <Link href={`/collections/${collection.id}`}>
@@ -253,6 +162,127 @@ function CollectionElement({
           </p>
         </div>
       </Link>
+    </div>
+  )
+}
+
+function OwnerComponents({ collections }: { collections: Collection[] }) {
+  const { userInfo } = useUserInfoContext()
+
+  const [isMounted, setIsMounted] = useState(false)
+  const { collections: ownerCollections, setCollections: setOwnerCollections } =
+    useAffiliateLinksContext()
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  const router = useRouter()
+
+  const addCollectionOnClick = () => {
+    fetcher(`/api/users/by-uuid/${userInfo.id}/collections`, {
+      method: 'POST',
+    }).then((res: Collection) => {
+      if (res !== null) {
+        console.log('collectyions post result', res)
+        setOwnerCollections([...collections, res])
+        router.replace(`/collections/${String(res.id)}`)
+      }
+    })
+  }
+
+  const onDragEnd = (result: DropResult) => {
+    const updateCollectionOrder = async (newOrder: number[]) => {
+      const res = await fetcher(
+        `/api/users/by-uuid/${userInfo.id}/collections/collectionsOrder`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({
+            newOrder: newOrder,
+          }),
+        },
+      )
+    }
+
+    // console.log('drag end', result)
+    if (!result.destination) {
+      return
+    }
+    if (result.destination.index === result.source.index) {
+      return
+    }
+
+    const newCollections = reorder(
+      collections,
+      result.source.index,
+      result.destination.index,
+    )
+
+    updateCollectionOrder(newCollections.map((collection) => collection.id))
+    setOwnerCollections(newCollections)
+  }
+
+  return (
+    <div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        {isMounted && (
+          <Droppable droppableId="collections">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {collections.map((collection, index) => {
+                  return (
+                    <Draggable
+                      key={collection.id}
+                      draggableId={String(collection.id)}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                        >
+                          <CollectionElement
+                            collection={collection}
+                            isOwner={true}
+                            dragHandleProps={provided.dragHandleProps}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  )
+                })}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        )}
+      </DragDropContext>
+
+      <div className="flex flex-row justify-center">
+        <Button className="w-48" onClick={addCollectionOnClick}>
+          {' '}
+          ADD COLLECTION +
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function VistorComonents({ collections }: { collections: Collection[] }) {
+  return (
+    <div>
+      {collections.map((collection) => {
+        return (
+          collection.affiliateLinks.length > 0 && (
+            <CollectionElement
+              collection={collection}
+              isOwner={false}
+              dragHandleProps={undefined}
+              key={collection.id}
+            />
+          )
+        )
+      })}
     </div>
   )
 }

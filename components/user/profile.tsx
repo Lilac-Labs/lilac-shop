@@ -32,7 +32,6 @@ export default function UserProfile({ userName }: { userName: string }) {
     userInfo.userProfile as UserProfile,
   )
   const isOwner = userInfo.userProfile?.userName === userName
-  console.log('isOwner', isOwner)
   // conditional rendering variables
   // if user is owner and userInfo is laoded page is loaded
   const [pageLoaded, setPageLoaded] = useState(isOwner && !loading)
@@ -47,15 +46,8 @@ export default function UserProfile({ userName }: { userName: string }) {
       if (res === null) {
         console.log('user not found')
       } else {
-        console.log(res)
         setUserProfile({
-          userName: res.userName,
-          firstName: res.firstName,
-          lastName: res.lastName,
-          bio: res.bio,
-          image: res.image,
-          uuid: res.uuid,
-          socialMedias: res.socialMedias,
+          ...res,
           // TODO: dyamic
           ig: 'https://www.instagram.com/',
           tk: 'https://www.tiktok.com/',
@@ -99,7 +91,6 @@ function ProfileDisplay({
   isOwner: boolean
 }) {
   const { data: session, status } = useSession()
-  console.log('ProfileDisplay', isOwner)
   const { toast } = useToast()
 
   return (
