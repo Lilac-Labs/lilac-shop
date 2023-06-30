@@ -74,8 +74,8 @@ const CreatorsApplyModal = ({
       showModal={showCreatorsApplyModal}
       setShowModal={setCreatorsApplyModal}
     >
-      <div className="md:border-black-200 w-full overflow-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border">
-        <div className="items-left border-back-200 flex flex-col justify-center space-y-3 border-b bg-white px-4 py-6 pt-8 text-center md:px-16">
+      <div className="md:border-black-200 w-full overflow-hidden shadow-xl md:max-w-2xl md:rounded-2xl md:border bg-white md:h-fit h-full">
+        <div className="items-left border-back-200 flex flex-col justify-center space-y-3 px-4 py-6 pt-8 text-center md:px-16">
           <h1 className="font-display text-3xl font-bold">
             Apply to join the waitlist!
           </h1>
@@ -86,7 +86,7 @@ const CreatorsApplyModal = ({
           <ApplyForm setCreatorsApplyModal={setCreatorsApplyModal} />
         </div>
 
-        <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center md:px-16">
+        {/* <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center md:px-16">
           <h2 className="text-md font-display font-bold">
             Don&apos;t have an account?
           </h2>
@@ -94,7 +94,7 @@ const CreatorsApplyModal = ({
             If you have an invitation code, click here to create your account,
             otherwise click here to apply for an account.
           </p>
-        </div>
+        </div> */}
       </div>
     </Modal>
   )

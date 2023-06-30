@@ -94,7 +94,9 @@ export default function NavBar({ session }: { session: Session | null }) {
                 >
                   Apply
                 </Button>
-                {isMobile && <MobileDropdown />}
+                {isMobile && (
+                  <MobileDropdown setShowSignInModal={setShowSignInModal} />
+                )}
               </div>
             )}
           </div>
