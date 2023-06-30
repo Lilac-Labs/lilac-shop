@@ -5,7 +5,6 @@ export async function GET(
   request: Request,
   { params }: { params: { userName: string } },
 ) {
-  console.log('params', params.userName)
   const user = await prisma.userProfile.findUnique({
     where: {
       userName: params.userName,
@@ -14,6 +13,6 @@ export async function GET(
       socialMedias: true,
     },
   })
-  console.log('user', user)
+
   return NextResponse.json(user)
 }

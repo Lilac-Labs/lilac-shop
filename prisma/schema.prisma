@@ -51,16 +51,17 @@ model User {
 }
 
 model UserProfile {
-  userName       String          @id @unique
-  firstName      String          @default("")
-  lastName       String          @default("")
-  bio            String          @default("")
-  image          String
-  collections    Collection[]
-  socialMedias   SocialMedia[]
-  affiliateLinks AffiliateLink[]
-  uuid           String          @unique
-  user           User            @relation(fields: [uuid], references: [id], onDelete: Cascade)
+  userName        String          @id @unique
+  firstName       String          @default("")
+  lastName        String          @default("")
+  bio             String          @default("")
+  image           String
+  uuid            String          @unique
+  collectionOrder Int[]           @default([])
+  affiliateLinks  AffiliateLink[]
+  collections     Collection[]
+  socialMedias    SocialMedia[]
+  user            User            @relation(fields: [uuid], references: [id], onDelete: Cascade)
 
   @@unique([userName, uuid])
 }
@@ -90,8 +91,8 @@ model AffiliateLink {
   image        String
   brandName    String
   collectionId Int?
-  collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   brand        Brand       @relation(fields: [brandName], references: [name], onDelete: Cascade)
+  collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   userProfile  UserProfile @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
 
   @@index([id])
@@ -108,14 +109,15 @@ model Brand {
 }
 
 model Collection {
-  id             Int             @id @default(autoincrement())
-  userName       String
-  uuid           String          
-  title          String
-  active         Boolean         @default(true)
-  description    String?
-  userProfile    UserProfile     @relation(fields: [userName, uuid], references: [userName, uuid], onDelete: Cascade)
-  affiliateLinks AffiliateLink[]
+  id                 Int             @id @default(autoincrement())
+  userName           String
+  uuid               String
+  title              String
+  active             Boolean         @default(true)
+  description        String?
+  affiliateLinkOrder Int[]           @default([])
+  affiliateLinks     AffiliateLink[]
+  userProfile        UserProfile     @relation(fields: [userName, uuid], references: [userName, uuid], onDelete: Cascade)
 }
 
 enum SocialMediaType {

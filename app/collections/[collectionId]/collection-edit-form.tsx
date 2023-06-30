@@ -61,7 +61,6 @@ export function CollectionForm({
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
     const res = await fetcher(
       `/api/users/by-uuid/-/collections/${collection.id}`,
       {

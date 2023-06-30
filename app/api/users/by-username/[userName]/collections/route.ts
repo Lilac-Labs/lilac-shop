@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { orderListCompairFunction } from '@/app/api/utils'
 
 // id is user userName
 export async function GET(
@@ -11,6 +12,7 @@ export async function GET(
       userName: params.userName,
     },
     select: {
+      collectionOrder: true,
       collections: {
         include: {
           affiliateLinks: {
@@ -26,5 +28,11 @@ export async function GET(
     return NextResponse.json({ error: 'user not found' }, { status: 404 })
   }
 
-  return NextResponse.json(userProfile?.collections)
+  const collectionOrder = userProfile.collectionOrder
+
+  const collections = userProfile.collections.sort(
+    orderListCompairFunction(collectionOrder),
+  )
+
+  return NextResponse.json(collections)
 }
