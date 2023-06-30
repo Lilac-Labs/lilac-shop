@@ -34,5 +34,12 @@ export async function GET(
     orderListCompairFunction(collectionOrder),
   )
 
-  return NextResponse.json(collections)
+  const sortedCollections = collections.map((collection) => {
+    const affiliateLinks = collection.affiliateLinks.sort(
+      orderListCompairFunction(collection.affiliateLinkOrder),
+    )
+    return { ...collection, affiliateLinks: affiliateLinks }
+  })
+
+  return NextResponse.json(sortedCollections)
 }

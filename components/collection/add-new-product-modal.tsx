@@ -44,7 +44,6 @@ const AddNewProductModal = ({
       } as Product),
     })
       .then((res) => {
-        console.log('Response:', res)
         setAffiliateLinks([...affiliateLinks, res])
         setCollections(
           collections.map((collection) => {
