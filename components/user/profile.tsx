@@ -41,7 +41,7 @@ export default function UserProfile({ userName }: { userName: string }) {
     // Get the user's information
     const fetchUserInfo = async () => {
       const res = await fetcher(`/api/users/by-username/${userName}`, {
-        cache: 'no-store',
+        next: { revalidate: 10 },
       })
       if (res === null) {
         console.log('user not found')

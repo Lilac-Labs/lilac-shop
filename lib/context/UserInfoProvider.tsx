@@ -33,7 +33,9 @@ export default function UserInfoProvider({
       const res = await fetcher(
         // @ts-ignore
         `/api/users/by-uuid/${session?.user?.id}`,
-        { cache: 'no-store' },
+        {
+          next: { revalidate: 10 },
+        },
       )
 
       const userInfo_: UserInfo = {
