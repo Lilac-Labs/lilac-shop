@@ -9,6 +9,9 @@ import UserDropdown from './user-dropdown'
 import { Session } from 'next-auth'
 import { useUserInfoContext } from '@/lib/context/UserInfoProvider'
 import { isEmpty } from '@/lib/utils'
+import { Button } from '../ui/button'
+import useWindowSize from '@/lib/hooks/use-window-size'
+import MobileDropdown from './mobile-dropdown'
 
 export default function NavBar({ session }: { session: Session | null }) {
   const { SignInModal, setShowSignInModal } = useSignInModal()
@@ -17,6 +20,7 @@ export default function NavBar({ session }: { session: Session | null }) {
   const scrolled = useScroll(50)
   const { userInfo } = useUserInfoContext()
   const isUserInfo = isEmpty(userInfo)
+  const { isMobile } = useWindowSize()
 
   return (
     <>
@@ -27,7 +31,6 @@ export default function NavBar({ session }: { session: Session | null }) {
           scrolled
             ? 'border-b border-gray-200 bg-white/5 backdrop-blur-xl'
             : 'bg-white/0'
-
         } z-30 transition-all`}
       >
         <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
@@ -76,19 +79,24 @@ export default function NavBar({ session }: { session: Session | null }) {
               ) : null
             ) : (
               // add log in button here
-              <div>
-                <button
-                  className="mx-2 rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
-                  onClick={() => setShowSignInModal(true)}
-                >
-                  Sign In
-                </button>
-                <button
-                  className="mx-2 rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
+              <div className="flex">
+                {!isMobile && (
+                  <Button
+                    className="mx-2 rounded-full"
+                    onClick={() => setShowSignInModal(true)}
+                  >
+                    Sign In
+                  </Button>
+                )}
+                <Button
+                  className="mx-2 rounded-full"
                   onClick={() => setShowCreatorsApplyModal(true)}
                 >
                   Apply
-                </button>
+                </Button>
+                {isMobile && (
+                  <MobileDropdown setShowSignInModal={setShowSignInModal} />
+                )}
               </div>
             )}
           </div>

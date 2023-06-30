@@ -36,7 +36,7 @@ export default async function RootLayout({
       >
         {/* <div className="fixed z-0 h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" /> */}
         <Providers>
-          <Suspense fallback="...">
+          <Suspense fallback="">
             <Nav />
           </Suspense>
           {/*children*/}
