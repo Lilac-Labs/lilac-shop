@@ -54,22 +54,33 @@ export async function DELETE(
     return lmDeleteRes
   }
 
-  const res = await prisma.affiliateLink
-    .delete({
+  const res = await prisma.affiliateLink.delete({
+    where: {
+      id: +params.alid,
+    },
+  })
+  console.log('deleted from db', res)
+
+  if (res.collectionId) {
+    const collection = await prisma.collection.findUnique({
       where: {
-        id: +params.alid,
+        id: res.collectionId,
+      },
+      select: {
+        affiliateLinkOrder: true,
       },
     })
-    .then((res) => {
-      console.log('deleted', res)
-      return NextResponse.json(res)
-    })
-    .catch((e) => {
-      return NextResponse.json(
-        { error: 'failed to delete affiliateLink, ', e },
-        { status: 400 },
-      )
-    })
 
-  return res
+    await prisma.collection.update({
+      where: {
+        id: res.collectionId,
+      },
+      data: {
+        affiliateLinkOrder: {
+          set: collection?.affiliateLinkOrder.filter((id) => id !== res.id),
+        },
+      },
+    })
+  }
+  return NextResponse.json(res)
 }

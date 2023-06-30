@@ -25,6 +25,7 @@ import { Edit } from 'lucide-react'
 import useAutosizeTextArea from '@/lib/hooks/use-autosize-textarea'
 import { Separator } from '@/components/ui/separator'
 import useAutosizeInput from '@/lib/hooks/use-autosize-inpu'
+import { useAffiliateLinksContext } from '@/lib/context/AffiliateLinksProvider'
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -35,13 +36,12 @@ const formSchema = z.object({
 
 export function CollectionForm({
   collection,
-  setCollection,
   isOwner,
 }: {
   collection: Collection
-  setCollection: Dispatch<SetStateAction<Collection>>
   isOwner: boolean
 }) {
+  const { setCollections } = useAffiliateLinksContext()
   const [readOnly, setReadOnly] = useState<boolean>(true)
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,10 +68,15 @@ export function CollectionForm({
         body: JSON.stringify(values),
       },
     )
-    setCollection({
-      ...collection,
-      title: res.title,
-      description: res.description,
+    setCollections((prev) => {
+      const index = prev.findIndex((c) => c.id === collection.id)
+      prev[index] = {
+        ...prev[index],
+        title: res.title,
+        description: res.description,
+      }
+
+      return [...prev]
     })
     setReadOnly(true)
   }

@@ -85,5 +85,19 @@ export async function POST(
       collection: true,
     },
   })
+
+  if (product.collectonId) {
+    await prisma.collection.update({
+      where: {
+        id: +product.collectonId,
+      },
+      data: {
+        affiliateLinkOrder: {
+          push: affiliateLink.id,
+        },
+      },
+    })
+  }
+
   return NextResponse.json({ ...affiliateLink, link: link })
 }
