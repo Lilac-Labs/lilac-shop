@@ -27,7 +27,7 @@ export async function PATCH(
 // id is collection id
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { collectionId: string } },
+  { params }: { params: { uuid: string; collectionId: string } },
 ) {
   const collection = await prisma.collection
     .delete({
@@ -44,6 +44,29 @@ export async function DELETE(
         { status: 400 },
       )
     })
+
+  const userProfile = await prisma.userProfile.findUnique({
+    where: {
+      uuid: params.uuid,
+    },
+    select: {
+      collectionOrder: true,
+    },
+  })
+
+  // remove deleted collection id from collectionOrder
+  await prisma.userProfile.update({
+    where: {
+      uuid: params.uuid,
+    },
+    data: {
+      collectionOrder: {
+        set: userProfile?.collectionOrder.filter(
+          (id) => id !== +params.collectionId,
+        ),
+      },
+    },
+  })
 
   return NextResponse.json(collection)
 }

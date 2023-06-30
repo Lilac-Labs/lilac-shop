@@ -19,5 +19,16 @@ export async function POST(
     },
   })
 
+  await prisma.userProfile.update({
+    where: {
+      uuid: params.uuid,
+    },
+    data: {
+      collectionOrder: {
+        push: newCollection.id,
+      },
+    },
+  })
+
   return NextResponse.json(newCollection)
 }
