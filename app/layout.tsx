@@ -16,7 +16,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: "Lilac - Shop your creator's favorite products",
     description:
-      'Precedent is the all-in-one solution for your Next.js project. It includes a design system, authentication, analytics, and more.',
+      "Shop your creator's favorite products and support them with every purchase.",
     creator: '@tokam',
   },
   metadataBase: new URL('https://withlilac.com/'),

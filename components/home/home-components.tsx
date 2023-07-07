@@ -138,7 +138,7 @@ export default function HomeComponents() {
           />
         </div>
       </div>
-      <div className="bg-rose-200">
+      {/* <div className="bg-rose-200">
         <div
           className="mx-5 flex
                           flex-auto flex-row items-center
@@ -183,7 +183,7 @@ export default function HomeComponents() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div
         className={`${debug ? 'bg-green-500' : ''} 

@@ -36,7 +36,7 @@ export default function NavBar({ session }: { session: Session | null }) {
         <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
           <Link href="/" className="flex items-center font-display text-3xl">
             <Image
-              src="/lilac.png"
+              src="/lilac.svg"
               alt="Precedent logo"
               width="50"
               height="50"
